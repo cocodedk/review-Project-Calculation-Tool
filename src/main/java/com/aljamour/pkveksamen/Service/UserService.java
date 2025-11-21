@@ -2,8 +2,10 @@ package com.aljamour.pkveksamen.Service;
 
 import com.aljamour.pkveksamen.Repository.UserRepository;
 import org.apache.catalina.User;
+import org.springframework.stereotype.Service;
 import org.yaml.snakeyaml.constructor.DuplicateKeyException;
 
+@Service
 public class UserService {
 
     private UserRepository userRepository;
