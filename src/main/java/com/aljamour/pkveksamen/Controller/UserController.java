@@ -23,10 +23,10 @@ public class UserController {
     @GetMapping("/create-user")
     public String createUser(Model model){
         model.addAttribute("user", new UserModel());
-        return "create-user"; // matcher create-user.html i templates
+        return "create-user";
     }
 
-
+    // TODO man kan bruge sammen email, vi skal kigge på det
     @PostMapping("/create-user")
     public String createUserpost(UserModel user, Model model) {
         boolean success = userService.createUser(
@@ -39,10 +39,10 @@ public class UserController {
         if (!success) {
             model.addAttribute("error", "Denne email er allerede i brug");
             model.addAttribute("user", user);
-            return "create-user";  // 🔹 vis form igen med fejl
+            return "create-user";
         }
 
-        return "redirect:/homepage";  // 🔹 redirect efter succes
+        return "redirect:/homepage";
     }
 
 
