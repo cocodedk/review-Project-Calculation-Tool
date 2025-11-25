@@ -36,6 +36,19 @@ public class ProjectModel {
         this.subProjectDuration = subProjectDuration;
     }
 
+
+    public ProjectModel(long projectID, String projectName, String projectDescription, LocalDate startDate, LocalDate endDate,
+                        String projectCustomer, int projectDuration) {
+        this.projectID = projectID;
+        this.projectName = projectName;
+        this.projectDescription = projectDescription;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.projectCustomer = projectCustomer;
+        this.projectDuration = projectDuration;
+
+    }
+
     public long getProjectID() {
         return projectID;
     }

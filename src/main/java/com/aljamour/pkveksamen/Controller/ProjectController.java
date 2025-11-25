@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ui.Model;
 import java.time.LocalDate;
+import java.util.List;
 
 @Controller
 @RequestMapping("project")
@@ -18,6 +19,20 @@ public class ProjectController {
 
     public ProjectController(ProjectService projectService) {
         this.projectService = projectService;
+    }
+
+    @GetMapping()
+    public String showAllProject(Model model){
+        List<ProjectModel> projectList = projectService.getAllProjectList();
+        model.addAttribute("projectList", projectList);
+        return "project";
+    }
+
+    @GetMapping("/show-projects")
+    public String showProjectsByUserID(@RequestParam("id") long userID, Model model){
+        List<ProjectModel> projectList = projectService.showProjectsByUserID(userID);
+        model.addAttribute("projectList",projectList);
+        return "project";
     }
 
 
