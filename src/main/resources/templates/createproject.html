@@ -1,10 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Opret Nyt Projekt</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; }
+        input[type="text"], input[type="date"], input[type="number"] { width: 300px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        button { padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    </style>
 </head>
 <body>
+
+<h1>Opret Nyt Projekt</h1>
+
+<form th:action="@{/project/createproject}" th:object="${project}" method="post">
+
+    <div class="form-group">
+        <label for="projectName">Projekt Navn:</label>
+        <input type="text" id="projectName" name="projectName" th:field="*{projectName}" required/>
+    </div>
+
+    <div class="form-group">
+        <label for="projectDescription">Beskrivelse:</label>
+        <input type="text" id="projectDescription" name="projectDescription" th:field="*{projectDescription}" required/>
+    </div>
+
+    <div class="form-group">
+        <label for="startDate">Start Dato:</label>
+        <input type="date" id="startDate" name="startDate" th:field="*{startDate}" required/>
+    </div>
+
+    <div class="form-group">
+        <label for="endDate">Slut Dato:</label>
+        <input type="date" id="endDate" name="endDate" th:field="*{endDate}" required/>
+    </div>
+
+    <div class="form-group">
+        <label for="projectCustomer">Kunde:</label>
+        <input type="text" id="projectCustomer" name="projectCustomer" th:field="*{projectCustomer}" required/>
+    </div>
+
+    <div class="form-group">
+        <label for="projectDuration">Varighed (Dage):</label>
+        <input type="number" id="projectDuration" name="projectDuration" th:field="*{projectDuration}" required/>
+    </div>
+
+    <button type="submit">Opret Projekt</button>
+
+</form>
 
 </body>
 </html>

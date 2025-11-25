@@ -45,7 +45,7 @@ public class UserController {
             return "create-user";
         }
 
-        return "redirect:/homepage";
+        return "redirect:/project/createproject";
     }
 
 

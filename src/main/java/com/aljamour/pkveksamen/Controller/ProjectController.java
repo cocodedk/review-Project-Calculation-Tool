@@ -20,11 +20,11 @@ public class ProjectController {
         this.projectService = projectService;
     }
 
+
     @GetMapping("createproject")
     public String showCreateform(Model model){
         model.addAttribute("project", new ProjectModel());
         return "createproject";
-
 
     }
 
