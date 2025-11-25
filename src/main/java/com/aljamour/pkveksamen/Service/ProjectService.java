@@ -30,4 +30,16 @@ public class ProjectService {
     public List<ProjectModel> showProjectsByUserID(long userID) {
         return projectRepository.showProjectsByUserID(userID);
     }
+
+    public void saveProject(ProjectModel projectModel) {
+        projectRepository.saveProject(projectModel);
+    }
+
+    public void deleteProject(long projectID) {
+        projectRepository.deleteProject(projectID);
+    }
+
+    public void editProject() {
+        projectRepository.editProject()
+    }
 }

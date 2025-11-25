@@ -2,11 +2,9 @@ package com.aljamour.pkveksamen.Controller;
 
 import com.aljamour.pkveksamen.Model.ProjectModel;
 import com.aljamour.pkveksamen.Service.ProjectService;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import java.time.LocalDate;
 import java.util.List;
@@ -51,6 +49,28 @@ public class ProjectController {
     }
 
 
+    @PostMapping("/saveproject")
+    public String saveProject(@ModelAttribute ProjectModel projectModel) {
+        projectService.saveProject(projectModel);
+        return "redirect:/project";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String deleteProject(@PathVariable long id) {
+        projectService.deleteProject(id);
+        return "redirect:/project";
+    }
+
+    @PostMapping("/edit")
+    public String editProject(@PathVariable String projectName,
+                              String projectDescription,
+                              LocalDate startDate,
+                              LocalDate endDate,
+                              String projectCustomer,
+                              int projectDuration, Model model){
+        projectService.editProject();
+        return "redirect:/project";
+    }
 
 
 
