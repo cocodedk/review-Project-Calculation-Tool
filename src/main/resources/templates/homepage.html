@@ -1,10 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Velkommen til Kalkulationsværktøjet</title>
+    <style>
+        body { font-family: Arial, sans-serif; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .header { display: flex; justify-content: space-between; align-items: center; width: 80%; max-width: 1200px; padding: 20px; }
+        .nav-links a { margin-left: 20px; text-decoration: none; color: #007bff; font-weight: bold; }
+        .main-content { margin-top: 50px; }
+    </style>
 </head>
 <body>
+
+<div class="header">
+    <div class="main-title">
+        <h1>Velkommen til Kalkulationsværktøjet</h1>
+    </div>
+
+    <div class="nav-links">
+        <a th:href="@{/login/login}">Log ind</a>
+        <span>|</span>
+        <a th:href="@{/login/create-user}">Opret bruger</a>
+    </div>
+</div>
+
+<div class="main-content">
+    <p>Dette værktøj er designet til Alpha Solutions til effektivt at administrere og beregne projekter.</p>
+</div>
 
 </body>
 </html>

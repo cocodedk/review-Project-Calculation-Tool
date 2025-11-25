@@ -1,9 +1,7 @@
 package com.aljamour.pkveksamen.Controller;
 
 import com.aljamour.pkveksamen.Model.UserModel;
-import com.aljamour.pkveksamen.Model.UserRole;
 import com.aljamour.pkveksamen.Service.UserService;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +17,11 @@ public class UserController {
     public UserController(UserService userService){
         this.userService  = userService;
 }
+
+    @GetMapping("/")
+    public String homepage() {
+        return "homepage";
+    }
 
     @GetMapping("/create-user")
     public String createUser(Model model){
