@@ -45,7 +45,7 @@ public class ProjectController {
     public String createProject(@RequestParam String projectName, @RequestParam String projectDescription, @RequestParam LocalDate startDate,
     @RequestParam LocalDate endDate, @RequestParam String projectCustomer, @RequestParam int projectDuration ){
         projectService.createProject(projectName,projectDescription,startDate,endDate,projectCustomer,projectDuration);
-        return "redirect/project";
+        return "redirect:/project";
     }
 
 
