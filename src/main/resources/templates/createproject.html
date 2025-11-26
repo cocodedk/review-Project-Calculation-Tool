@@ -15,7 +15,7 @@
 
 <h1>Opret Nyt Projekt</h1>
 
-    <form th:action="@{/project/saveproject}" th:object="${project}" method="post">
+    <form th:action="@{/project/saveproject/{userId}(userId=${currentUserId})}" th:object="${project}" method="post">
     <div class="form-group">
         <label for="projectName">Projekt Navn:</label>
         <input type="text" id="projectName" name="projectName" th:field="*{projectName}" required/>

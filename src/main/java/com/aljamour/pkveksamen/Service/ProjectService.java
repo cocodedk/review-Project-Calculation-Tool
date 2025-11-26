@@ -16,8 +16,8 @@ public class ProjectService {
     }
 
     public void createProject(String projectName, String projectDescription, LocalDate startDate,
-                              LocalDate endDate, String projectCustomer,  int projectDuration ){
-        projectRepository.createProject(projectName,projectDescription,startDate,endDate,projectCustomer,projectDuration);
+                              LocalDate endDate, String projectCustomer, int projectDuration, long userId) {
+        projectRepository.createProject(projectName, projectDescription, startDate, endDate, projectCustomer, projectDuration, userId);
 
     }
 
@@ -25,8 +25,8 @@ public class ProjectService {
         return projectRepository.showProjectsByUserID(userID);
     }
 
-    public void saveProject(Project projectModel) {
-        projectRepository.saveProject(projectModel);
+    public void saveProject(Project projectModel, long userId) {
+        projectRepository.saveProject(projectModel, userId);
     }
 
     public void deleteProject(long projectID) {
