@@ -1,11 +1,12 @@
 package com.aljamour.pkveksamen.Repository;
 
-import com.aljamour.pkveksamen.Model.Project;
+import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
-import java.util.List;
+import com.aljamour.pkveksamen.Model.Project;
 
 @Repository
 public class ProjectRepository {
@@ -19,7 +20,7 @@ public class ProjectRepository {
     public void createProject(String projectName, String projectDescription, LocalDate startDate,
                               LocalDate endDate, String projectCustomer, int projectDuration, long userId) {
         jdbcTemplate.update(
-                "INSERT INTO project (project_title, project_description, project_start_date, project_end_date, project_costumer, project_duration, user_id) " +
+                "INSERT INTO project (project_title, project_description, project_start_date, project_end_date, project_costomer, project_duration, user_id) " +
                         "VALUES (?,?,?,?,?,?,?)",
                 projectName,
                 projectDescription,
@@ -48,9 +49,9 @@ public class ProjectRepository {
 //    }
 
     public List<Project> showProjectsByUserID(long userID) {
-        String sql = "SELECT project_id, project_title, project_description, project_start_date, project_end_date, project_costumer, project_duration " +
-                "FROM PROJECT p " +
-                "WHERE p.user_id = ?";
+        String sql = "SELECT project_id, project_title, project_description, project_start_date, project_end_date, project_costomer, project_duration " +
+                "FROM project " +
+                "WHERE user_id = ?";
 
         return jdbcTemplate.query(sql, (rs, rowNum) -> new Project(
                 rs.getLong("project_id"),
@@ -58,13 +59,13 @@ public class ProjectRepository {
                 rs.getString("project_description"),
                 rs.getObject("project_start_date", LocalDate.class),
                 rs.getObject("project_end_date", LocalDate.class),
-                rs.getString("project_costumer"),
+                rs.getString("project_costomer"),
                 rs.getInt("project_duration")
         ), userID);
     }
 
     public void saveProject(Project projectModel, long userId) {
-        String sql = "INSERT INTO project (project_title, project_description, project_start_date, project_end_date, project_costumer, project_duration, user_id) " +
+        String sql = "INSERT INTO project (project_title, project_description, project_start_date, project_end_date, project_costomer, project_duration, user_id) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         jdbcTemplate.update(sql,
@@ -94,7 +95,7 @@ public class ProjectRepository {
                 "project_description = ?, " +
                 "project_start_date = ?, " +
                 "project_end_date = ?, " +
-                "project_costumer = ?, " +
+                "project_costomer = ?, " +
                 "project_duration = ? " +
                 "WHERE project_id = ?";
 
