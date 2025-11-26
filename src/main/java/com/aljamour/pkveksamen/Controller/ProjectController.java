@@ -19,7 +19,6 @@ public class ProjectController {
         this.projectService = projectService;
     }
 
-    // I ProjectController.java
     @GetMapping("/list/{userId}")
     public String showProjectsByUserID(@PathVariable long userId, Model model){
         List<Project> projectList = projectService.showProjectsByUserID(userId);

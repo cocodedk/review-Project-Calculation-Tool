@@ -59,4 +59,7 @@ public class User {
         this.role = role;
     }
 
+    public void setUserId(long userId) {
+        this.userID = userId;
+    }
 }
