@@ -17,9 +17,18 @@ public class ProjectRepository {
     }
 
     public void createProject(String projectName, String projectDescription, LocalDate startDate,
-                              LocalDate endDate,String projectCustomer, int projectDuration){
-        jdbcTemplate.update("INSERT INTO project(project_title,project_description,project_start_date, project_end_date,project_duration,project_costumer) VALUES (?,?,?,?,?,?)",
-        projectName,projectDescription,startDate,endDate,projectCustomer,projectDuration);
+                              LocalDate endDate, String projectCustomer, int projectDuration, long userId) {
+        jdbcTemplate.update(
+                "INSERT INTO project (project_title, project_description, project_start_date, project_end_date, project_costumer, project_duration, user_id) " +
+                        "VALUES (?,?,?,?,?,?,?)",
+                projectName,
+                projectDescription,
+                startDate,
+                endDate,
+                projectCustomer,
+                projectDuration,
+                userId
+        );
     }
 
 
@@ -55,8 +64,9 @@ public class ProjectRepository {
         ), userID);
     }
 
-    public void saveProject(Project projectModel) {
-        String sql = "INSERT INTO project (project_title, project_description, project_start_date, project_end_date, project_costomer, project_duration ) VALUES (?, ?, ?, ?, ?, ?)";
+    public void saveProject(Project projectModel, long userId) {
+        String sql = "INSERT INTO project (project_title, project_description, project_start_date, project_end_date, project_costumer, project_duration, user_id) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         jdbcTemplate.update(sql,
                 projectModel.getProjectName(),
@@ -64,7 +74,8 @@ public class ProjectRepository {
                 projectModel.getStartDate(),
                 projectModel.getEndDate(),
                 projectModel.getProjectCustomer(),
-                projectModel.getProjectDuration()
+                projectModel.getProjectDuration(),
+                userId
         );
     }
 

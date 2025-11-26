@@ -1,5 +1,6 @@
 package com.aljamour.pkveksamen.Service;
 
+import com.aljamour.pkveksamen.Model.User;
 import com.aljamour.pkveksamen.Model.UserRole;
 import com.aljamour.pkveksamen.Repository.UserRepository;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -33,8 +34,12 @@ public class UserService {
 
 
     public int validateLogin(String userName, String userPassword) {
-       int id = 0;
+        int id = 0;
         id = userRepository.validateLogin(userName, userPassword);
-       return id;
-   }
+        return id;
+    }
+
+    public User getUserById(long userId) {
+        return userRepository.findUserById(userId);
+    }
 }
