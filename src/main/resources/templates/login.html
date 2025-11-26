@@ -9,13 +9,11 @@
 <div class="container">
     <h1>Velkommen Til Alpha Solutions</h1>
 
-    <!-- Error message -->
     <div th:if="${error}" class="error-message">
         <p th:text="${error}"></p>
     </div>
 
-    <!-- LOGIN FORM -->
-    <form th:action="@{/login/validate-login/}" method="post">
+    <form th:action="@{/validate-login}" method="post">
 
         <div class="form-group">
             <label for="username">Brugernavn:</label>
@@ -39,7 +37,7 @@
     </form>
 
     <p>
-
+        <a th:href="@{/create-user}" class="btn-submit">Opret bruger</a>
     </p>
 </div>
 </body>

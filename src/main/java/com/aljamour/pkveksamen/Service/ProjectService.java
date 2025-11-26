@@ -20,10 +20,6 @@ public class ProjectService {
         projectRepository.createProject(projectName,projectDescription,startDate,endDate,projectCustomer,projectDuration);
 
     }
-//
-//    public List<ProjectModel> getAllProjectList() {
-//        return projectRepository.getAllProjectList();
-//    }
 
     public List<Project> showProjectsByUserID(long userID) {
         return projectRepository.showProjectsByUserID(userID);

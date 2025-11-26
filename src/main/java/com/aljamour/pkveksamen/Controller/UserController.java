@@ -23,17 +23,17 @@ public class UserController {
     public String homepage() {
         return "homepage";
     }
+
     @GetMapping("login")
     public String getLogin() {
         return "login";
-
     }
+
     @GetMapping("/create-user")
     public String createUser(Model model) {
         model.addAttribute("user", new User());
         return "create-user";
     }
-
 
     @PostMapping("/create-user")
     public String createUserpost(User user, Model model) {
@@ -50,22 +50,22 @@ public class UserController {
             return "create-user";
         }
 
-        return "redirect:/project/createproject";
+        return "redirect:/login";
     }
+
+    // I UserController.java
 
     @PostMapping("/validate-login")
     public String validateLogin(@RequestParam("username") String userName,
                                 @RequestParam("password") String userPassword, Model model) {
-        Integer id = null;
-        id = userService.validateLogin(userName, userPassword);
+        Integer id = userService.validateLogin(userName, userPassword);
 
-        if (id != null) {
-            return "redirect:project/showAllProject" + id;
+        if (id != null && id > 0) {
+            return "redirect:/project/list/" + id;
         } else {
             model.addAttribute("error", "Brugernavn eller kode er forkert. Prøv igen!");
-            return "redirect:/login";
+
+            return "login";
         }
-
-
     }
 }

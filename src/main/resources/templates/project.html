@@ -1,10 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Mine Projekter</title>
 </head>
 <body>
+<h1>Projekter for Bruger ID: <span th:text="${currentUserId}"></span></h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>Navn</th>
+        <th>Beskrivelse</th>
+        <th>Handlinger</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${projectList == null or #lists.isEmpty(projectList)}">
+        <td colspan="3">Du har ikke projekter endnu.</td>
+    </tr>
+
+    <tr th:each="project : ${projectList}">
+        <td th:text="${project.projectName}">Projekt Navn</td>
+        <td th:text="${project.projectDescription}">Projekt Beskrivelse</td>
+        <td>
+            <a th:href="@{/project/details/{id}(id=${project.projectId})}">Se detaljer</a>
+
+            <form th:action="@{/project/delete/{id}(id=${project.projectId})}" method="post" style="display:inline">
+                <button type="submit">Slet</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<a th:href="@{/project/createproject/{userId}(userId=${currentUserId})}">
+    <button>Opret nyt projekt</button>
+</a>
 
 </body>
 </html>

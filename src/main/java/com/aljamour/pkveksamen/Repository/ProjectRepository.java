@@ -22,19 +22,7 @@ public class ProjectRepository {
         projectName,projectDescription,startDate,endDate,projectCustomer,projectDuration);
     }
 
-    public List<Project> getAllProjectList() {
-        String sql = "SELECT project_id, project_title, project_description, project_start_date, project_end_date, project_costomer, project_duration FROM project";
-        return jdbcTemplate.query(sql, (rs, rowNum) -> new Project(
-                rs.getLong("project_id"),
-                rs.getString("project_title"),
-                rs.getString("project_description"),
-                rs.getObject("project_start_date", LocalDate.class),
-                rs.getObject("project_end_date",LocalDate.class),
-                rs.getString("project_costomer"),
-                rs.getInt("project_duration")
-                ));
 
-    }
 
 //    public List<ProjectModel> findProjectsByUserID(long userId) {
 //        String sql = "SELECT p.* FROM ProjectModel p INNER JOIN UserProjects up ON p.projectID = up.projectID WHERE up.userId = ?";
@@ -52,23 +40,20 @@ public class ProjectRepository {
 //    }
 
     public List<Project> showProjectsByUserID(long userID) {
-        String sql = "SELECT p.project_id, p.project_title, p.project_description, p.project_start_date, p.project_end_date, p.project_costumer, p.project_duration "+
-                "FROM PROJECT p" +
-                "INNER JOIN project_user_role pur ON p.project_id = pur.project_id" +
-                "WHERE pur.user_id = ?";
-        ;
+        String sql = "SELECT project_id, project_title, project_description, project_start_date, project_end_date, project_costumer, project_duration " +
+                "FROM PROJECT p " +
+                "WHERE p.user_id = ?";
 
         return jdbcTemplate.query(sql, (rs, rowNum) -> new Project(
-                rs.getLong("projectID"),
-                rs.getString("projectName"),
-                rs.getString("projectDescription"),
+                rs.getLong("project_id"),
+                rs.getString("project_title"),
+                rs.getString("project_description"),
                 rs.getObject("project_start_date", LocalDate.class),
                 rs.getObject("project_end_date",LocalDate.class),
-                rs.getString("projectCustomer"),
-                rs.getInt("projectDuration")
+                rs.getString("project_costumer"),
+                rs.getInt("project_duration")
         ), userID);
-
-        }
+    }
 
     public void saveProject(Project projectModel) {
         String sql = "INSERT INTO project (project_title, project_description, project_start_date, project_end_date, project_costomer, project_duration ) VALUES (?, ?, ?, ?, ?, ?)";
