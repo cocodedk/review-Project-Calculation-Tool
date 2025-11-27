@@ -147,7 +147,7 @@
         <h1>Mine Projekter</h1>
 
         <div class="user-info">
-            <span th:text="${userName} + ' (' + userRole + ')'">moha4733 (ADMIN)</span>
+            <span th:text="${userName} + ' (' + ${userRole} + ')'"> </span>
 
             <form th:action="@{/logout}" method="post">
                 <button type="submit" class="logout-button">

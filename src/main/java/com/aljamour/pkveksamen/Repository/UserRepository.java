@@ -21,10 +21,10 @@ public class UserRepository {
     public void createUser(String userName, String userPassword, String email, UserRole role) {
         jdbcTemplate.update(
                 "INSERT INTO User(username, user_password, email, role) VALUES (?, ?, ?, ?)",
-                userName, userPassword, email, role.name()
+                userName, email, userPassword, role.name()
         );
 
-        System.out.println(userName + email + userPassword + role);
+        System.out.println(userName + userPassword + email + role);
 
 
     }

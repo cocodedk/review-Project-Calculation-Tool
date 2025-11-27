@@ -38,7 +38,7 @@ public class UserController {
     }
 
     @PostMapping("/create-user")
-    public String createUserpost(User user, Model model) {
+    public String createUserPost(User user, Model model) {
         boolean success = userService.createUser(
                 user.getUserName(),
                 user.getEmail(),

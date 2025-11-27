@@ -16,13 +16,13 @@ public class UserService {
     }
 
 
-    public boolean createUser(String userName, String email, String userPassword, UserRole role) {
+    public boolean createUser(String userName, String userPassword, String email, UserRole role) {
         try {
-            userRepository.createUser(userName, email, userPassword, role);
+            userRepository.createUser(userName, userPassword, email, role);
             System.out.println("Bruger oprettet: " + userName + " " + email);
             return true;
         } catch (DataIntegrityViolationException e) {
-            System.out.println("Email allerede i brug (DataIntegrityViolation): " + email);
+            System.out.println("Email allerede i brug: " + email);
             e.printStackTrace();
             return false;
         } catch (Exception e) {
@@ -33,10 +33,9 @@ public class UserService {
     }
 
 
-    public int validateLogin(String userName, String userPassword) {
-        int id = 0;
-        id = userRepository.validateLogin(userName, userPassword);
-        return id;
+    public Integer validateLogin(String userName, String userPassword) {
+        return userRepository.validateLogin(userName, userPassword);
+
     }
 
     public User getUserById(long userId) {
