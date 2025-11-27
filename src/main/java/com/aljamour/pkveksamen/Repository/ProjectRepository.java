@@ -109,5 +109,21 @@ public class ProjectRepository {
                 project.getProjectID()  // vigtigt: id for at opdatere korrekt projekt
         );
     }
+
+    public Project getProjectById(long projectId) {
+        String sql = "SELECT project_id, project_title, project_description, project_start_date, project_end_date, project_costomer, project_duration " +
+                "FROM project " +
+                "WHERE project_id = ?";
+
+        return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new Project(
+                rs.getLong("project_id"),
+                rs.getString("project_title"),
+                rs.getString("project_description"),
+                rs.getObject("project_start_date", LocalDate.class),
+                rs.getObject("project_end_date", LocalDate.class),
+                rs.getString("project_costomer"),
+                rs.getInt("project_duration")
+        ), projectId);
+    }
 }
 

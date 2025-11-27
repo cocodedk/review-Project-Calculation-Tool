@@ -70,14 +70,28 @@ public class ProjectController {
 //    }
 //
 
-    @PostMapping("/edit/{projectId}")
-    public String editProject(@PathVariable long projectId,
-                              @ModelAttribute Project project,
-                              Model model) {
-        project.setProjectID(projectId); // sørg for id er sat
-        projectService.editProject(project);
-        return "redirect:/project/list/" + projectId;
+
+    @GetMapping("/edit/{userId}/{projectId}")
+    public String showEditForm(@PathVariable long userId,
+                               @PathVariable long projectId,
+                               Model model) {
+        Project project = projectService.getProjectById(projectId);
+        model.addAttribute("project", project);
+        model.addAttribute("currentUserId", userId); // vigtigt for formularens action
+        return "edit-project"; // din redigerings-view
     }
+
+    @PostMapping("/edit/{userId}/{projectId}")
+    public String editProject(@PathVariable long userId,
+                              @PathVariable long projectId,
+                              @ModelAttribute Project project) {
+
+        project.setProjectID(projectId);
+        projectService.editProject(project);
+
+        return "redirect:/project/list/" + userId;
+    }
+
 
     //  MODTAG FORMULAR OG GEM NYT PROJEKT
     @PostMapping("/create/{userId}")

@@ -36,4 +36,8 @@ public class ProjectService {
    public void editProject(Project project) {
        projectRepository.editProject(project);
    }
+
+    public Project getProjectById(long projectId) {
+       return projectRepository.getProjectById(projectId);
+    }
 }
