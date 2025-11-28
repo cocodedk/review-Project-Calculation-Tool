@@ -117,5 +117,19 @@ public class ProjectController {
 
         return "redirect:/project/list/" + userId; // tilbage til projektliste
     }
+    @PostMapping("/project/createsubproject/{projectId}")
+    public String createSubProject(@PathVariable long projectId, @ModelAttribute Project subProjectData) {
+        Project project = projectService.getProjectById(projectId);
+
+        // Sæt subproject-felter i eksisterende projekt
+        project.setSubProjectName(subProjectData.getSubProjectName());
+        project.setSubProjectDescription(subProjectData.getSubProjectDescription());
+        project.setSubProjectStatus(subProjectData.getSubProjectStatus());
+        project.setSubProjectDuration(subProjectData.getSubProjectDuration());
+
+        projectService.saveProject(project);
+        return "redirect:/projects";
+    }
+
 }
 
