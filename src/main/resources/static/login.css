@@ -1,106 +1,89 @@
-/* --- Base styles --- */
+/* Generelle indstillinger */
 body {
-    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
     margin: 0;
+    padding: 0;
+    font-family: Lora, sans-serif;
+    background: linear-gradient(135deg, #4b79a1, #283e51);
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    background: linear-gradient(to bottom right, #eff6ff, #e0f2fe);
 }
 
-/* --- Container --- */
+/* Container */
 .container {
-    background-color: #ffffff;
-    border-radius: 0.75rem;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    padding: 2.5rem 2rem;
+    background: #ffffff;
+    padding: 40px 50px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    max-width: 380px;
     width: 100%;
-    max-width: 400px;
     text-align: center;
 }
 
-/* --- Title --- */
+/* Overskrift */
 .container h1 {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #1f2937;
-    margin-bottom: 2rem;
+    margin-bottom: 25px;
+    color: #333;
 }
 
-/* --- Form styles --- */
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
+/* Fejlbesked */
+.error-message {
+    background-color: #ffd6d6;
+    color: #a30000;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
 }
 
-label {
-    font-weight: 500;
-    margin-bottom: 0.25rem;
+/* Form-grupper */
+.form-group {
+    margin-bottom: 20px;
     text-align: left;
 }
 
-/* Input fields */
-input[type="text"],
-input[type="password"] {
+/* Labels */
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #444;
+    font-weight: bold;
+}
+
+/* Inputs */
+input {
     width: 100%;
-    padding: 0.75rem 1rem;
-    border: 1px solid #d1d5db;
-    border-radius: 0.5rem;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
     font-size: 1rem;
-    outline: none;
-    box-sizing: border-box;
+    transition: 0.2s ease;
 }
 
 input:focus {
-    border-color: #2563eb;
-    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    border-color: #4b79a1;
+    outline: none;
+    box-shadow: 0 0 5px rgba(75, 121, 161, 0.3);
 }
 
-/* --- Buttons --- */
+/* Knapper */
 .btn-submit {
-    padding: 0.75rem 1rem;
-    border-radius: 0.5rem;
-    font-weight: 600;
-    font-size: 1rem;
-    background-color: #2563eb;
-    color: white;
+    display: inline-block;
+    width: 100%;
+    padding: 12px 0;
+    margin-top: 10px;
+    background: #4b79a1;
+    color: #fff;
     border: none;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
-}
-
-.btn-submit:hover {
-    padding: 0.75rem 1rem;
-    border-radius: 0.5rem;
-    font-weight: 600;
+    border-radius: 8px;
     font-size: 1rem;
-    background-color: #2563eb;
-    color: white;
-    border: none;
     cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
-}
-
-/* --- Error message --- */
-.error-message {
-    color: #ef4444;
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
+    transition: 0.2s ease;
+    text-decoration: none;
     text-align: center;
 }
 
-/* --- Links --- */
-.container a {
-    display: inline-block;
-    margin-top: 1rem;
-    color: #2563eb;
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.container a:hover {
-    text-decoration: underline;
+.btn-submit:hover {
+    background: #3a5f7a;
 }

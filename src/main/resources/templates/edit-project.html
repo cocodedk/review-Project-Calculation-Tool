@@ -76,6 +76,7 @@
                 </div>
             </div>
 
+            <!-- VARIGHED (HVIS KAN LØSES UDEN JAVASCRIPT, IMPLEMENTER IGEN
             <div class="form-group">
                 <label for="projectDuration">Varighed (dage)</label>
                 <input type="number"
@@ -83,8 +84,8 @@
                        th:field="*{projectDuration}"
                        min="1"
                        placeholder="Antal dage">
-                <p class="info-text">Dette felt beregnes automatisk baseret på start- og slutdato</p>
             </div>
+            -->
 
             <div class="button-group">
                 <a th:href="@{/project/list/{userId}(userId=${currentUserId})}"
