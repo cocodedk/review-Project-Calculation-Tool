@@ -3,6 +3,7 @@ package com.aljamour.pkveksamen.Controller;
 import com.aljamour.pkveksamen.Model.Project;
 import com.aljamour.pkveksamen.Model.User;
 import com.aljamour.pkveksamen.Service.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -84,7 +85,13 @@ public class UserController {
             return "login"; // returner login.html direkte
         }
     }
-
-
-
+    @PostMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate(); // Sletter session
+        return "redirect:/login"; // Redirect til login side
+    }
 }
+
+
+
+
