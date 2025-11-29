@@ -1,4 +1,4 @@
-package com.aljamour.pkveksamen.Repository;
+package com.example.pkveksamen.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.aljamour.pkveksamen.Model.Project;
+import com.example.pkveksamen.Model.Project;
 
 @Repository
 public class ProjectRepository {

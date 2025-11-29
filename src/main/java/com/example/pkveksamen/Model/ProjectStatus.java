@@ -1,13 +1,15 @@
-package com.aljamour.pkveksamen.Model;
+package com.example.pkveksamen.Model;
 
-public enum TaskStatus {
-    NOT_STARTED("Not started"),
+public enum ProjectStatus {
+
+    PLANNED("Planned"),
     IN_PROGRESS("In progress"),
-    COMPLETED("Completed");
+    COMPLETED("Completed"),
+    CANCELED("Canceled");
 
     private final String displayName;
 
-    TaskStatus(String displayName) {
+    ProjectStatus(String displayName) {
         this.displayName = displayName;
     }
 

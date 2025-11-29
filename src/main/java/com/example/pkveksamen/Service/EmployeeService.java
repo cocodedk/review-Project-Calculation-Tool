@@ -1,7 +1,7 @@
-package com.aljamour.pkveksamen.Service;
+package com.example.pkveksamen.Service;
 
-import com.aljamour.pkveksamen.Model.Employee;
-import com.aljamour.pkveksamen.Repository.EmployeeRepository;
+import com.example.pkveksamen.Model.Employee;
+import com.example.pkveksamen.Repository.EmployeeRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 

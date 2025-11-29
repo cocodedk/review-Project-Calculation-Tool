@@ -1,7 +1,7 @@
-package com.aljamour.pkveksamen.Service;
+package com.example.pkveksamen.Service;
 
-import com.aljamour.pkveksamen.Model.Project;
-import com.aljamour.pkveksamen.Repository.ProjectRepository;
+import com.example.pkveksamen.Model.Project;
+import com.example.pkveksamen.Repository.ProjectRepository;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;

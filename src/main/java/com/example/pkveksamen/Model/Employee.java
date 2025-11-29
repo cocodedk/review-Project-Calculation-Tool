@@ -1,4 +1,4 @@
-package com.aljamour.pkveksamen.Model;
+package com.example.pkveksamen.Model;
 
 public class Employee {
     private int employeeId;

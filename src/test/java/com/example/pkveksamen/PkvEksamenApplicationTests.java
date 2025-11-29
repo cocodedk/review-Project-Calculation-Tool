@@ -1,4 +1,4 @@
-package com.aljamour.pkveksamen;
+package com.example.pkveksamen;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

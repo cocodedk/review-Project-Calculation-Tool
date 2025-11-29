@@ -1,4 +1,4 @@
-package com.aljamour.pkveksamen.Controller;
+package com.example.pkveksamen.Controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
