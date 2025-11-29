@@ -5,17 +5,17 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class UserControllerTest {
+class EmployeeControllerTest {
 
     @BeforeEach
     void setUp() {
     }
 
     @Test
-    void createUser() {
+    void createEmployee() {
     }
 
     @Test
-    void createUserpost() {
+    void createEmployeePost() {
     }
 }

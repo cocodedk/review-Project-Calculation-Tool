@@ -1,9 +1,9 @@
 package com.aljamour.pkveksamen.Controller;
 
 import com.aljamour.pkveksamen.Model.Project;
-import com.aljamour.pkveksamen.Model.User;
+import com.aljamour.pkveksamen.Model.Employee;
 import com.aljamour.pkveksamen.Service.ProjectService;
-import com.aljamour.pkveksamen.Service.UserService;
+import com.aljamour.pkveksamen.Service.EmployeeService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
@@ -14,100 +14,78 @@ import java.util.List;
 @Controller
 @RequestMapping("project")
 public class ProjectController {
-//gg
     private final ProjectService projectService;
-    private final UserService userService;
+    private final EmployeeService employeeService;
 
-    public ProjectController(ProjectService projectService, UserService userService) {
+    public ProjectController(ProjectService projectService, EmployeeService employeeService) {
         this.projectService = projectService;
-        this.userService = userService;
+        this.employeeService = employeeService;
     }
 
-    @GetMapping("/list/{userId}")
-    public String showProjectsByUserID(@PathVariable long userId, Model model){
-        List<Project> projectList = projectService.showProjectsByUserID(userId);
+    @GetMapping("/list/{employeeId}")
+    public String showProjectsByEmployeeId(@PathVariable int employeeId, Model model){
+        List<Project> projectList = projectService.showProjectsByEmployeeId(employeeId);
         model.addAttribute("projectList", projectList);
-        model.addAttribute("currentUserId", userId);
+        model.addAttribute("currentEmployeeId", employeeId);
 
-        User user = userService.getUserById(userId);
-        if (user != null) {
-            model.addAttribute("userName", user.getUserName());
-            model.addAttribute("userRole", user.getRole());
+        Employee employee = employeeService.getEmployeeById(employeeId);
+        if (employee != null) {
+            model.addAttribute("username", employee.getUsername());
+            model.addAttribute("employeeRole", employee.getRole());
         }
         return "project";
     }
 
-
-    @GetMapping("/createproject/{userId}")
-    public String showCreateform(@PathVariable long userId, Model model){
+    @GetMapping("/createproject/{employeeId}")
+    public String showCreateform(@PathVariable int employeeId, Model model){
         model.addAttribute("project", new Project());
-        model.addAttribute("currentUserId", userId);
+        model.addAttribute("currentEmployeeId", employeeId);
         return "createproject";
-
     }
 
-    @PostMapping("/saveproject/{userId}")
-    public String saveProject(@PathVariable long userId, @ModelAttribute Project project) {
+    @PostMapping("/saveproject/{employeeId}")
+    public String saveProject(@PathVariable int employeeId, @ModelAttribute Project project) {
         project.recalculateDuration();
-        projectService.saveProject(project, userId);
-        return "redirect:/project/list/" + userId;
+        projectService.saveProject(project, employeeId);
+        return "redirect:/project/list/" + employeeId;
     }
 
-    @PostMapping("/delete/{userId}/{id}")
-    public String deleteProject(@PathVariable long userId, @PathVariable long id) {
+    @PostMapping("/delete/{employeeId}/{id}")
+    public String deleteProject(@PathVariable int employeeId, @PathVariable long id) {
         projectService.deleteProject(id);
-        return "redirect:/project/list/" + userId;
+        return "redirect:/project/list/" + employeeId;
     }
-    // IK SLET DET TAK - ADEN KIGGER PÅ DET
-//    @PostMapping("/edit")
-//    public String editProject(@PathVariable String projectName,
-//                              String projectDescription,
-//                              LocalDate startDate,
-//                              LocalDate endDate,
-//                              String projectCustomer,
-//                              int projectDuration, Model model){
-//        projectService.editProject();
-//        return "redirect:/project/list";
-//    }
-//
 
-
-    @GetMapping("/edit/{userId}/{projectId}")
-    public String showEditForm(@PathVariable long userId,
+    @GetMapping("/edit/{employeeId}/{projectId}")
+    public String showEditForm(@PathVariable int employeeId,
                                @PathVariable long projectId,
                                Model model) {
         Project project = projectService.getProjectById(projectId);
         model.addAttribute("project", project);
-        model.addAttribute("currentUserId", userId); // vigtigt for formularens action
+        model.addAttribute("currentEmployeeId", employeeId);
 
-        User user = userService.getUserById(userId);
-        if (user != null) {
-            model.addAttribute("userName", user.getUserName());
-            model.addAttribute("userRole", user.getRole());
+        Employee employee = employeeService.getEmployeeById(employeeId);
+        if (employee != null) {
+            model.addAttribute("username", employee.getUsername());
+            model.addAttribute("employeeRole", employee.getRole());
         }
-        return "edit-project"; // din redigerings-view
+        return "edit-project";
     }
 
-    @PostMapping("/edit/{userId}/{projectId}")
-    public String editProject(@PathVariable long userId,
+    @PostMapping("/edit/{employeeId}/{projectId}")
+    public String editProject(@PathVariable int employeeId,
                               @PathVariable long projectId,
                               @ModelAttribute Project project) {
-
         project.setProjectID(projectId);
         project.recalculateDuration();
-
         projectService.editProject(project);
-
-        return "redirect:/project/list/" + userId;
+        return "redirect:/project/list/" + employeeId;
     }
 
-
-    //  MODTAG FORMULAR OG GEM NYT PROJEKT
-    @PostMapping("/create/{userId}")
-    public String createProject(@PathVariable long userId,
+    @PostMapping("/create/{employeeId}")
+    public String createProject(@PathVariable int employeeId,
                                 @ModelAttribute Project project,
                                 Model model) {
-
         project.recalculateDuration();
 
         projectService.createProject(
@@ -116,12 +94,9 @@ public class ProjectController {
                 project.getStartDate(),
                 project.getEndDate(),
                 project.getProjectCustomer(),
-                project.getProjectDuration(),
-                userId
+                employeeId
         );
 
-        return "redirect:/project/list/" + userId; // tilbage til projektliste
+        return "redirect:/project/list/" + employeeId;
     }
-
 }
-

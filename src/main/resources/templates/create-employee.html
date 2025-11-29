@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="da">
+<head>
+    <meta charset="UTF-8">
+    <title>Opret medarbejder</title>
+    <link th:href="@{/create-employee.css}" rel="stylesheet">
+</head>
+<body>
+<h1>Opret medarbejder</h1>
+
+<form th:action="@{/create-employee}" th:object="${employee}" method="post">
+    <label>Brugernavn</label>
+    <input type="text" th:field="*{username}" placeholder="Indtast brugernavn" required>
+
+    <label>Password</label>
+    <input type="password" th:field="*{password}" placeholder="Indtast password" required>
+
+    <label>Email</label>
+    <input type="email" th:field="*{email}" placeholder="Indtast email" required>
+
+    <label>Role</label>
+    <input type="text" th:field="*{role}" placeholder="Indtast rolle" required>
+
+    <button type="submit">Opret medarbejder</button>
+</form>
+
+<p th:if="${error}" th:text="${error}" style="color:red;"></p>
+
+<a th:href="@{/}">Tilbage til forsiden</a>
+</body>
+</html>

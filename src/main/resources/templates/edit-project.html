@@ -25,11 +25,11 @@
     </div>
 
     <div class="breadcrumb">
-        <a th:href="@{/project/list/{userId}(userId=${currentUserId})}">← Tilbage til Mine Projekter</a>
+        <a th:href="@{/project/list/{employeeId}(employeeId=${currentEmployeeId})}">← Tilbage til Mine Projekter</a>
     </div>
 
     <div class="form-card">
-        <form th:action="@{/project/edit/{userId}/{projectId}(userId=${currentUserId}, projectId=${project.projectID})}"
+        <form th:action="@{/project/edit/{employeeId}/{projectId}(employeeId=${currentEmployeeId}, projectId=${project.projectID})}"
               th:object="${project}"
               method="post">
 
@@ -87,7 +87,7 @@
             </div>
 
             <div class="button-group">
-                <a th:href="@{/project/list/{userId}(userId=${currentUserId})}"
+                <a th:href="@{/project/list/{employeeId}(employeeId=${currentEmployeeId})}"
                    class="btn-secondary">
                     Annuller
                 </a>

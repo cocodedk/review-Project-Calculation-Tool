@@ -11,34 +11,32 @@ public class ProjectService {
 
     private ProjectRepository projectRepository;
 
-    public ProjectService (ProjectRepository projectRepository) {
+    public ProjectService(ProjectRepository projectRepository) {
         this.projectRepository = projectRepository;
     }
 
-    public void createProject(String projectName, String projectDescription, LocalDate startDate,
-                              LocalDate endDate, String projectCustomer, int projectDuration, long userId) {
-        projectRepository.createProject(projectName, projectDescription, startDate, endDate, projectCustomer, projectDuration, userId);
-
+    public void createProject(String projectTitle, String projectDescription, LocalDate projectStartDate,
+                              LocalDate projectEndDate, String projectCustomer, Integer employeeId) {
+        projectRepository.createProject(projectTitle, projectDescription, projectStartDate, projectEndDate, projectCustomer, employeeId);
     }
 
-    public List<Project> showProjectsByUserID(long userID) {
-        return projectRepository.showProjectsByUserID(userID);
+    public List<Project> showProjectsByEmployeeId(int employeeId) {
+        return projectRepository.showProjectsByEmployeeId(employeeId);
     }
 
-    public void saveProject(Project projectModel, long userId) {
-        projectRepository.saveProject(projectModel, userId);
+    public void saveProject(Project projectModel, int employeeId) {
+        projectRepository.saveProject(projectModel, employeeId);
     }
 
     public void deleteProject(long projectID) {
         projectRepository.deleteProject(projectID);
     }
 
-   public void editProject(Project project) {
-       projectRepository.editProject(project);
-   }
-
-    public Project getProjectById(long projectId) {
-       return projectRepository.getProjectById(projectId);
+    public void editProject(Project project) {
+        projectRepository.editProject(project);
     }
 
+    public Project getProjectById(long projectId) {
+        return projectRepository.getProjectById(projectId);
+    }
 }

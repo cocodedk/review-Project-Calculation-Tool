@@ -17,56 +17,42 @@ public class ProjectRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void createProject(String projectName, String projectDescription, LocalDate startDate,
-                              LocalDate endDate, String projectCustomer, int projectDuration, long userId) {
+    public void createProject(String projectTitle, String projectDescription, LocalDate projectStartDate,
+                              LocalDate projectEndDate, String projectCustomer, Integer employeeId) {
         jdbcTemplate.update(
-                "INSERT INTO project (project_title, project_description, project_start_date, project_end_date, project_costomer, project_duration, user_id) " +
-                        "VALUES (?,?,?,?,?,?,?)",
-                projectName,
+                "INSERT INTO project (project_title, project_description, project_start_date, project_end_date, project_customer, employee_id) " +
+                        "VALUES (?,?,?,?,?,?)",
+                projectTitle,
                 projectDescription,
-                startDate,
-                endDate,
+                projectStartDate,
+                projectEndDate,
                 projectCustomer,
-                projectDuration,
-                userId
+                employeeId
         );
     }
 
-
-//    public List<ProjectModel> findProjectsByUserID(long userId) {
-//        String sql = "SELECT p.* FROM ProjectModel p INNER JOIN UserProjects up ON p.projectID = up.projectID WHERE up.userId = ?";
-//    ;
-//
-//        return jdbcTemplate.query(sql, (rs, rowNum) -> new ProjectModel(
-//                rs.getLong("projectID"),
-//                rs.getString("projectName"),
-//                rs.getString("projectDescription"),
-//                rs.getDate("startDate").toLocalDate(),
-//                rs.getDate("endDate").toLocalDate(),
-//                rs.getString("projectCustomer"),
-//                rs.getInt("projectDuration")
-//        ), userId);
-//    }
-
-    public List<Project> showProjectsByUserID(long userID) {
-        String sql = "SELECT project_id, project_title, project_description, project_start_date, project_end_date, project_costomer, project_duration " +
+    public List<Project> showProjectsByEmployeeId(int employeeId) {
+        String sql = "SELECT project_id, employee_id, project_title, project_description, project_start_date, project_end_date, project_customer " +
                 "FROM project " +
-                "WHERE user_id = ?";
+                "WHERE employee_id = ?";
 
-        return jdbcTemplate.query(sql, (rs, rowNum) -> new Project(
-                rs.getLong("project_id"),
-                rs.getString("project_title"),
-                rs.getString("project_description"),
-                rs.getObject("project_start_date", LocalDate.class),
-                rs.getObject("project_end_date", LocalDate.class),
-                rs.getString("project_costomer"),
-                rs.getInt("project_duration")
-        ), userID);
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            Project project = new Project();
+            project.setProjectID(rs.getLong("project_id"));
+            project.setProjectName(rs.getString("project_title"));
+            project.setProjectDescription(rs.getString("project_description"));
+            project.setStartDate(rs.getObject("project_start_date", LocalDate.class));
+            project.setEndDate(rs.getObject("project_end_date", LocalDate.class));
+            project.setProjectCustomer(rs.getString("project_customer"));
+            // Beregn varigheden automatisk
+            project.recalculateDuration();
+            return project;
+        }, employeeId);
     }
 
-    public void saveProject(Project projectModel, long userId) {
-        String sql = "INSERT INTO project (project_title, project_description, project_start_date, project_end_date, project_costomer, project_duration, user_id) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+    public void saveProject(Project projectModel, int employeeId) {
+        String sql = "INSERT INTO project (project_title, project_description, project_start_date, project_end_date, project_customer, employee_id) " +
+                "VALUES (?, ?, ?, ?, ?, ?)";
 
         jdbcTemplate.update(sql,
                 projectModel.getProjectName(),
@@ -74,8 +60,7 @@ public class ProjectRepository {
                 projectModel.getStartDate(),
                 projectModel.getEndDate(),
                 projectModel.getProjectCustomer(),
-                projectModel.getProjectDuration(),
-                userId
+                employeeId
         );
     }
 
@@ -83,20 +68,13 @@ public class ProjectRepository {
         jdbcTemplate.update("DELETE FROM project WHERE project_id = ?", projectID);
     }
 
-
-//    public void editProject() {
-//    }
-//}
-
-
     public void editProject(Project project) {
         String sql = "UPDATE project SET " +
                 "project_title = ?, " +
                 "project_description = ?, " +
                 "project_start_date = ?, " +
                 "project_end_date = ?, " +
-                "project_costomer = ?, " +
-                "project_duration = ? " +
+                "project_customer = ? " +
                 "WHERE project_id = ?";
 
         jdbcTemplate.update(sql,
@@ -105,25 +83,26 @@ public class ProjectRepository {
                 project.getStartDate(),
                 project.getEndDate(),
                 project.getProjectCustomer(),
-                project.getProjectDuration(),
-                project.getProjectID()  // vigtigt: id for at opdatere korrekt projekt
+                project.getProjectID()
         );
     }
 
     public Project getProjectById(long projectId) {
-        String sql = "SELECT project_id, project_title, project_description, project_start_date, project_end_date, project_costomer, project_duration " +
+        String sql = "SELECT project_id, employee_id, project_title, project_description, project_start_date, project_end_date, project_customer " +
                 "FROM project " +
                 "WHERE project_id = ?";
 
-        return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new Project(
-                rs.getLong("project_id"),
-                rs.getString("project_title"),
-                rs.getString("project_description"),
-                rs.getObject("project_start_date", LocalDate.class),
-                rs.getObject("project_end_date", LocalDate.class),
-                rs.getString("project_costomer"),
-                rs.getInt("project_duration")
-        ), projectId);
+        return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
+            Project project = new Project();
+            project.setProjectID(rs.getLong("project_id"));
+            project.setProjectName(rs.getString("project_title"));
+            project.setProjectDescription(rs.getString("project_description"));
+            project.setStartDate(rs.getObject("project_start_date", LocalDate.class));
+            project.setEndDate(rs.getObject("project_end_date", LocalDate.class));
+            project.setProjectCustomer(rs.getString("project_customer"));
+            // Beregn varigheden automatisk
+            project.recalculateDuration();
+            return project;
+        }, projectId);
     }
 }
-
