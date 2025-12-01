@@ -71,12 +71,6 @@ public class ProjectRepository {
     }
 
 
-
-
-
-
-
-
     public void saveProject(Project projectModel, int employeeId) {
         String sql = "INSERT INTO project (project_title, project_description, project_start_date, project_end_date, project_customer, employee_id) " +
                 "VALUES (?, ?, ?, ?, ?, ?)";
@@ -132,6 +126,24 @@ public class ProjectRepository {
                 project.getProjectID()
         );
     }
+    public void editSubProject(SubProject subProject) {
+        String sql = "UPDATE subproject SET" +
+                "sub_project_title = ?, " +
+                "sub_project_description = ?, " +
+                "sub_project_start_date = ?, " +
+                "sub_project_end_date = ?, " +
+                "sub_project_duration = ? " +
+                "WHERE sub_project_id = ?";
+
+        jdbcTemplate.update(sql,
+                subProject.getSubProjectName(),
+                subProject.getSubProjectDescription(),
+                subProject.getStartDate(),
+                subProject.getEndDate(),
+                subProject.getSubProjectDuration(),
+                subProject.getSubProjectID()
+        );
+    }
 
     public Project getProjectById(long projectId) {
         String sql = "SELECT project_id, employee_id, project_title, project_description, project_start_date, project_end_date, project_customer " +
@@ -153,4 +165,26 @@ public class ProjectRepository {
     }
 
 
+    public SubProject getSubProjectByID(long subProjectID) {
+        String sql = "SELECT sub_project_id, project_id, sub_project_title, sub_project_description, sub_project_start_date, sub_project_end_date, sub_project_duration " +
+                "FROM sub_project" +
+                "WHERE sub_project_id = ?";
+
+
+        return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
+            SubProject subproject = new SubProject();
+            subproject.setSubProjectID(rs.getLong("sub_project_id"));
+            subproject.setSubProjectName(rs.getString("sub_project_title"));
+            subproject.setSubProjectDescription(rs.getString("sub_project_description"));
+            subproject.setStartDate(rs.getObject("sub_project_start_date", LocalDate.class));
+            subproject.setEndDate(rs.getObject("sub_project_end_date", LocalDate.class));
+            subproject.setSubProjectDuration(rs.getInt("sub_project_duration"));
+            // Beregn varigheden automatisk
+            subproject.recalculateDuration();
+            return subproject;
+        }, subProjectID);
+    }
+
+
 }
+

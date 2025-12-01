@@ -113,6 +113,10 @@ public class ProjectController {
         return "redirect:/project/list/" + employeeId;
     }
 
+    // TODO DELETE TIL SUBPROJECT
+//    @PostMapping("/delete"....)
+//    public String deleteSubProject(@PathVariable long projectId)
+
     @GetMapping("/edit/{employeeId}/{projectId}")
     public String showEditForm(@PathVariable int employeeId,
                                @PathVariable long projectId,
@@ -129,6 +133,18 @@ public class ProjectController {
         return "edit-project";
     }
 
+    // TODO FINDE UD AF URL
+    @GetMapping("/edit/.../{projectId}")
+    public String showSubProjectEditForm(@PathVariable long projectId,
+                                         @PathVariable long subProjectID,
+                                         Model model) {
+        SubProject subProject = projectService.getSubProjectByID(subProjectID);
+        model.addAttribute("projectID", projectId);
+        model.addAttribute("subProjectID", subProjectID);
+
+        return "edit-subproject";
+    }
+
     @PostMapping("/edit/{employeeId}/{projectId}")
     public String editProject(@PathVariable int employeeId,
                               @PathVariable long projectId,
@@ -138,5 +154,19 @@ public class ProjectController {
         projectService.editProject(project);
         return "redirect:/project/list/" + employeeId;
     }
+
+    // TODO HVORFOR SUBPROJECTID IKKE BLIVER BRUGT
+    @PostMapping("edit/.../{projectId}")
+    public String editSubProject(@PathVariable long projectId,
+                                 @PathVariable long subProjectID,
+                                 @ModelAttribute SubProject subProject) {
+        subProject.setSubProjectID(projectId);
+        subProject.recalculateDuration();
+        projectService.editSubProject(subProject);
+        return "redirect:/project/subproject/list";
+    }
+
+
+
 
 }

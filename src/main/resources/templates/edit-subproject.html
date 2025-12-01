@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="da">
+<head>
+  <meta charset="UTF-8">
+  <title>Rediger SubProjekt</title>
+  <link th:href="@{/edit-project.css}" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>Rediger SubProjekt</h1>
+    <div class="user-info">
+      <span th:text="${username} + ' (' + ${employeeRole} + ')'"></span>
+      <form th:action="@{/logout}" method="post">
+        <button type="submit" class="logout-button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" x2="9" y1="12" y2="12"/>
+          </svg>
+          Log ud
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div class="breadcrumb">
+    <a th:href="@{/project/subproject/list/{projectId}(employeeId=${currentEmployeeId})}">← Tilbage til Mine Subprojekter</a>
+  </div>
+
+  <div class="form-card">
+    <form th:action="@{/project/subproject/edit/{employeeId}/{projectId}/{subProjectID}/(employeeId=${currentEmployeeId}, projectId=${project.projectID},subProjectID =${subProject.subProjectID})}"
+          th:object="${project}"
+          method="post">
+
+      <div class="form-group">
+        <label for="subProjectName">Subprojekt Navn *</label>
+        <input type="text"
+               id="subProjectName"
+               th:field="*{subProjectName}"
+               required
+               placeholder="Indtast subprojektnavn">
+      </div>
+
+      <div class="form-group">
+        <label for="subProjectDescription">Beskrivelse</label>
+        <textarea id="subProjectDescription"
+                  th:field="*{subProjectDescription}"
+                  placeholder="Indtast subprojektbeskrivelse"></textarea>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="startDate">Start Dato *</label>
+          <input type="date"
+                 id="startDate"
+                 th:field="*{startDate}"
+                 required>
+        </div>
+
+        <div class="form-group">
+          <label for="endDate">Slut Dato *</label>
+          <input type="date"
+                 id="endDate"
+                 th:field="*{endDate}"
+                 required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="subProjectDuration">Varighed (dage)</label>
+        <input type="number"
+               id="subProjectDuration"
+               th:field="*{subProjectDuration}"
+               min="1"
+               readonly
+               placeholder="Antal dage">
+      </div>
+
+      <div class="button-group">
+        <a th:href="@{/project/subproject/list/{projectId}(employeeId=${currentEmployeeId})}"
+           class="btn-secondary">
+          Annuller
+        </a>
+        <button type="submit" class="create-project-button">
+          Gem Ændringer
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>

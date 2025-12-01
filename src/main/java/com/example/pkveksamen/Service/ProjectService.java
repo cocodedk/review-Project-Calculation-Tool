@@ -26,7 +26,7 @@ public class ProjectService {
         return projectRepository.showProjectsByEmployeeId(employeeId);
     }
 
-    public List<SubProject> showSubProjectsByProjectId(long projectID){
+    public List<SubProject> showSubProjectsByProjectId(long projectID) {
         return projectRepository.showSubProjectsByProjectId(projectID);
     }
 
@@ -34,7 +34,7 @@ public class ProjectService {
         projectRepository.saveProject(projectModel, employeeId);
     }
 
-    public void saveSubProject(SubProject subProject, long projectID){
+    public void saveSubProject(SubProject subProject, long projectID) {
         projectRepository.saveSubProject(subProject, projectID);
     }
 
@@ -48,5 +48,13 @@ public class ProjectService {
 
     public Project getProjectById(long projectId) {
         return projectRepository.getProjectById(projectId);
+    }
+
+    public SubProject getSubProjectByID(long subProjectID) {
+       return projectRepository.getSubProjectByID(subProjectID);
+    }
+
+    public void editSubProject(SubProject subProject) {
+        projectRepository.editSubProject(subProject);
     }
 }
