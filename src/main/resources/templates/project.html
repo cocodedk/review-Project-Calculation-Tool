@@ -13,10 +13,10 @@
     <div class="header">
         <h1>Mine Projekter</h1>
         <div class="user-info">
-            <!-- Viser brugernavn og rolle dynamisk via Thymeleaf -->
+<!--             Viser brugernavn og rolle dynamisk via Thymeleaf-->
             <span th:text="${username} + ' (' + ${employeeRole} + ')'"></span>
 
-            <!-- Logout form -->
+<!--             Logout form-->
             <form th:action="@{/logout}" method="post">
                 <button type="submit" class="logout-button">
                     <!-- Logout ikon -->
@@ -85,8 +85,10 @@
                         </button>
                     </form>
 
-                    <a th:href="@{/project/createsubproject/{employeeId}/{projectId}(employeeId=${currentEmployeeId}, projectId=${project.projectID})}"
-                       class="create-subproject-button">Opret Subprojekt</a>
+                    <a th:href="@{/project/subproject/list/{projectId}(projectId=${project.projectID}, employeeId=${currentEmployeeId})}"
+                       class="create-subproject-button">Se Subprojekt</a>
+
+
                 </div>
             </td>
         </tr>

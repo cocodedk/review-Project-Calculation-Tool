@@ -36,6 +36,26 @@ public class ProjectController {
         return "project";
     }
 
+    @GetMapping("/subproject/list/{projectID}")
+    public String showSubprojectByProjectId(@RequestParam("employeeId") int employeeId, 
+                                         @PathVariable long projectID, 
+                                         Model model){
+        List<SubProject> subProjectList = projectService.showSubProjectsByProjectId(projectID);
+        model.addAttribute("subProjectList", subProjectList);
+        model.addAttribute("currentProjectId", projectID);
+        model.addAttribute("currentEmployeeId", employeeId);
+        
+        // Add employee details for the header
+        Employee employee = employeeService.getEmployeeById(employeeId);
+        if (employee != null) {
+            model.addAttribute("username", employee.getUsername());
+            model.addAttribute("employeeRole", employee.getRole());
+        }
+
+        return "subproject";
+    }
+
+    
     @GetMapping("/createproject/{employeeId}")
     public String showCreateProjectForm(@PathVariable int employeeId, Model model){
         model.addAttribute("project", new Project());
@@ -84,7 +104,7 @@ public class ProjectController {
                                  @ModelAttribute SubProject subProject){
         subProject.recalculateDuration();
         projectService.saveSubProject(subProject, projectId);
-        return "redirect:/project/list/" + employeeId;
+        return "redirect:/project/subproject/list/" + projectId + "?employeeId=" + employeeId;
     }
 
     @PostMapping("/delete/{employeeId}/{id}")

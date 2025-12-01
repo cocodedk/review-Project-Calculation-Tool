@@ -26,6 +26,10 @@ public class ProjectService {
         return projectRepository.showProjectsByEmployeeId(employeeId);
     }
 
+    public List<SubProject> showSubProjectsByProjectId(long projectID){
+        return projectRepository.showSubProjectsByProjectId(projectID);
+    }
+
     public void saveProject(Project projectModel, int employeeId) {
         projectRepository.saveProject(projectModel, employeeId);
     }

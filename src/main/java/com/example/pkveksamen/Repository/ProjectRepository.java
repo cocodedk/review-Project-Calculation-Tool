@@ -51,6 +51,32 @@ public class ProjectRepository {
         }, employeeId);
     }
 
+    public List<SubProject> showSubProjectsByProjectId(long projectID) {
+        String sql = "SELECT sub_project_id, project_id, sub_project_title, sub_project_description, sub_project_start_date, sub_project_end_date, sub_project_duration " +
+                "FROM sub_project " +
+                "WHERE project_id = ?";
+
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            SubProject subProject = new SubProject();
+            subProject.setSubProjectID(rs.getLong("sub_project_id"));
+            subProject.setSubProjectName(rs.getString("sub_project_title"));
+            subProject.setSubProjectDescription(rs.getString("sub_project_description"));
+            subProject.setStartDate(rs.getObject("sub_project_start_date", LocalDate.class));
+            subProject.setEndDate(rs.getObject("sub_project_end_date", LocalDate.class));
+            subProject.setSubProjectDuration(rs.getInt("sub_project_duration"));
+            // Beregn varigheden automatisk
+            subProject.recalculateDuration();
+            return subProject;
+        }, projectID);
+    }
+
+
+
+
+
+
+
+
     public void saveProject(Project projectModel, int employeeId) {
         String sql = "INSERT INTO project (project_title, project_description, project_start_date, project_end_date, project_customer, employee_id) " +
                 "VALUES (?, ?, ?, ?, ?, ?)";
@@ -125,4 +151,6 @@ public class ProjectRepository {
             return project;
         }, projectId);
     }
+
+
 }

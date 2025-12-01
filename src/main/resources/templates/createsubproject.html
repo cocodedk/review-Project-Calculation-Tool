@@ -7,45 +7,100 @@
 </head>
 <body>
 
-<h1>Opret Nyt subProjekt</h1>
-
-<form th:action="@{/project/savesubproject/{employeeId}/{projectId}(employeeId=${currentEmployeeId}, projectId=${currentProjectId})}"
-      th:object="${subProject}" method="post">
-    <div class="form-group">
-        <label for="subprojectName">SubProjekt Navn:</label>
-        <input type="text" id="subprojectName" name="subprojectName" th:field="*{subProjectName}" required/>
+<div class="header">
+    <h1>Opret Nyt Subprojekt</h1>
+    <div class="user-info">
+        <span th:text="${username} + ' (' + ${employeeRole} + ')'"></span>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="logout-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                    <polyline points="16 17 21 12 16 7"/>
+                    <line x1="21" x2="9" y1="12" y2="12"/>
+                </svg>
+                Log ud
+            </button>
+        </form>
     </div>
-
-    <div class="form-group">
-        <label for="subprojectDescription">Beskrivelse:</label>
-        <input type="text" id="subprojectDescription" name="subprojectDescription" th:field="*{subProjectDescription}" required/>
-    </div>
-
-    <div class="form-group">
-        <label for="status">Status:</label>
-        <input type="text" id="status" name="status" th:field="*{subProjectStatus}" required/>
-    </div>
-
-    <div class="form-group">
-        <label for="startDate">Start Dato:</label>
-        <input type="date" id="startDate" name="startDate" th:field="*{startDate}" required/>
-    </div>
-
-    <div class="form-group">
-        <label for="endDate">Slut Dato:</label>
-        <input type="date" id="endDate" name="endDate" th:field="*{endDate}" required/>
-    </div>
-
-
-
-<div class="form-group">
-    <label for="subprojectDuration">Varighed (Dage):</label>
-    <input type="number" id="subprojectDuration" name="subprojectDuration" th:field="*{subProjectDuration}" required readonly/>
 </div>
 
-    <button type="submit">Opret subProjekt</button>
+<div class="form-container">
+    <form th:action="@{/project/savesubproject/{employeeId}/{projectId}(employeeId=${currentEmployeeId}, projectId=${currentProjectId})}"
+          th:object="${subProject}" method="post" class="project-form" id="subprojectForm">
+        <div class="form-group">
+            <label for="subProjectName">Subprojekt Navn:</label>
+            <input type="text" id="subProjectName" name="subProjectName" th:field="*{subProjectName}" required/>
+        </div>
 
-</form>
+        <div class="form-group">
+            <label for="subProjectDescription">Beskrivelse:</label>
+            <textarea id="subProjectDescription" name="subProjectDescription" th:field="*{subProjectDescription}" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="startDate">Start Dato:</label>
+            <input type="date" id="startDate" name="startDate" th:field="*{startDate}" required 
+                   onchange="calculateDuration()"/>
+        </div>
+
+        <div class="form-group">
+            <label for="endDate">Slut Dato:</label>
+            <input type="date" id="endDate" name="endDate" th:field="*{endDate}" required 
+                   onchange="calculateDuration()"/>
+        </div>
+
+        <div class="form-group">
+            <label for="subProjectDuration">Varighed (dage):</label>
+            <input type="number" id="subProjectDuration" name="subProjectDuration" 
+                   th:field="*{subProjectDuration}" readonly/>
+        </div>
+
+        <div class="form-actions">
+            <button type="button" class="cancel-button" 
+                    th:onclick="'window.location.href=\'' + @{/project/subproject/list/{projectId}(projectId=${currentProjectId}, employeeId=${currentEmployeeId})} + '\''">
+                Annuller
+            </button>
+            <button type="submit" class="submit-button">Opret Subprojekt</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    function calculateDuration() {
+        const startDate = new Date(document.getElementById('startDate').value);
+        const endDate = new Date(document.getElementById('endDate').value);
+        const durationField = document.getElementById('subProjectDuration');
+        
+        if (startDate && endDate && endDate >= startDate) {
+            const diffTime = Math.abs(endDate - startDate);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // +1 to include both start and end dates
+            durationField.value = diffDays;
+        } else {
+            durationField.value = '0';
+        }
+    }
+
+    // Initialize duration to 0 when the page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('subProjectDuration').value = '0';
+        
+        // Add form submission handler
+        document.getElementById('subprojectForm').addEventListener('submit', function(e) {
+            // Ensure duration is calculated before submission
+            calculateDuration();
+            
+            // Check if duration is valid
+            const duration = parseInt(document.getElementById('subProjectDuration').value);
+            if (isNaN(duration) || duration <= 0) {
+                e.preventDefault();
+                alert('Venligst indtast gyldige datoer for at beregne varigheden.');
+                return false;
+            }
+            return true;
+        });
+    });
+</script>
 
 </body>
 </html>
