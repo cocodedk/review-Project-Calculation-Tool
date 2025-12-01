@@ -17,8 +17,6 @@ public class Task {
 
     public Task(){}
 
-
-
     public Task(int taskID, String taskName, String taskDescription, TaskStatus taskStatus, int taskDuration,
                 String taskNote, LocalDate startDate, LocalDate endDate, TaskPriority taskPriority) {
         this.taskID = taskID;
