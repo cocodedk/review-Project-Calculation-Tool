@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Log ind</title>
+    <!-- Google Font link (indlæser fonten fra Google) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link th:href="@{/login.css}" rel="stylesheet">
 </head>
 <body>
 <div class="container">
-    <h1>Welcome to The Planner</h1>
+    <h1>THE PLANNER</h1>
 
     <div th:if="${error}" class="error-message">
         <p th:text="${error}"></p>

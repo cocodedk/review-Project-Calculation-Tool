@@ -1,0 +1,231 @@
+/* === GLOBAL === */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Poppins, sans-serif;
+    background: #f2f5f9;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* === HEADER / TOP BAR === */
+.header {
+    background: linear-gradient(135deg, #4b79a1, #283e51);
+    padding: 20px 25px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #ffffff;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+/* === USER INFO + LOGOUT === */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-info span {
+    font-weight: 500;
+}
+
+.logout-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.6);
+    background: rgba(0,0,0,0.1);
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: 0.2s ease;
+}
+
+.logout-button:hover {
+    background: rgba(0,0,0,0.25);
+}
+
+/* === CONTROL BAR (top over tabel) === */
+.control-bar {
+    margin: 25px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Tilbage-linket */
+.control-bar .back-button {
+    color: #4b79a1;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 0.95rem;
+    padding: 0;
+    background: transparent;
+    border: none;
+}
+
+.control-bar .back-button:hover {
+    text-decoration: underline;
+}
+
+/* Opret ny task knap */
+.create-task-button {
+    background: #4b79a1;
+    padding: 10px 18px;
+    border-radius: 8px;
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.2s ease;
+}
+
+.create-task-button:hover {
+    background: #3a5f7a;
+}
+
+/* === TABLE === */
+.task-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.task-table thead {
+    background: #4b79a1;
+    color: white;
+}
+
+.task-table th {
+    padding: 14px;
+    text-align: left;
+    font-size: 0.95rem;
+}
+
+.task-table td {
+    padding: 14px;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 0.9rem;
+}
+
+/* Hover på rækker */
+.task-table tbody tr:hover {
+    background: #f5f7fb;
+}
+
+/* Tom-tilstand tekst */
+.task-table td[colspan] {
+    text-align: center;
+    padding: 30px;
+    color: #777;
+}
+
+/* === ACTION BUTTONS I TABEL === */
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.action-buttons .edit-button,
+.action-buttons .delete-button,
+.action-buttons .create-task-button {
+    padding: 7px 12px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: 0.2s ease;
+}
+
+/* Rediger-task */
+.action-buttons .back-button {
+    background: #4b79a1;
+    color: white;
+}
+
+.action-buttons .edit-button:hover {
+    background: #3a5f7a;
+}
+
+/* Slet-task */
+.action-buttons .delete-button {
+    background: #d9534f;
+    color: white;
+}
+
+.action-buttons .delete-button:hover {
+    background: #b0413e;
+}
+
+/* Opret sub-task */
+.action-buttons .create-subtask-button {
+    background: #3b8c58;
+    color: white;
+}
+
+.action-buttons .create-subtask-button:hover {
+    background: #2f6f46;
+}
+
+/* === STATUS-CELLE (valgfrit: gør status lidt mere tydelig) === */
+.subproject-table td:nth-child(6) {
+    font-weight: 600;
+    color: #4b79a1;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 900px) {
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    .action-buttons .edit-button,
+    .action-buttons .delete-button,
+    .action-buttons .create-subtask-button {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 600px) {
+    .header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+    }
+
+    .control-bar {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .create-subtask-button {
+        width: 100%;
+        justify-content: center;
+    }
+}

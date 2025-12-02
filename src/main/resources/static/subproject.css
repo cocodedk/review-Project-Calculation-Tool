@@ -1,0 +1,220 @@
+/* === GLOBAL === */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Poppins, sans-serif;
+    background: #f2f5f9;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* === HEADER === */
+.header {
+    background: linear-gradient(135deg, #4b79a1, #283e51);
+    padding: 20px 25px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #ffffff;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+/* === USER INFO === */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-info span {
+    font-weight: 500;
+}
+
+.logout-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.6);
+    background: rgba(0,0,0,0.1);
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: 0.2s ease;
+}
+
+.logout-button:hover {
+    background: rgba(0,0,0,0.25);
+}
+
+/* === CONTROL BAR === */
+.control-bar {
+    margin: 25px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.control-bar .back-button {
+    color: #4b79a1;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+
+.control-bar .back-button:hover {
+    text-decoration: underline;
+}
+
+.create-project-button {
+    background: #4b79a1;
+    padding: 10px 18px;
+    border-radius: 8px;
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.2s ease;
+}
+
+.create-subproject-button:hover {
+    background: #3a5f7a;
+}
+
+/* === TABLE === */
+.subproject-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.subproject-table thead {
+    background: #4b79a1;
+    color: white;
+}
+
+.subproject-table th {
+    padding: 14px;
+    text-align: left;
+    font-size: 0.95rem;
+}
+
+.subproject-table td {
+    padding: 14px;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 0.9rem;
+}
+
+.subproject-table tbody tr:hover {
+    background: #f5f7fb;
+}
+
+/* === ACTION BUTTONS === */
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.edit-button,
+.delete-button,
+.create-subproject-button {
+    padding: 7px 12px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: 0.2s ease;
+}
+
+/* Rediger-knap */
+.edit-button {
+    background: #4b79a1;
+    color: white;
+}
+
+.edit-button:hover {
+    background: #3a5f7a;
+}
+
+/* Opret task */
+.create-subproject-button {
+    background: #3b8c58;
+    color: white;
+}
+
+.create-subproject-button:hover {
+    background: #2f6f46;
+}
+
+/* Slet-knap */
+.delete-button {
+    background: #d9534f;
+    color: white;
+    border: none;
+}
+
+.delete-button:hover {
+    background: #b0413e;
+}
+
+/* Center text when empty */
+.subproject-table td[colspan] {
+    text-align: center;
+    padding: 30px;
+    color: #777;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 900px) {
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    .create-subproject-button,
+    .edit-button,
+    .delete-button {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 600px) {
+    .header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+    }
+
+    .control-bar {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .create-subproject-button {
+        width: 100%;
+        justify-content: center;
+    }
+}

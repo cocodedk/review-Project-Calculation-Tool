@@ -2,7 +2,7 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: Lora, sans-serif;
+    font-family: Inter, Arial, sans-serif;
     background: linear-gradient(135deg, #4b79a1, #283e51);
     height: 100vh;
     display: flex;
@@ -32,6 +32,7 @@ body {
     background-color: #ffd6d6;
     color: #a30000;
     padding: 10px;
+    font-family: Inter, Arial, sans-serif;
     border-radius: 8px;
     margin-bottom: 20px;
     font-size: 0.9rem;
@@ -72,6 +73,7 @@ input:focus {
     display: inline-block;
     width: 100%;
     padding: 12px 0;
+    font-family: Inter, Arial, sans-serif;
     margin-top: 10px;
     background: #4b79a1;
     color: #fff;

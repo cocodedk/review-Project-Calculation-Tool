@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Tasks</title>
     <!-- Linker til ekstern CSS-fil med styling -->
-    <link th:href="@{/project.css}" rel="stylesheet">
+    <link th:href="@{/task.css}" rel="stylesheet">
 </head>
 <body>
 
@@ -36,7 +36,7 @@
     <!-- Kontrol bar med knap til at oprette nyt subprojekt -->
     <div class="control-bar">
         <!-- Tilbage til projekter knap -->
-        <a th:href="@{/project/subproject/list/{subprojectId}(employeeId=${currentEmployeeId})}" class="edit-button">
+        <a th:href="@{/project/subproject/list/{subprojectId}(employeeId=${currentEmployeeId})}" class="back-button">
             ← Tilbage til Sub Projects
         </a>
 
@@ -51,8 +51,8 @@
         </a>
     </div>
 
-    <!-- Tabel der viser alle subprojekter -->
-    <table class="subproject-table">
+    <!-- Tabel der viser alle tasks -->
+    <table class="task-table">
         <thead>
         <tr>
             <th>Task Navn</th>
@@ -93,7 +93,7 @@
 
                     <!-- Opret task knap (tilføj URL når du har lavet task funktionaliteten) -->
                     <a th:href="@{/project/task/liste/{employeeId}/{projectId}/{subProjectId}(employeeId=${currentEmployeeId}, projectId=${currentProjectId}, subProjectId=${subproject.subProjectID})}"
-                       class="create-subproject-button">Opret Sub Task</a>
+                       class="create-subtask-button">Opret Sub Task</a>
                 </div>
             </td>
         </tr>
