@@ -2,7 +2,7 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: Poppins, sans-serif;
+    font-family: Inter, sans-serif;
     background: #f2f5f9;
     color: #333;
 }
@@ -47,7 +47,7 @@ body {
     align-items: center;
     gap: 6px;
     padding: 8px 14px;
-    font-family: Poppins, sans-serif;
+    font-family: Inter, sans-serif;
     border-radius: 999px;
     border: 1px solid rgba(255,255,255,0.6);
     background: rgba(0,0,0,0.1);
@@ -62,11 +62,11 @@ body {
     background: rgba(0,0,0,0.25);
 }
 
-/* === CONTROL BAR (over tabel) === */
+/* === CONTROL BAR (opret projekt kmap) === */
 .control-bar {
     margin: 25px 0;
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;
 }
 
 /* Blå "Opret Nyt Projekt" */

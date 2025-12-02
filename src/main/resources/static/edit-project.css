@@ -1,5 +1,177 @@
+/* === GLOBAL === */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Inter, sans-serif;
+    background: #f2f5f9;
+    color: #333;
+}
 
-    /* --- Base og Layout --- */
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* === HEADER / TOP BAR === */
+.header {
+    background: linear-gradient(135deg, #4b79a1, #283e51);
+    padding: 20px 25px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #ffffff;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logout-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    font-family: Inter, sans-serif;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.6);
+    background: rgba(0,0,0,0.15);
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: 0.2s ease;
+}
+
+.logout-button:hover {
+    background: rgba(0,0,0,0.25);
+}
+
+/* === BREADCRUMB === */
+.breadcrumb {
+    margin: 25px 0;
+}
+
+.breadcrumb a {
+    text-decoration: none;
+    color: #4b79a1;
+    font-weight: 600;
+    transition: 0.2s ease;
+}
+
+.breadcrumb a:hover {
+    color: #375a78;
+}
+
+/* === FORM CARD === */
+.form-card {
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+/* === FORM === */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 18px;
+    width: 100%;
+}
+
+.form-group label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #444;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    background: #f9fafb;
+    transition: 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #4b79a1;
+    background: #ffffff;
+    outline: none;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* === DATE ROW === */
+.form-row {
+    display: flex;
+    gap: 20px;
+}
+
+@media (max-width: 700px) {
+    .form-row {
+        flex-direction: column;
+    }
+}
+
+/* === BUTTONS === */
+.button-group {
+    margin-top: 25px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+/* Grå sekundær-knap */
+.btn-secondary {
+    padding: 10px 18px;
+    font-family: Inter, sans-serif;
+    border-radius: 8px;
+    color: #333;
+    background: #e5e7eb;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.2s ease;
+}
+
+.btn-secondary:hover {
+    background: #d5d6d8;
+}
+
+/* Blå primær-knap */
+.create-project-button {
+    padding: 10px 18px;
+    font-family: Inter, sans-serif;
+    border-radius: 8px;
+    background: #4b79a1;
+    color: #ffffff;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.create-project-button:hover {
+    background: #3a5f7a;
+}
+
+/* GAMLE CSS
+    /* --- Base og Layout ---
 body {
     font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     margin: 0;
@@ -13,7 +185,7 @@ body {
     padding: 20px;
 }
 
-/* --- Header (Top bar) --- */
+/* --- Header (Top bar) ---
 .header {
     display: flex;
     justify-content: space-between;
@@ -41,7 +213,7 @@ body {
     color: #4b5563;
 }
 
-/* Logout Button */
+/* Logout Button
 .logout-button {
     display: inline-flex;
     align-items: center;
@@ -64,7 +236,7 @@ body {
     margin-right: 5px;
 }
 
-/* --- Breadcrumb --- */
+/* --- Breadcrumb ---
 .breadcrumb {
     margin-bottom: 25px;
 }
@@ -80,7 +252,7 @@ body {
     color: #2563eb;
 }
 
-/* --- Form Card --- */
+/* --- Form Card ---
 .form-card {
     background-color: white;
     border-radius: 0.5rem;
@@ -137,7 +309,7 @@ body {
     margin-top: 4px;
 }
 
-/* --- Buttons --- */
+/* --- Buttons ---
 .button-group {
     display: flex;
     gap: 10px;
@@ -183,14 +355,14 @@ body {
     background-color: #4b5563;
 }
 
-/* Action buttons container */
+/* Action buttons container
 .action-buttons {
     display: flex;
     gap: 10px;
     align-items: center;
 }
 
-/* Edit button */
+/* Edit button
 .edit-button {
     display: inline-flex;
     align-items: center;
@@ -215,7 +387,7 @@ body {
     vertical-align: middle;
 }
 
-/* Delete button */
+/* Delete button
 .delete-button {
     display: inline-flex;
     align-items: center;
@@ -253,3 +425,4 @@ body {
         width: 100%;
     }
 }
+*/

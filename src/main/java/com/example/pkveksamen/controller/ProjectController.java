@@ -140,19 +140,36 @@ public class ProjectController {
         return "edit-project";
     }
 
+    @GetMapping("/subproject/edit/{employeeId}/{projectId}/{subProjectId}")
+    public String showSubProjectEditForm(@PathVariable int employeeId,
+                                         @PathVariable long projectId,
+                                         @PathVariable long subProjectId, // lowercase i URL
+                                         Model model) {
+        SubProject subProject = projectService.getSubProjectBySubProjectID(subProjectId);
+        model.addAttribute("subProject", subProject);
+        model.addAttribute("currentEmployeeId", employeeId);
+        model.addAttribute("currentProjectId", projectId);
+
+        Employee employee = employeeService.getEmployeeById(employeeId);
+        if (employee != null) {
+            model.addAttribute("username", employee.getUsername());
+            model.addAttribute("employeeRole", employee.getRole());
+        }
+
+        return "edit-subproject";
+    }
+    /*
     // TODO FINDE UD AF URL
-    @GetMapping("/edit/.../{projectId}")
+    @GetMapping("/subproject/edit/{employeeId}/{projectId}/{subprojectId}")
     public String showSubProjectEditForm(@PathVariable long projectId,
                                          @PathVariable long subProjectID,
                                          Model model) {
-        SubProject subProject = projectService.getSubProjectByID(subProjectID);
-        model.addAttribute("projectID", projectId);
-        model.addAttribute("subProjectID", subProjectID);
+        SubProject subProject = projectService.getSubProjectBySubProjectID(subProjectID);
+        model.addAttribute("currentProjectID", projectId);
+        model.addAttribute("currentSubProjectID", subProjectID);
 
         return "edit-subproject";
-
-    }
-
+    } */
 
     @PostMapping("/edit/{employeeId}/{projectId}")
     public String editProject(@PathVariable int employeeId,
@@ -164,6 +181,17 @@ public class ProjectController {
         return "redirect:/project/list/" + employeeId;
     }
 
+    @PostMapping("/subproject/edit/{employeeId}/{projectId}/{subProjectId}")
+    public String editSubProject(@PathVariable int employeeId,
+                                 @PathVariable long projectId,
+                                 @PathVariable long subProjectId, // lowercase i URL
+                                 @ModelAttribute SubProject subProject) {
+        subProject.setSubProjectID(subProjectId); // Bruger setter-metoden fra model klassen
+        subProject.recalculateDuration();
+        projectService.editSubProject(subProject);
+        return "redirect:/project/subproject/list/" + projectId + "?employeeId=" + employeeId;
+    }
+    /*
     // TODO HVORFOR SUBPROJECTID ikke bliver brugt - Aden har kiggede på det.
     // TODO VI MANGLEDE SKRIVE + SUBPROJECTID TIL SIDST VED REDCICRECT
     @PostMapping("edit/.../{projectId}")
@@ -175,5 +203,5 @@ public class ProjectController {
         projectService.editSubProject(subProject);
         return "redirect:/project/subproject/list" + subProjectID;
     }
-
+    */
 }

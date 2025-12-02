@@ -50,8 +50,8 @@ public class ProjectService {
         return projectRepository.getProjectById(projectId);
     }
 
-    public SubProject getSubProjectByID(long subProjectID) {
-       return projectRepository.getSubProjectByID(subProjectID);
+    public SubProject getSubProjectBySubProjectID(long subProjectID) {
+       return projectRepository.getSubProjectBySubProjectID(subProjectID);
     }
 
     public void editSubProject(SubProject subProject) {

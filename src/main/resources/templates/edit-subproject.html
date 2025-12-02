@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Rediger SubProjekt</title>
+  <!-- package til at bruge en lækker og æstetisk skrifttype-->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link th:href="@{/edit-subproject.css}" rel="stylesheet">
 </head>
 <body>
@@ -25,12 +27,12 @@
   </div>
 
   <div class="breadcrumb">
-    <a th:href="@{/project/subproject/list/{projectId}(employeeId=${currentEmployeeId})}">← Tilbage til Mine Subprojekter</a>
+    <a th:href="@{/project/subproject/list/{projectId}(projectId=${currentProjectId}, employeeId=${currentEmployeeId})}">← Tilbage til Mine Subprojekter</a>
   </div>
 
   <div class="form-card">
-    <form th:action="@{/project/subproject/edit/{employeeId}/{projectId}/{subProjectID}/(employeeId=${currentEmployeeId}, projectId=${project.projectID},subProjectID =${subProject.subProjectID})}"
-          th:object="${project}"
+    <form th:action="@{/project/subproject/edit/{employeeId}/{projectId}/{subProjectId}(employeeId=${currentEmployeeId}, projectId=${currentProjectId}, subProjectId=${subProject.subProjectID})}"
+          th:object="${subProject}"
           method="post">
 
       <div class="form-group">
@@ -47,6 +49,7 @@
         <textarea id="subProjectDescription"
                   th:field="*{subProjectDescription}"
                   placeholder="Indtast subprojektbeskrivelse"></textarea>
+      </div>
 
       <div class="form-row">
         <div class="form-group">
@@ -73,11 +76,11 @@
                th:field="*{subProjectDuration}"
                min="1"
                readonly
-               placeholder="Antal dage">
+               >
       </div>
 
       <div class="button-group">
-        <a th:href="@{/project/subproject/list/{projectId}(employeeId=${currentEmployeeId})}"
+        <a th:href="@{/project/subproject/list/{projectId}(projectId=${currentProjectId}, employeeId=${currentEmployeeId})}"
            class="btn-secondary">
           Annuller
         </a>
