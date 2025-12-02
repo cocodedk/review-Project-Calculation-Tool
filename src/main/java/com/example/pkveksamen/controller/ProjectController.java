@@ -114,6 +114,7 @@ public class ProjectController {
     }
 
     // TODO DELETE TIL SUBPROJECT - kig på den Aden har lavet den
+    // TODO: KIG OGSÅ PÅ LINJE 123 EFTER PROJECTID
     @PostMapping("/subproject/delete/{employeeId}/{projectId}/{subProjectId}")
     public String deleteSubProject(@PathVariable int employeeId,
                                    @PathVariable long projectId,
