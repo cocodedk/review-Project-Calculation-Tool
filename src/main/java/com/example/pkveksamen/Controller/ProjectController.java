@@ -23,7 +23,7 @@ public class ProjectController {
     }
 
     @GetMapping("/list/{employeeId}")
-    public String showProjectsByEmployeeId(@PathVariable int employeeId, Model model){
+    public String showProjectsByEmployeeId(@PathVariable int employeeId, Model model) {
         List<Project> projectList = projectService.showProjectsByEmployeeId(employeeId);
         model.addAttribute("projectList", projectList);
         model.addAttribute("currentEmployeeId", employeeId);
@@ -37,14 +37,14 @@ public class ProjectController {
     }
 
     @GetMapping("/subproject/list/{projectID}")
-    public String showSubprojectByProjectId(@RequestParam("employeeId") int employeeId, 
-                                         @PathVariable long projectID, 
-                                         Model model){
+    public String showSubprojectByProjectId(@RequestParam("employeeId") int employeeId,
+                                            @PathVariable long projectID,
+                                            Model model) {
         List<SubProject> subProjectList = projectService.showSubProjectsByProjectId(projectID);
         model.addAttribute("subProjectList", subProjectList);
         model.addAttribute("currentProjectId", projectID);
         model.addAttribute("currentEmployeeId", employeeId);
-        
+
         // Add employee details for the header
         Employee employee = employeeService.getEmployeeById(employeeId);
         if (employee != null) {
@@ -55,9 +55,9 @@ public class ProjectController {
         return "subproject";
     }
 
-    
+
     @GetMapping("/createproject/{employeeId}")
-    public String showCreateProjectForm(@PathVariable int employeeId, Model model){
+    public String showCreateProjectForm(@PathVariable int employeeId, Model model) {
         model.addAttribute("project", new Project());
         model.addAttribute("currentEmployeeId", employeeId);
         return "createproject";
@@ -66,7 +66,7 @@ public class ProjectController {
     @GetMapping("/createsubproject/{employeeId}/{projectId}")
     public String showCreateSubProjectForm(@PathVariable int employeeId,
                                            @PathVariable long projectId,
-                                           Model model){
+                                           Model model) {
         model.addAttribute("subProject", new SubProject());
         model.addAttribute("currentEmployeeId", employeeId);
         model.addAttribute("currentProjectId", projectId);
@@ -101,7 +101,7 @@ public class ProjectController {
     @PostMapping("/savesubproject/{employeeId}/{projectId}")
     public String saveSubProject(@PathVariable int employeeId,
                                  @PathVariable long projectId,
-                                 @ModelAttribute SubProject subProject){
+                                 @ModelAttribute SubProject subProject) {
         subProject.recalculateDuration();
         projectService.saveSubProject(subProject, projectId);
         return "redirect:/project/subproject/list/" + projectId + "?employeeId=" + employeeId;
@@ -113,9 +113,15 @@ public class ProjectController {
         return "redirect:/project/list/" + employeeId;
     }
 
-    // TODO DELETE TIL SUBPROJECT
-//    @PostMapping("/delete"....)
-//    public String deleteSubProject(@PathVariable long projectId)
+    // TODO DELETE TIL SUBPROJECT - kig på den Aden har lavet den
+    @PostMapping("/subproject/delete/{employeeId}/{projectId}/{subProjectId}")
+    public String deleteSubProject(@PathVariable int employeeId,
+                                   @PathVariable long projectId,
+                                   @PathVariable long subProjectId) {
+        projectService.deleteSubProject(subProjectId);
+        return "redirect:/project/subproject/list/" + projectId + "?employeeId=" + employeeId;
+    }
+
 
     @GetMapping("/edit/{employeeId}/{projectId}")
     public String showEditForm(@PathVariable int employeeId,
@@ -143,7 +149,9 @@ public class ProjectController {
         model.addAttribute("subProjectID", subProjectID);
 
         return "edit-subproject";
+
     }
+
 
     @PostMapping("/edit/{employeeId}/{projectId}")
     public String editProject(@PathVariable int employeeId,
@@ -155,7 +163,8 @@ public class ProjectController {
         return "redirect:/project/list/" + employeeId;
     }
 
-    // TODO HVORFOR SUBPROJECTID IKKE BLIVER BRUGT
+    // TODO HVORFOR SUBPROJECTID ikke bliver brugt - Aden har kiggede på det.
+    // TODO VI MANGLEDE SKRIVE + SUBPROJECTID TIL SIDST VED REDCICRECT
     @PostMapping("edit/.../{projectId}")
     public String editSubProject(@PathVariable long projectId,
                                  @PathVariable long subProjectID,
@@ -163,10 +172,7 @@ public class ProjectController {
         subProject.setSubProjectID(projectId);
         subProject.recalculateDuration();
         projectService.editSubProject(subProject);
-        return "redirect:/project/subproject/list";
+        return "redirect:/project/subproject/list" + subProjectID;
     }
-
-
-
 
 }

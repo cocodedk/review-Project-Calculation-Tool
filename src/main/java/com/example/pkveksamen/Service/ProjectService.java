@@ -57,4 +57,7 @@ public class ProjectService {
     public void editSubProject(SubProject subProject) {
         projectRepository.editSubProject(subProject);
     }
+    public void deleteSubProject(long subProjectId) {
+        projectRepository.deleteSubProject(subProjectId);
+    }
 }

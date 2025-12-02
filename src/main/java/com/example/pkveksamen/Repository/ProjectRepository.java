@@ -127,7 +127,7 @@ public class ProjectRepository {
         );
     }
     public void editSubProject(SubProject subProject) {
-        String sql = "UPDATE subproject SET" +
+        String sql = "UPDATE sub_project SET " +
                 "sub_project_title = ?, " +
                 "sub_project_description = ?, " +
                 "sub_project_start_date = ?, " +
@@ -167,7 +167,7 @@ public class ProjectRepository {
 
     public SubProject getSubProjectByID(long subProjectID) {
         String sql = "SELECT sub_project_id, project_id, sub_project_title, sub_project_description, sub_project_start_date, sub_project_end_date, sub_project_duration " +
-                "FROM sub_project" +
+                "FROM sub_project " +
                 "WHERE sub_project_id = ?";
 
 
@@ -183,6 +183,13 @@ public class ProjectRepository {
             subproject.recalculateDuration();
             return subproject;
         }, subProjectID);
+    }
+
+
+
+
+    public void deleteSubProject(long subProjectId) {
+        jdbcTemplate.update("DELETE FROM sub_project WHERE sub_project_id = ?", subProjectId);
     }
 
 
