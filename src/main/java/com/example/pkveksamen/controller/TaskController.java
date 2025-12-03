@@ -86,4 +86,16 @@ public class TaskController {
 
         return "task";
     }
+
+    @PostMapping("/savetask/{employeeId}/{projectId}/{subprojectID}")
+    public String saveTask(@PathVariable int employeeId,
+                           @PathVariable long projectId,
+                           @PathVariable long subprojectID,
+                           @ModelAttribute Task task) {
+        task.recalculateDuration();
+        taskService.saveTask(task, subprojectID);
+        return "redirect:/project/task/list/" + subprojectID + projectId + "?employeeId=" + employeeId;
+    }
+
+
 }

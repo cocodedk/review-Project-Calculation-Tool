@@ -27,6 +27,10 @@ public class TaskService {
     public List<Task> showTaskByEmployeeId(int employeeId) {
         return taskRepository.showTaskByEmployeeId(employeeId);
     }
+
+    public void saveTask(Task task, long subprojectID) {
+        taskRepository.saveTask(task,subprojectID);
+    }
 }
 
 
