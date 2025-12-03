@@ -1,6 +1,7 @@
 package com.example.pkveksamen.controller;
 
 import com.example.pkveksamen.model.Employee;
+import com.example.pkveksamen.model.EmployeeRole;
 import com.example.pkveksamen.service.EmployeeService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -30,6 +31,7 @@ public class EmployeeController {
     @GetMapping("/create-employee")
     public String createEmployee(Model model) {
         model.addAttribute("employee", new Employee());
+        model.addAttribute("roles", EmployeeRole.values());
         return "create-employee";
     }
 

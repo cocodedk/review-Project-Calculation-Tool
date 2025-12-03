@@ -13,12 +13,12 @@ public class Task {
     private LocalDate endDate;
     private Priority priority;
     private Status status;
-
+    private EmployeeRole employeeRole;
 
     public Task(){}
 
     public Task(int taskID, String taskName, String taskDescription, Status status, int taskDuration,
-                String taskNote, LocalDate startDate, LocalDate endDate, Priority priority) {
+                String taskNote, LocalDate startDate, LocalDate endDate, Priority priority, EmployeeRole employeeRole) {
         this.taskID = taskID;
         this.taskName = taskName;
         this.taskDescription = taskDescription;
@@ -28,9 +28,8 @@ public class Task {
         this.startDate = startDate;
         this.endDate = endDate;
         this.priority = priority;
-
+        this.employeeRole = employeeRole;
     }
-
 
     public void recalculateDuration() {
         if (startDate != null && endDate != null) {

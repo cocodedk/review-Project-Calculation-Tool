@@ -75,7 +75,7 @@
             <td th:text="${subproject.subProjectDescription}"></td>
             <td th:text="${subproject.startDate}"></td>
             <td th:text="${subproject.endDate}"></td>
-            <td><span th:text="${subproject.SubProjectDuration}"></span> dage</td>
+            <td><span th:text="${subproject.subProjectDuration}"></span> dage</td>
             <td>
                 <div class="action-buttons">
                     <!-- Rediger-knap (udkommenteret indtil du laver funktionaliteten) -->
@@ -91,7 +91,7 @@
 
                     <!-- Opret task knap (tilføj URL når du har lavet task funktionaliteten) -->
                     <a th:href="@{/project/task/liste/{employeeId}/{projectId}/{subProjectId}(employeeId=${currentEmployeeId}, projectId=${currentProjectId}, subProjectId=${subproject.subProjectID})}"
-                       class="create-task-button">Opret task</a>
+                       class="create-task-button">Se task</a>
                 </div>
             </td>
         </tr>

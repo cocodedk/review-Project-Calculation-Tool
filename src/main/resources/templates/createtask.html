@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Opret Ny Task</title>
-    <link th:href="@{/createsubproject.css}" rel="stylesheet">
+    <link th:href="@{/createtask.css}" rel="stylesheet">
 </head>
 <body>
 
@@ -15,8 +15,8 @@
 </div>
 
 <div class="form-container">
-    <form th:action="@{/project/savesubproject/{employeeId}/{projectId}(employeeId=${currentEmployeeId}, projectId=${currentProjectId})}"
-          th:object="${subProject}" method="post" class="project-form" id="subprojectForm">
+    <form th:action="@{/task/createtask/{subProjectId}(employeeId=${currentEmployeeId}, subProjectId=${currentSubProjectId})}"
+          th:object="${task}" method="post" class="project-form" id="taskForm">
         <div class="form-group">
             <label for="taskName">Task Navn:</label>
             <input type="text" id="taskName" name="taskName" th:field="*{taskName}" required/>
@@ -29,81 +29,46 @@
 
         <div class="form-group">
             <label for="startDate">Start Dato:</label>
-            <input type="date" id="startDate" name="startDate" th:field="*{startDate}" required
-                   onchange="calculateDuration()"/>
+            <input type="date" id="startDate" name="startDate" th:field="*{startDate}" required/>
         </div>
 
         <div class="form-group">
             <label for="endDate">Slut Dato:</label>
-            <input type="date" id="endDate" name="endDate" th:field="*{endDate}" required
-                   onchange="calculateDuration()"/>
-        </div>
-
-        <div class="form-group">
-            <label for="taskDuration">Varighed (dage):</label>
-            <input type="number" id="taskDuration" name="taskDuration"
-                   th:field="*{taskDuration}" readonly/>
+            <input type="date" id="endDate" name="endDate" th:field="*{endDate}" required/>
         </div>
 
         <div class="form-group">
             <label for="taskStatus">Status:</label>
-            <input type="text" id="taskStatus" name="taskStatus"
-                   th:field="*{taskStatus}" readonly/>
+            <select id="taskStatus" name="taskStatus" th:field="*{taskStatus}" class="form-control" required>
+                <option value="NOT_STARTED">Ikke startet</option>
+                <option value="IN_PROGRESS">I gang</option>
+                <option value="COMPLETED">Afsluttet</option>
+            </select>
         </div>
 
-
-<div class="form-group">
-            <label for="taskpriority">Priotet:</label>
-            <input type="text" id="taskpriority" name="taskpriority"
-                   th:field="*{taskpriority}" readonly/>
+        <div class="form-group">
+            <label for="taskPriority">Prioritet:</label>
+            <select id="taskPriority" name="taskPriority" th:field="*{taskPriority}" class="form-control" required>
+                <option value="LOW">Lav</option>
+                <option value="MEDIUM">Mellem</option>
+                <option value="HIGH">Høj</option>
+            </select>
         </div>
 
+        <div class="form-group">
+            <label for="taskNote">Note:</label>
+            <textarea id="taskNote" name="taskNote" th:field="*{taskNote}" class="form-control"></textarea>
+        </div>
 
         <div class="form-actions">
             <button type="button" class="cancel-button"
                     th:onclick="'window.location.href=\'' + @{/project/subproject/list/{projectId}(projectId=${currentProjectId}, employeeId=${currentEmployeeId})} + '\''">
                 Annuller
             </button>
-            <button type="submit" class="submit-button">Opret Subprojekt</button>
+            <button type="submit" class="submit-button">Opret Task</button>
         </div>
     </form>
 </div>
-
-<script>
-    function calculateDuration() {
-        const startDate = new Date(document.getElementById('startDate').value);
-        const endDate = new Date(document.getElementById('endDate').value);
-        const durationField = document.getElementById('subProjectDuration');
-
-        if (startDate && endDate && endDate >= startDate) {
-            const diffTime = Math.abs(endDate - startDate);
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // +1 to include both start and end dates
-            durationField.value = diffDays;
-        } else {
-            durationField.value = '0';
-        }
-    }
-
-    // Initialize duration to 0 when the page loads
-    document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('subProjectDuration').value = '0';
-
-        // Add form submission handler
-        document.getElementById('subprojectForm').addEventListener('submit', function(e) {
-            // Ensure duration is calculated before submission
-            calculateDuration();
-
-            // Check if duration is valid
-            const duration = parseInt(document.getElementById('subProjectDuration').value);
-            if (isNaN(duration) || duration <= 0) {
-                e.preventDefault();
-                alert('Venligst indtast gyldige datoer for at beregne varigheden.');
-                return false;
-            }
-            return true;
-        });
-    });
-</script>
 
 </body>
 </html>

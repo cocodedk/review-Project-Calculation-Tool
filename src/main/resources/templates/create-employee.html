@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Opret medarbejder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link th:href="@{/create-employee.css}" rel="stylesheet">
 </head>
 <body>
@@ -19,13 +20,18 @@
     <label>Email</label>
     <input type="email" th:field="*{email}" placeholder="Indtast email" required>
 
-    <label>Role</label>
-    <input type="text" th:field="*{role}" placeholder="Indtast rolle" required>
+    <label for="employeeRole">Choose role</label>
+    <select id="employeeRole" th:field="*{role}" required>
+        <option th:each="r : ${roles}"
+                th:value="${r}"
+                th:text="${#strings.capitalize(#strings.replace(r.name().toLowerCase(), '_', ' '))}">
+        </option>
+    </select>
 
     <button type="submit">Opret medarbejder</button>
 </form>
 
-<p th:if="${error}" th:text="${error}" style="color:red;"></p>
+<p th:if="${error}" th:text="${error}" class="error-message"></p>
 
 <a th:href="@{/}">Tilbage til forsiden</a>
 </body>
