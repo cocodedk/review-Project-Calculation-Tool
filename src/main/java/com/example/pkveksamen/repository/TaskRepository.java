@@ -85,4 +85,8 @@ public class TaskRepository {
         jdbcTemplate.update("DELETE FROM task WHERE task_id = ?", taskId);
     }
 
+    public void deleteSubTask(long subTaskId) {
+        jdbcTemplate.update("DELETE FROM sub_task WHERE sub_task_id = ? ", subTaskId);
+    }
+
 }

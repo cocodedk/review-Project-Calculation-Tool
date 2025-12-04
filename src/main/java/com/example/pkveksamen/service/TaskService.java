@@ -36,6 +36,10 @@ public class TaskService {
     public void deleteTask(long taskId) {
         taskRepository.deleteTask(taskId);
     }
+    public void deleteSubTask(long subTaskId) {
+        taskRepository.deleteSubTask(subTaskId);
+    }
+
 }
 
 
