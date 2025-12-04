@@ -20,7 +20,7 @@ public class TaskService {
 
     public void createTask(Integer employeeId, long subProjectId, String taskName, String taskDescription
             , Status status, LocalDate startDate, LocalDate endDate, int taskDuration, Priority priority, String taskNote) {
-        taskRepository.createTask( employeeId, subProjectId, taskName, taskDescription, status,
+        taskRepository.createTask(employeeId, subProjectId, taskName, taskDescription, status,
                 startDate, endDate, taskDuration, priority, taskNote);
     }
 
@@ -29,15 +29,17 @@ public class TaskService {
     }
 
     public void saveTask(Task task, long subprojectID) {
-        taskRepository.saveTask(task,subprojectID);
+        taskRepository.saveTask(task, subprojectID);
     }
 
 
     public void deleteTask(long taskId) {
         taskRepository.deleteTask(taskId);
     }
+    public void createSubTask(Integer employeeId, long projectId, long subProjectId, long taskId, String subTaskName, String subTaskDescription, String subTaskDuration) {
+        taskRepository.createSubTask(employeeId, projectId, subProjectId, taskId, subTaskName, subTaskDescription, subTaskDuration);
+    }
 }
-
 
 
 
