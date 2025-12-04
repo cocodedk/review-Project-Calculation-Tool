@@ -48,4 +48,7 @@ public class TaskService {
         return taskRepository.getTaskById(taskId);
 
     }
+    public void createSubTask(Integer employeeId, long projectId, long subProjectId, long taskId, String subTaskName, String subTaskDescription, String subTaskDuration) {
+        taskRepository.createSubTask(employeeId, projectId, subProjectId, taskId, subTaskName, subTaskDescription, subTaskDuration);
+    }
 }

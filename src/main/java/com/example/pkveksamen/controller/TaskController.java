@@ -1,9 +1,6 @@
 package com.example.pkveksamen.controller;
 
-import com.example.pkveksamen.model.Employee;
-import com.example.pkveksamen.model.Project;
-import com.example.pkveksamen.model.SubProject;
-import com.example.pkveksamen.model.Task;
+import com.example.pkveksamen.model.*;
 import com.example.pkveksamen.repository.TaskRepository;
 import com.example.pkveksamen.service.EmployeeService;
 import com.example.pkveksamen.service.ProjectService;
@@ -161,6 +158,48 @@ public class TaskController {
         taskService.editTask(task);
         return "redirect:/project/task/liste/" + projectId + "/" + subProjectId + "/" + employeeId;
     }
+    @GetMapping("/project/subtask/createsubtask/{employeeId}/{projectId}/{subProjectId}/{taskId}")
+    public String showSubTaskCreateForm(@PathVariable int employeeId,
+                                        @PathVariable long projectId,
+                                        @PathVariable long subProjectId,
+                                        @PathVariable long taskId,
+                                        Model model) {
+        model.addAttribute("subTask", new SubTask());
+        model.addAttribute("currentEmployeeId", employeeId);
+        model.addAttribute("currentProjectId", projectId);
+        model.addAttribute("currentSubProjectId", subProjectId);
+        model.addAttribute("currentTaskId", taskId);
+
+        // Tilføj employee info til header
+        Employee employee = employeeService.getEmployeeById(employeeId);
+        if (employee != null) {
+            model.addAttribute("username", employee.getUsername());
+            model.addAttribute("employeeRole", employee.getRole());
+        }
+
+        return "subtask";
+    }
 
 
+    @PostMapping("/task/subtask/create/{taskId}/{employeeId}/{projectId}/{subProjectId}")
+    public String createSubTask(@PathVariable int employeeId,
+                                @PathVariable long projectId,
+                                @PathVariable long subProjectId,
+                                @PathVariable long taskId,
+                                @ModelAttribute SubTask subTask) {
+
+        taskService.createSubTask(
+                employeeId,
+                projectId,
+                subProjectId,
+                taskId,
+                subTask.getSubTaskName(),
+                subTask.getSubTaskDescription(),
+                subTask.getSubTaskDuration()
+        );
+
+        return "redirect:/task/subtask/create/" + taskId + "/" + employeeId + "/" + projectId + "/" + subProjectId;
+    }
 }
+
+

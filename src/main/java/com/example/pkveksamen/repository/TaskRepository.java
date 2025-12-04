@@ -121,6 +121,26 @@ public class TaskRepository {
             return task;
         }, taskId);
     }
+    public void createSubTask(Integer employeeId, long projectId, long subProejctId, long taskId,
+                              String subTaskName, String subTaskDescription, String subTaskDuration) {
+
+        jdbcTemplate.update(
+                "INSERT INTO task (employee_id, project_id, sub_project_id, task_id, sub_task_title, sub_task_description, sub_task_status," +
+                        "sub_task_start_date, sub_task_end_date, sub_task_duration, sub_task_priority, sub_task_note) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+
+                employeeId,
+                projectId,
+                subProejctId,
+                taskId,
+                subTaskName,
+                subTaskDescription,
+                subTaskDuration
 
 
+        );
+    }
 }
+
+
+

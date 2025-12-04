@@ -14,6 +14,10 @@ public class SubTask {
         this.subTaskDuration = subTaskDuration;
     }
 
+    public SubTask() {
+
+    }
+
     public long getSubTaskID() {
         return subTaskID;
     }
