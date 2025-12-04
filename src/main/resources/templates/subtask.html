@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>Tasks</title>
+    <title>Sub Tasks</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link th:href="@{/subtask.css}" rel="stylesheet">
 </head>
@@ -11,9 +11,8 @@
 <div class="container">
     <!-- Header / top bar -->
     <div class="header">
-        <h1>Tasks</h1>
+        <h1>Sub Tasks</h1>
         <div class="user-info">
-            <!-- KORRIGERET: kun én ${...} expression -->
             <span th:text="${username} + ' (' + ${employeeRole} + ')'"></span>
             <form th:action="@{/logout}" method="post">
                 <button type="submit" class="logout-button">
@@ -31,55 +30,55 @@
 
     <!-- Kontrol bar -->
     <div class="control-bar">
-        <a th:href="@{/project/task/liste/{projectId}/{taskId}/{employeeId}(projectId=${currentProjectId}, taskId=${currentTaskId}, employeeId=${currentEmployeeId})}"
+        <a th:href="@{/project/task/liste/{projectId}/{subProjectId}/{employeeId}(projectId=${currentProjectId}, subProjectId=${currentSubProjectId}, employeeId=${currentEmployeeId})}"
            class="back-button">
-            ← Tilbage til Task
+            ← Tilbage til Tasks
         </a>
 
-        <a th:href="@{/project/subtask/createsubtask/{employeeId}/{projectId}/{subProjectId}/{taskId}(employeeId=${currentEmployeeId}, projectId=${currentProjectId}, subProjectId=${currentSubProjectId} , taskId =${currentTaskId})}"
+        <a th:href="@{/project/subtask/createsubtask/{employeeId}/{projectId}/{subProjectId}/{taskId}(employeeId=${currentEmployeeId}, projectId=${currentProjectId}, subProjectId=${currentSubProjectId}, taskId=${currentTaskId})}"
            class="create-subTask-button">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                  stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="12" y1="5" x2="12" y2="19"></line>
                 <line x1="5" y1="12" x2="19" y2="12"></line>
             </svg>
-            Opret Ny subTask
+            Opret Ny SubTask
         </a>
     </div>
 
-    <!-- Task tabel -->
+    <!-- SubTask tabel -->
     <table class="task-table">
         <thead>
         <tr>
-            <th>subTask Navn</th>
+            <th>SubTask Navn</th>
             <th>Beskrivelse</th>
             <th>Start Dato</th>
             <th>Slut Dato</th>
-            <th>Status</th>
             <th>Varighed</th>
+            <th>Note</th>
             <th>Prioritet</th>
+            <th>Status</th>
             <th>Handlinger</th>
         </tr>
         </thead>
         <tbody>
-        <!-- Hvis ingen tasks -->
+        <!-- Hvis ingen subtasks -->
         <tr th:if="${subTaskList == null or #lists.isEmpty(subTaskList)}">
-            <td colspan="7">Du har ingen tasks endnu. Klik på "Opret Ny subTask" for at starte.</td>
+            <td colspan="9">Du har ingen subtasks endnu. Klik på "Opret Ny SubTask" for at starte.</td>
         </tr>
 
-        <!-- Iterer tasks -->
+        <!-- Iterer subtasks -->
         <tr th:each="subTask : ${subTaskList}">
             <td th:text="${subTask.subTaskName}"></td>
             <td th:text="${subTask.subTaskDescription}"></td>
             <td th:text="${subTask.subTaskStartDate}"></td>
             <td th:text="${subTask.subTaskEndDate}"></td>
-            <td th:text="${subTask.subTaskDuration}"></td>
+            <td><span th:text="${subTask.subTaskDuration}"></span> dage</td>
             <td th:text="${subTask.subTaskNote}"></td>
             <td th:text="${subTask.subTaskPriority}"></td>
-            <td th:text="${subTask.subTaskStatus}"></td>
             <td>
                 <form th:action="@{/project/subtask/updatestatus/{subTaskId}(subTaskId=${subTask.subTaskId})}" method="post">
-                    <select name="taskStatus">
+                    <select name="subTaskStatus" onchange="this.form.submit()">
                         <option value="NOT_STARTED"
                                 th:selected="${subTask.subTaskStatus == 'NOT_STARTED'}">Ikke startet</option>
                         <option value="IN_PROGRESS"
@@ -89,28 +88,25 @@
                     </select>
                 </form>
             </td>
-
-            <td><span th:text="${subTask.subTaskDuration}"></span> dage</td>
             <td>
                 <div class="action-buttons">
                     <!-- Rediger -->
-                    <a th:href="@{/project/task/edit/{employeeId}/{projectId}/{subProjectId}/{taskId}(employeeId=${currentEmployeeId}, projectId=${currentProjectId}, subProjectId=${currentSubProjectId}, taskId=${task.taskID})}"
+                    <a th:href="@{/project/subtask/edit/{employeeId}/{projectId}/{subProjectId}/{taskId}/{subTaskId}(employeeId=${currentEmployeeId}, projectId=${currentProjectId}, subProjectId=${currentSubProjectId}, taskId=${currentTaskId}, subTaskId=${subTask.subTaskId})}"
                        class="edit-button">Rediger</a>
 
-
-                    <!-- Slet task - knappen -->
-                    <form th:action="@{/task/delete/{employeeId}/{projectId}/{subProjectId}/{taskId}(
-                     employeeId=${currentEmployeeId},
-                     projectId=${currentProjectId},
-                     subProjectId=${currentSubProjectId},
-                     taskId=${task.taskID})}"
+                    <!-- Slet subtask -->
+                    <form th:action="@{/task/delete/{employeeId}/{projectId}/{subProjectId}/{taskId}/{subTaskId}(
+                         employeeId=${currentEmployeeId},
+                         projectId=${currentProjectId},
+                         subProjectId=${currentSubProjectId},
+                         taskId=${currentTaskId},
+                         subTaskId=${subTask.subTaskId})}"
                           method="post" style="display:inline">
                         <button type="submit" class="delete-button"
-                                onclick="return confirm('Er du sikker på, du vil slette denne task?');">
+                                onclick="return confirm('Er du sikker på, du vil slette denne subtask?');">
                             Slet
                         </button>
                     </form>
-
                 </div>
             </td>
         </tr>

@@ -173,21 +173,24 @@ public class TaskController {
             model.addAttribute("employeeRole", employee.getRole());
         }
 
-        return "subtask";
+        return "createsubtask";
     }
 
-    @GetMapping("/project/subtask/liste/{projectId}/{subProjectId}/{taskId}{employeeId}")
-    public String showSubTaskByEmployeeId(@PathVariable int employeeId,
-                                       @PathVariable long projectId,
-                                       @PathVariable long subProjectId,
-                                       @PathVariable long taskId,
-                                       Model model) {
-        List<SubTask> subTaskList = taskService.showSubTaskByEmployeeId(employeeId);
+    @GetMapping("/project/subtask/liste/{projectId}/{subProjectId}/{taskId}/{employeeId}")
+    public String showSubTasksByTaskId(@PathVariable int employeeId,
+                                          @PathVariable long projectId,
+                                          @PathVariable long subProjectId,
+                                          @PathVariable long taskId,
+                                          Model model) {
+        // Ret dette: Hent subtasks for den specifikke task, ikke alle employee's subtasks
+        List<SubTask> subTaskList = taskService.showSubTasksByTaskId(taskId);
+
         model.addAttribute("subTaskList", subTaskList);
         model.addAttribute("currentProjectId", projectId);
         model.addAttribute("currentSubProjectId", subProjectId);
         model.addAttribute("currentEmployeeId", employeeId);
-        model.addAttribute("taskId", taskId);
+        model.addAttribute("currentTaskId", taskId);
+
         // Add employee details for the header
         Employee employee = employeeService.getEmployeeById(employeeId);
         if (employee != null) {
@@ -235,6 +238,16 @@ public class TaskController {
 
         return "redirect:/project/task/subtask/liste/" + projectId + "/" + subProjectId + "/" + taskId + "/" + employeeId;
     }
+    @PostMapping("/task/delete/{employeeId}/{projectId}/{subProjectId}/{taskId}/{subTaskId}")
+    public String deleteSubTask(@PathVariable int employeeId,
+                                @PathVariable long projectId,
+                                @PathVariable long subProjectId,
+                                @PathVariable long taskId,
+                                @PathVariable long subTaskId){
+        taskService.deleteSubTask(subTaskId);
+        return "redirect:/project/subproject/task/subtask/list/" + projectId + "/" + taskId + "/" + subProjectId + "/" + employeeId;
+    }
+
 }
 
 

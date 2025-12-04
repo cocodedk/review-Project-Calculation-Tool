@@ -164,6 +164,33 @@ public class TaskRepository {
         );
     }
 
+
+    public List<SubTask> showSubTasksByTaskId(long taskId) {
+        String sql = "SELECT sub_task_id, task_id, sub_task_title, sub_task_description, sub_task_status, " +
+                "sub_task_start_date, sub_task_end_date, sub_task_duration, sub_task_priority, sub_task_note, employee_id " +
+                "FROM sub_task WHERE task_id = ?";
+
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            SubTask subTask = new SubTask();
+            subTask.setSubTaskId(rs.getLong("sub_task_id"));
+            subTask.setSubTaskName(rs.getString("sub_task_title"));
+            subTask.setSubTaskDescription(rs.getString("sub_task_description"));
+            subTask.setSubTaskStatus(Status.valueOf(rs.getString("sub_task_status")));
+            subTask.setSubTaskNote(rs.getString("sub_task_note"));
+            subTask.setStartDate(rs.getObject("sub_task_start_date", java.time.LocalDate.class));
+            subTask.setSubTaskEndDate(rs.getObject("sub_task_end_date", java.time.LocalDate.class));
+            subTask.setSubTaskDuration(rs.getInt("sub_task_duration"));
+            subTask.recalculateDuration();
+            return subTask;
+        }, taskId);
+    }
+
+    public void deleteSubTask(long subTaskId) {
+        jdbcTemplate.update("DELETE FROM sub_task WHERE sub_task_id = ? ", subTaskId);
+    }
+
+
+
     // TODO: subtask er afghængig af task, derfor erstat employeeId med taskId
     /*
     public List<SubTask> showSubTaskByTaskId(long taskId) {

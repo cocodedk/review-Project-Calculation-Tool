@@ -107,7 +107,8 @@
                     </form>
 
                     <!-- Se Sub Tasks-knap -->
-                    <a th:href="@{/task/subtask/list/{taskId}(taskId=${task.taskID})}" class="subtask-button">
+                    <a th:href="@{/project/subtask/liste/{projectId}/{subProjectId}/{taskId}/{employeeId}(projectId=${currentProjectId}, subProjectId=${currentSubProjectId}, taskId=${task.taskID}, employeeId=${currentEmployeeId})}"
+                       class="subtask-button">
                         Se Sub Tasks
                     </a>
                 </div>

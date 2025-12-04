@@ -58,7 +58,11 @@ public class TaskService {
         taskRepository.saveSubTask(subTask, subTaskId);
     }
 
-    public List<SubTask> showSubTaskByEmployeeId(int employeeId) {
-        return taskRepository.showSubTaskByEmployeeId(employeeId);
+    public List<SubTask> showSubTasksByTaskId(long taskId) {
+        return taskRepository.showSubTasksByTaskId(taskId);
+    }
+
+    public void deleteSubTask(long subTaskId) {
+        taskRepository.deleteSubTask(subTaskId);
     }
 }
