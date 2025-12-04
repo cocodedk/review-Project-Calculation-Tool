@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 public class TaskService {
 
-    private TaskRepository taskRepository;
+    private static TaskRepository taskRepository;
 
     public TaskService(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
@@ -28,18 +28,30 @@ public class TaskService {
         return taskRepository.showTaskByEmployeeId(employeeId);
     }
 
-    public void saveTask(Task task, long subprojectID) {
-        taskRepository.saveTask(task,subprojectID);
+    public void saveTask(Task task, int employeeId, long projectId, long subProjectId) {
+        task.setTaskDuration(task.getTaskDuration()); // bare for sikkerhed
+        task.recalculateDuration();
+        taskRepository.saveTask(task, employeeId, projectId, subProjectId);
     }
 
 
     public void deleteTask(long taskId) {
         taskRepository.deleteTask(taskId);
     }
+
     public void deleteSubTask(long subTaskId) {
         taskRepository.deleteSubTask(subTaskId);
     }
 
+
+    public static void editTask(Task task) {
+        taskRepository.editTask(task);
+    }
+
+    public Task getTaskById(long taskId) {
+        return taskRepository.getTaskById(taskId);
+
+    }
 }
 
 
