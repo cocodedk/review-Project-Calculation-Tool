@@ -1,3 +1,4 @@
+
 package com.example.pkveksamen.service;
 
 import com.example.pkveksamen.model.Priority;
@@ -39,11 +40,6 @@ public class TaskService {
         taskRepository.deleteTask(taskId);
     }
 
-    public void deleteSubTask(long subTaskId) {
-        taskRepository.deleteSubTask(subTaskId);
-    }
-
-
     public static void editTask(Task task) {
         taskRepository.editTask(task);
     }
@@ -53,12 +49,3 @@ public class TaskService {
 
     }
 }
-
-
-
-
-
-//    public List<Task> getTasksByTaskID(int taskID) {
-//        return taskRepository.getTasksByTaskID(taskID);
-//    }
-//}
