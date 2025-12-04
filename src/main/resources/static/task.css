@@ -2,9 +2,9 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: Poppins, sans-serif;
+    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     background: #f2f5f9;
-    color: #333;
+    color: #111827;
 }
 
 .container {
@@ -27,7 +27,7 @@ body {
 
 .header h1 {
     margin: 0;
-    font-size: 1.8rem;
+    font-size: 1.9rem;
     font-weight: 600;
 }
 
@@ -36,6 +36,7 @@ body {
     display: flex;
     align-items: center;
     gap: 15px;
+    font-size: 0.9rem;
 }
 
 .user-info span {
@@ -49,7 +50,7 @@ body {
     padding: 8px 14px;
     border-radius: 999px;
     border: 1px solid rgba(255,255,255,0.6);
-    background: rgba(0,0,0,0.1);
+    background: rgba(0,0,0,0.15);
     color: #ffffff;
     cursor: pointer;
     font-size: 0.85rem;
@@ -57,145 +58,173 @@ body {
     transition: 0.2s ease;
 }
 
+.logout-button svg {
+    display: block;
+}
+
 .logout-button:hover {
     background: rgba(0,0,0,0.25);
 }
 
-/* === CONTROL BAR (top over tabel) === */
+/* === CONTROL BAR === */
 .control-bar {
     margin: 25px 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
 }
 
-/* Tilbage-linket */
-.control-bar .back-button {
-    color: #4b79a1;
-    font-weight: 600;
+/* Tilbage-knap */
+.back-button {
     text-decoration: none;
-    font-size: 0.95rem;
-    padding: 0;
-    background: transparent;
-    border: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #4b5563;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid #d1d5db;
+    background: #ffffff;
+    transition: 0.2s ease;
 }
 
-.control-bar .back-button:hover {
-    text-decoration: underline;
+.back-button:hover {
+    background: #f3f4f6;
+    border-color: #9ca3af;
 }
 
-/* Opret ny task knap */
-.create-task-button {
+/* Blå "Opret Ny Task"-knap */
+.create-project-button {
     background: #4b79a1;
     padding: 10px 18px;
-    border-radius: 8px;
-    color: white;
+    border-radius: 999px;
+    color: #ffffff;
     text-decoration: none;
     font-weight: 600;
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    font-size: 0.9rem;
     transition: 0.2s ease;
 }
 
-.create-task-button:hover {
+.create-project-button svg {
+    display: block;
+}
+
+.create-project-button:hover {
     background: #3a5f7a;
 }
 
-/* === TABLE === */
+/* === TASK TABEL === */
 .task-table {
     width: 100%;
     border-collapse: collapse;
     background: #ffffff;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
     border-radius: 12px;
     overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    font-size: 0.9rem;
 }
 
 .task-table thead {
     background: #4b79a1;
-    color: white;
+    color: #ffffff;
 }
 
 .task-table th {
-    padding: 14px;
+    padding: 12px 14px;
     text-align: left;
-    font-size: 0.95rem;
+    font-weight: 600;
 }
 
 .task-table td {
-    padding: 14px;
+    padding: 12px 14px;
     border-bottom: 1px solid #e5e7eb;
-    font-size: 0.9rem;
+    vertical-align: middle;
 }
 
-/* Hover på rækker */
 .task-table tbody tr:hover {
-    background: #f5f7fb;
+    background: #f9fafb;
 }
 
 /* Tom-tilstand tekst */
 .task-table td[colspan] {
     text-align: center;
     padding: 30px;
-    color: #777;
+    color: #6b7280;
 }
 
-/* === ACTION BUTTONS I TABEL === */
-.action-buttons {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.action-buttons .edit-button,
-.action-buttons .delete-button,
-.action-buttons .create-task-button {
-    padding: 7px 12px;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
+/* === STATUS DROPDOWN === */
+.task-table select {
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid #d1d5db;
     font-size: 0.85rem;
-    font-weight: 600;
-    text-decoration: none;
-    display: inline-block;
+    background: #f9fafb;
+    cursor: pointer;
     transition: 0.2s ease;
 }
 
-/* Rediger-task */
-.action-buttons .back-button {
-    background: #4b79a1;
-    color: white;
+.task-table select:focus {
+    outline: none;
+    border-color: #4b79a1;
+    background: #ffffff;
 }
 
-.action-buttons .edit-button:hover {
+/* === ACTION BUTTONS === */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* Fælles knap-style */
+.edit-button,
+.delete-button,
+.subtask-button {
+    padding: 7px 12px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Rediger (blå) */
+.edit-button {
+    background: #4b79a1;
+    color: #ffffff;
+}
+
+.edit-button:hover {
     background: #3a5f7a;
 }
 
-/* Slet-task */
-.action-buttons .delete-button {
-    background: #d9534f;
-    color: white;
+/* Slet (rød) */
+.delete-button {
+    background: #dc2626;
+    color: #ffffff;
 }
 
-.action-buttons .delete-button:hover {
-    background: #b0413e;
+.delete-button:hover {
+    background: #b91c1c;
 }
 
-/* Opret sub-task */
-.action-buttons .create-subtask-button {
-    background: #3b8c58;
-    color: white;
+/* Se Sub Tasks (grøn) */
+.subtask-button {
+    background: #16a34a;
+    color: #ffffff;
 }
 
-.action-buttons .create-subtask-button:hover {
-    background: #2f6f46;
-}
-
-/* === STATUS-CELLE (valgfrit: gør status lidt mere tydelig) === */
-.subproject-table td:nth-child(6) {
-    font-weight: 600;
-    color: #4b79a1;
+.subtask-button:hover {
+    background: #15803d;
 }
 
 /* === RESPONSIVE === */
@@ -206,8 +235,20 @@ body {
 
     .action-buttons .edit-button,
     .action-buttons .delete-button,
-    .action-buttons .create-subtask-button {
+    .action-buttons .subtask-button {
         width: 100%;
+        text-align: center;
+    }
+
+    .control-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .control-bar .back-button,
+    .control-bar .create-project-button {
+        width: 100%;
+        justify-content: center;
         text-align: center;
     }
 }
@@ -219,13 +260,16 @@ body {
         align-items: flex-start;
     }
 
-    .control-bar {
-        flex-direction: column;
-        gap: 15px;
+    .container {
+        margin-top: 20px;
     }
 
-    .create-subtask-button {
-        width: 100%;
-        justify-content: center;
+    .task-table {
+        font-size: 0.8rem;
+    }
+
+    .task-table th,
+    .task-table td {
+        padding: 8px 10px;
     }
 }

@@ -2,6 +2,7 @@ package com.example.pkveksamen.service;
 
 import com.example.pkveksamen.model.Project;
 import com.example.pkveksamen.model.SubProject;
+import com.example.pkveksamen.model.Task;
 import com.example.pkveksamen.repository.ProjectRepository;
 import org.springframework.stereotype.Service;
 

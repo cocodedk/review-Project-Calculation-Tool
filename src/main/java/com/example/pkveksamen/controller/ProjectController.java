@@ -1,6 +1,5 @@
 package com.example.pkveksamen.controller;
 
-import com.example.pkveksamen.model.EmployeeRole;
 import com.example.pkveksamen.model.Project;
 import com.example.pkveksamen.model.Employee;
 import com.example.pkveksamen.model.SubProject;
@@ -74,6 +73,7 @@ public class ProjectController {
         return "createsubproject";
     }
 
+    // TODO: Vurder om denne kan slettes (kan nok godt)
     @PostMapping("/create/{employeeId}")
     public String createProject(@PathVariable int employeeId,
                                 @ModelAttribute Project project,
@@ -180,17 +180,4 @@ public class ProjectController {
         projectService.editSubProject(subProject);
         return "redirect:/project/subproject/list/" + projectId + "?employeeId=" + employeeId;
     }
-    /*
-    // TODO HVORFOR SUBPROJECTID ikke bliver brugt - Aden har kiggede på det.
-    // TODO VI MANGLEDE SKRIVE + SUBPROJECTID TIL SIDST VED REDCICRECT
-    @PostMapping("edit/.../{projectId}")
-    public String editSubProject(@PathVariable long projectId,
-                                 @PathVariable long subProjectID,
-                                 @ModelAttribute SubProject subProject) {
-        subProject.setSubProjectID(projectId);
-        subProject.recalculateDuration();
-        projectService.editSubProject(subProject);
-        return "redirect:/project/subproject/list" + subProjectID;
-    }
-    */
 }

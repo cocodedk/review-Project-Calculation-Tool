@@ -1,8 +1,10 @@
 package com.example.pkveksamen.controller;
 
 import com.example.pkveksamen.model.Employee;
-import com.example.pkveksamen.model.SubTask;
+import com.example.pkveksamen.model.Project;
+import com.example.pkveksamen.model.SubProject;
 import com.example.pkveksamen.model.Task;
+import com.example.pkveksamen.repository.TaskRepository;
 import com.example.pkveksamen.service.EmployeeService;
 import com.example.pkveksamen.service.ProjectService;
 import com.example.pkveksamen.service.TaskService;
@@ -19,12 +21,16 @@ public class TaskController {
     private final TaskService taskService;
     private final EmployeeService employeeService;
     private final ProjectService projectService;
+    private final TaskRepository taskRepository;
 
-    public TaskController(TaskService taskService, EmployeeService employeeService, ProjectService projectService) {
+    public TaskController (TaskService taskService, EmployeeService employeeService, ProjectService projectService, TaskRepository taskRepository) {
         this.taskService = taskService;
         this.employeeService = employeeService;
         this.projectService = projectService;
+        this.taskRepository = taskRepository;
     }
+
+
 
 
     @GetMapping("/project/task/liste/{projectId}/{subProjectId}/{employeeId}")
@@ -100,56 +106,61 @@ public class TaskController {
     }
 
 
+    @PostMapping("/save/{employeeId}/{projectId}/{subProjectId}")
+    public String saveTask(@PathVariable int employeeId,
+                           @PathVariable long projectId,
+                           @PathVariable long subProjectId,
+                           @ModelAttribute Task task) {
+        taskService.saveTask(task, employeeId, projectId, subProjectId);
+        return "redirect:/project/task/liste/" + projectId + "/" + subProjectId + "/" + employeeId;
+    }
+
+
+
+
     @PostMapping("/task/delete/{employeeId}/{projectId}/{subProjectId}/{taskId}")
     public String deleteTask(@PathVariable int employeeId,
                              @PathVariable long projectId,
                              @PathVariable long subProjectId,
                              @PathVariable long taskId) {
+
         taskService.deleteTask(taskId);
-        return "redirect:/project/subproject/task/list/" + projectId + "/" + subProjectId + "/" + employeeId;
+
+        return "redirect:/project/task/liste/" + projectId + "/" + subProjectId + "/" + employeeId;
     }
-    @GetMapping("/project/subtask/createsubtask/{employeeId}/{projectId}/{subProjectId}/{taskId}")
-    public String showSubTaskCreateForm(@PathVariable int employeeId,
-                                        @PathVariable long projectId,
-                                        @PathVariable long subProjectId,
-                                        @PathVariable long taskId,
-                                        Model model) {
-        model.addAttribute("subTask", new SubTask());
+
+    @GetMapping("/project/task/edit/{employeeId}/{projectId}/{subProjectId}/{taskId}")
+    public String showEditTaskForm(@PathVariable int employeeId,
+                                   @PathVariable long projectId,
+                                   @PathVariable long subProjectId,
+                                   @PathVariable long taskId,
+                                   Model model) {
+        Task task = taskService.getTaskById(taskId);
+        model.addAttribute("task", task);
         model.addAttribute("currentEmployeeId", employeeId);
         model.addAttribute("currentProjectId", projectId);
         model.addAttribute("currentSubProjectId", subProjectId);
-        model.addAttribute("currentTaskId", taskId);
 
-        // Tilføj employee info til header
         Employee employee = employeeService.getEmployeeById(employeeId);
         if (employee != null) {
             model.addAttribute("username", employee.getUsername());
             model.addAttribute("employeeRole", employee.getRole());
         }
 
-        return "subtask";
+        return "edit-task"; // Thymeleaf template
     }
 
 
-    @PostMapping("/task/subtask/create/{taskId}/{employeeId}/{projectId}/{subProjectId}")
-    public String createSubTask(@PathVariable int employeeId,
-                                @PathVariable long projectId,
-                                @PathVariable long subProjectId,
-                                @PathVariable long taskId,
-                                @ModelAttribute SubTask subTask) {
-
-        taskService.createSubTask(
-                employeeId,
-                projectId,
-                subProjectId,
-                taskId,
-                subTask.getSubTaskName(),
-                subTask.getSubTaskDescription(),
-                subTask.getSubTaskDuration()
-        );
-
-        return "redirect:/task/subtask/create/" + taskId + "/" + employeeId + "/" + projectId + "/" + subProjectId;
+    @PostMapping("/project/task/edit/{employeeId}/{projectId}/{subProjectId}/{taskId}")
+    public String editTask(@PathVariable int employeeId,
+                           @PathVariable long projectId,
+                           @PathVariable long subProjectId,
+                           @PathVariable int taskId,
+                           @ModelAttribute Task task) {
+        task.setTaskID(taskId);
+        taskService.editTask(task);
+        return "redirect:/project/task/liste/" + projectId + "/" + subProjectId + "/" + employeeId;
     }
+
+
 }
-
-

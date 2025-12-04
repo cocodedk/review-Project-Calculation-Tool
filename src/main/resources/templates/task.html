@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Tasks</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link th:href="@{/task.css}" rel="stylesheet">
 </head>
 <body>
@@ -13,7 +14,7 @@
         <h1>Tasks</h1>
         <div class="user-info">
             <!-- KORRIGERET: kun én ${...} expression -->
-            <span th:text="${username} + ' (' + employeeRole + ')'"></span>
+            <span th:text="${username} + ' (' + ${employeeRole} + ')'"></span>
             <form th:action="@{/logout}" method="post">
                 <button type="submit" class="logout-button">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
@@ -91,8 +92,13 @@
                     <a th:href="@{/project/task/edit/{employeeId}/{projectId}/{subProjectId}/{taskId}(employeeId=${currentEmployeeId}, projectId=${currentProjectId}, subProjectId=${currentSubProjectId}, taskId=${task.taskID})}"
                        class="edit-button">Rediger</a>
 
-                    <!-- Slet-knap -->
-                    <form th:action="@{/project/task/delete/{employeeId}/{projectId}/{subProjectId}/{taskId}(employeeId=${currentEmployeeId}, projectId=${currentProjectId}, subProjectId=${currentSubProjectId}, taskId=${task.taskID})}"
+
+                    <!-- Slet task - knappen -->
+                    <form th:action="@{/task/delete/{employeeId}/{projectId}/{subProjectId}/{taskId}(
+                     employeeId=${currentEmployeeId},
+                     projectId=${currentProjectId},
+                     subProjectId=${currentSubProjectId},
+                     taskId=${task.taskID})}"
                           method="post" style="display:inline">
                         <button type="submit" class="delete-button"
                                 onclick="return confirm('Er du sikker på, du vil slette denne task?');">
