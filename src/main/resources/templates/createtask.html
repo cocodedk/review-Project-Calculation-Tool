@@ -61,10 +61,9 @@
         </div>
 
         <div class="form-actions">
-            <button type="button" class="cancel-button"
-                    th:onclick="'window.location.href=\'' + @{/project/subproject/list/{projectId}(projectId=${currentProjectId}, employeeId=${currentEmployeeId})} + '\''">
+            <a th:href="@{/project/task/liste/{projectId}/{subProjectId}/{employeeId}(projectId=${currentProjectId}, subProjectId=${currentSubProjectId}, employeeId=${currentEmployeeId})}">
                 Annuller
-            </button>
+            </a>
             <button type="submit" class="submit-button">Opret Task</button>
         </div>
     </form>

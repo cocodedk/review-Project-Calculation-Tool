@@ -46,50 +46,13 @@
         </div>
 
         <div class="form-actions">
-            <button type="button" class="cancel-button" 
-                    th:onclick="'window.location.href=\'' + @{/project/subproject/list/{projectId}(projectId=${currentProjectId}, employeeId=${currentEmployeeId})} + '\''">
+            <a th:href="@{/project/subproject/list/{projectId}(projectId=${currentProjectId}, employeeId=${currentEmployeeId})}">
                 Annuller
-            </button>
+            </a>
             <button type="submit" class="submit-button">Opret Subprojekt</button>
         </div>
     </form>
 </div>
-
-<script>
-    function calculateDuration() {
-        const startDate = new Date(document.getElementById('startDate').value);
-        const endDate = new Date(document.getElementById('endDate').value);
-        const durationField = document.getElementById('subProjectDuration');
-        
-        if (startDate && endDate && endDate >= startDate) {
-            const diffTime = Math.abs(endDate - startDate);
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // +1 to include both start and end dates
-            durationField.value = diffDays;
-        } else {
-            durationField.value = '0';
-        }
-    }
-
-    // Initialize duration to 0 when the page loads
-    document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('subProjectDuration').value = '0';
-        
-        // Add form submission handler
-        document.getElementById('subprojectForm').addEventListener('submit', function(e) {
-            // Ensure duration is calculated before submission
-            calculateDuration();
-            
-            // Check if duration is valid
-            const duration = parseInt(document.getElementById('subProjectDuration').value);
-            if (isNaN(duration) || duration <= 0) {
-                e.preventDefault();
-                alert('Venligst indtast gyldige datoer for at beregne varigheden.');
-                return false;
-            }
-            return true;
-        });
-    });
-</script>
 
 </body>
 </html>
