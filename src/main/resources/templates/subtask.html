@@ -75,10 +75,27 @@
             <td th:text="${subTask.subTaskEndDate}"></td>
             <td><span th:text="${subTask.subTaskDuration}"></span> dage</td>
             <td th:text="${subTask.subTaskNote}"></td>
-            <td th:text="${subTask.subTaskPriority}"></td>
+
+            <!-- PRIORITET (dropdown i sin egen kolonne) -->
             <td>
                 <form th:action="@{/project/subtask/updatestatus/{subTaskId}(subTaskId=${subTask.subTaskId})}" method="post">
-                    <select name="subTaskStatus" onchange="this.form.submit()">
+                    <select name="subTaskPriority" class="priority-select" onchange="this.form.submit()">
+                        <option value="LOW"
+                                th:selected="${subTask.subTaskPriority == 'LOW'}">Lav</option>
+                        <option value="MEDIUM"
+                                th:selected="${subTask.subTaskPriority == 'MEDIUM'}">Medium</option>
+                        <option value="HIGH"
+                                th:selected="${subTask.subTaskPriority == 'HIGH'}">Høj</option>
+                        <option value="CRITICAL"
+                                th:selected="${subTask.subTaskPriority  == 'CRITICAL'}">Kritisk</option>
+                    </select>
+                </form>
+            </td>
+
+            <!-- STATUS (dropdown i sin egen kolonne) -->
+            <td>
+                <form th:action="@{/project/subtask/updatestatus/{subTaskId}(subTaskId=${subTask.subTaskId})}" method="post">
+                    <select name="subTaskStatus" class="status-select" onchange="this.form.submit()">
                         <option value="NOT_STARTED"
                                 th:selected="${subTask.subTaskStatus == 'NOT_STARTED'}">Ikke startet</option>
                         <option value="IN_PROGRESS"
@@ -88,19 +105,24 @@
                     </select>
                 </form>
             </td>
+
+            <!-- HANDLINGER -->
             <td>
                 <div class="action-buttons">
-                    <!-- Rediger -->
-                    <a th:href="@{/project/subtask/edit/{employeeId}/{projectId}/{subProjectId}/{taskId}/{subTaskId}(employeeId=${currentEmployeeId}, projectId=${currentProjectId}, subProjectId=${currentSubProjectId}, taskId=${currentTaskId}, subTaskId=${subTask.subTaskId})}"
-                       class="edit-button">Rediger</a>
-
-                    <!-- Slet subtask -->
-                    <form th:action="@{/task/delete/{employeeId}/{projectId}/{subProjectId}/{taskId}/{subTaskId}(
+                    <a th:href="@{/project/subtask/edit/{employeeId}/{projectId}/{subProjectId}/{taskId}/{subTaskId}(
                          employeeId=${currentEmployeeId},
                          projectId=${currentProjectId},
                          subProjectId=${currentSubProjectId},
                          taskId=${currentTaskId},
                          subTaskId=${subTask.subTaskId})}"
+                       class="edit-button">Rediger</a>
+
+                    <form th:action="@{/task/delete/{employeeId}/{projectId}/{subProjectId}/{taskId}/{subTaskId}(
+                             employeeId=${currentEmployeeId},
+                             projectId=${currentProjectId},
+                             subProjectId=${currentSubProjectId},
+                             taskId=${currentTaskId},
+                             subTaskId=${subTask.subTaskId})}"
                           method="post" style="display:inline">
                         <button type="submit" class="delete-button"
                                 onclick="return confirm('Er du sikker på, du vil slette denne subtask?');">

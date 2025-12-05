@@ -201,10 +201,6 @@ public class TaskController {
         return "subtask";
     }
 
-
-
-
-
     @PostMapping("/project/subtask/createsubtask/{employeeId}/{projectId}/{subProjectId}/{taskId}")
     public String createSubTask(@PathVariable int employeeId,
                                 @PathVariable long projectId,
@@ -259,6 +255,29 @@ public class TaskController {
         return "redirect:/project/subproject/task/subtask/list/" + projectId + "/" + taskId + "/" + subProjectId + "/" + employeeId;
     }
 
-}
+    // TODO: lav postmapping til opdater subtask status og opdater subtask prioritet
+    @PostMapping("/project/subtask/updatestatus/{subTaskId}")
+        public String updateSubTaskStatus(
+                @PathVariable Long subTaskId,
+                @RequestParam(required = false) String subTaskPriority,
+                @RequestParam(required = false) String subTaskStatus) {
+
+            // hent subtask
+            SubTask subTask = taskService.getTaskById()
+
+            // opdater kun det der er sendt med
+            if (subTaskPriority != null) {
+                subTask.setSubTaskPriority(SubTaskPriority.valueOf(subTaskPriority));
+            }
+            if (subTaskStatus != null) {
+                subTask.setSubTaskStatus(SubTaskStatus.valueOf(subTaskStatus));
+            }
+
+            subTaskService.save(subTask);
+
+            // redirect tilbage til listen
+            return "redirect:/task/subtask/list/" + subTaskIdetsTaskEllerProjectId;
+        }
+    }
 
 
