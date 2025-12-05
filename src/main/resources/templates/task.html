@@ -77,21 +77,13 @@
             <td th:text="${task.startDate}"></td>
             <td th:text="${task.endDate}"></td>
             <td>
-                <form th:action="@{/project/task/updatestatus/{taskId}(taskId=${task.taskID})}" method="post">
-                    <select name="taskStatus">
-                        <option value="NOT_STARTED"
-                                th:selected="${task.taskStatus == 'NOT_STARTED'}">Ikke startet</option>
-                        <option value="IN_PROGRESS"
-                                th:selected="${task.taskStatus == 'IN_PROGRESS'}">I gang</option>
-                        <option value="COMPLETED"
-                                th:selected="${task.taskStatus == 'COMPLETED'}">Afsluttet</option>
-                    </select>
-                </form>
-            </td>
-
-            <!-- PRIORITET (dropdown i sin egen kolonne) -->
+                <!-- PRIORITET kolonne -->
             <td>
-                <form th:action="@{/project/task/updatestatus/{taskId}(taskId=${task.taskID})}" method="post">
+                <!-- Hvis Project Manager: vis dropdown som KAN ændres -->
+                <form th:if="${employeeRole != null
+                    and employeeRole == T(com.example.pkveksamen.model.EmployeeRole).PROJECT_MANAGER}"
+                      th:action="@{/project/task/updatestatus/{taskId}(taskId=${task.taskID})}"
+                      method="post">
                     <select name="taskPriority">
                         <option value="LOW"
                                 th:selected="${task.taskPriority == 'LOW'}">Lav</option>
@@ -103,6 +95,20 @@
                                 th:selected="${task.taskPriority == 'CRITICAL'}">Kritisk</option>
                     </select>
                 </form>
+
+                <!-- Hvis Team Member: vis dropdown som IKKE kan ændres (disabled) -->
+                <select th:if="${employeeRole != null
+                    and employeeRole == T(com.example.pkveksamen.model.EmployeeRole).TEAM_MEMBER}"
+                        name="taskPriority" disabled>
+                    <option value="LOW"
+                            th:selected="${task.taskPriority == 'LOW'}">Lav</option>
+                    <option value="MEDIUM"
+                            th:selected="${task.taskPriority == 'MEDIUM'}">Medium</option>
+                    <option value="HIGH"
+                            th:selected="${task.taskPriority == 'HIGH'}">Høj</option>
+                    <option value="CRITICAL"
+                            th:selected="${task.taskPriority == 'CRITICAL'}">Kritisk</option>
+                </select>
             </td>
 
             <!-- Note knap til  -->
