@@ -9,12 +9,13 @@
 <body>
 
 <div class="container">
-    <!-- Header / top bar -->
+
+    <!-- Header -->
     <div class="header">
         <h1>Tasks</h1>
         <div class="user-info">
-            <!-- KORRIGERET: kun én ${...} expression -->
-            <span th:text="${username} + ' (' + ${employeeRole.displayName} + ')'"></span>
+            <span th:text="${username + ' (' + employeeRole.displayName + ')'}"></span>
+
             <form th:action="@{/logout}" method="post">
                 <button type="submit" class="logout-button">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
@@ -29,16 +30,18 @@
         </div>
     </div>
 
-    <!-- Kontrol bar -->
+    <!-- Kontrolbar -->
     <div class="control-bar">
         <a th:href="@{/project/subproject/list/{projectId}(projectId=${currentProjectId}, employeeId=${currentEmployeeId})}"
            class="back-button">
             ← Tilbage til Subprojekter
         </a>
 
-        <a th:if="${employeeRole != null
-                                and employeeRole == T(com.example.pkveksamen.model.EmployeeRole).PROJECT_MANAGER}"
-           th:href="@{/project/task/createtask/{employeeId}/{projectId}/{subProjectId}(employeeId=${currentEmployeeId}, projectId=${currentProjectId}, subProjectId=${currentSubProjectId})}"
+        <a th:if="${employeeRole == T(com.example.pkveksamen.model.EmployeeRole).PROJECT_MANAGER}"
+           th:href="@{/project/task/createtask/{employeeId}/{projectId}/{subProjectId}(
+                    employeeId=${currentEmployeeId},
+                    projectId=${currentProjectId},
+                    subProjectId=${currentSubProjectId})}"
            class="create-project-button">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                  stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -49,7 +52,7 @@
         </a>
     </div>
 
-    <!-- Task tabel -->
+    <!-- Tabel -->
     <table class="task-table">
         <thead>
         <tr>
@@ -64,101 +67,123 @@
             <th>Handlinger</th>
         </tr>
         </thead>
+
         <tbody>
-        <!-- Hvis ingen tasks -->
+
+        <!-- Ingen tasks -->
         <tr th:if="${taskList == null or #lists.isEmpty(taskList)}">
-            <td colspan="7">Du har ingen tasks endnu. Klik på "Opret Ny Task" for at starte.</td>
+            <td colspan="9">Du har ingen tasks endnu. Klik på "Opret Ny Task" for at starte.</td>
         </tr>
 
-        <!-- Iterer tasks -->
+        <!-- Iteration -->
         <tr th:each="task : ${taskList}">
             <td th:text="${task.taskName}"></td>
             <td th:text="${task.taskDescription}"></td>
             <td th:text="${task.startDate}"></td>
             <td th:text="${task.endDate}"></td>
+
+            <!-- STATUS -->
             <td>
-                <!-- PRIORITET kolonne -->
-            <td>
-                <!-- Hvis Project Manager: vis dropdown som KAN ændres -->
-                <form th:if="${employeeRole != null
-                    and employeeRole == T(com.example.pkveksamen.model.EmployeeRole).PROJECT_MANAGER}"
+                <!-- TEAM MEMBER: kan ændre -->
+                <form th:if="${employeeRole == T(com.example.pkveksamen.model.EmployeeRole).TEAM_MEMBER}"
                       th:action="@{/project/task/updatestatus/{taskId}(taskId=${task.taskID})}"
                       method="post">
-                    <select name="taskPriority">
-                        <option value="LOW"
-                                th:selected="${task.taskPriority == 'LOW'}">Lav</option>
-                        <option value="MEDIUM"
-                                th:selected="${task.taskPriority == 'MEDIUM'}">Medium</option>
-                        <option value="HIGH"
-                                th:selected="${task.taskPriority == 'HIGH'}">Høj</option>
-                        <option value="CRITICAL"
-                                th:selected="${task.taskPriority == 'CRITICAL'}">Kritisk</option>
+
+                    <select name="taskStatus" onchange="this.form.submit()">
+                        <option value="NOT_STARTED"  th:selected="${task.taskStatus == 'NOT_STARTED'}">Ikke startet</option>
+                        <option value="IN_PROGRESS"  th:selected="${task.taskStatus == 'IN_PROGRESS'}">I gang</option>
+                        <option value="COMPLETED"    th:selected="${task.taskStatus == 'COMPLETED'}">Afsluttet</option>
                     </select>
                 </form>
 
-                <!-- Hvis Team Member: vis dropdown som IKKE kan ændres (disabled) -->
-                <select th:if="${employeeRole != null
-                    and employeeRole == T(com.example.pkveksamen.model.EmployeeRole).TEAM_MEMBER}"
-                        name="taskPriority" disabled>
-                    <option value="LOW"
-                            th:selected="${task.taskPriority == 'LOW'}">Lav</option>
-                    <option value="MEDIUM"
-                            th:selected="${task.taskPriority == 'MEDIUM'}">Medium</option>
-                    <option value="HIGH"
-                            th:selected="${task.taskPriority == 'HIGH'}">Høj</option>
-                    <option value="CRITICAL"
-                            th:selected="${task.taskPriority == 'CRITICAL'}">Kritisk</option>
+                <!-- PROJECT MANAGER: kan ikke ændre -->
+                <select th:if="${employeeRole == T(com.example.pkveksamen.model.EmployeeRole).PROJECT_MANAGER}" disabled>
+                    <option value="NOT_STARTED"  th:selected="${task.taskStatus == 'NOT_STARTED'}">Ikke startet</option>
+                    <option value="IN_PROGRESS"  th:selected="${task.taskStatus == 'IN_PROGRESS'}">I gang</option>
+                    <option value="COMPLETED"    th:selected="${task.taskStatus == 'COMPLETED'}">Afsluttet</option>
                 </select>
             </td>
 
-            <!-- Note knap til  -->
+            <!-- PRIORITY -->
             <td>
-                <a th:if="${employeeRole != null
-                                and employeeRole == T(com.example.pkveksamen.model.EmployeeRole).TEAM_MEMBER}"
+                <!-- Project Manager: kan ændre -->
+                <form th:if="${employeeRole == T(com.example.pkveksamen.model.EmployeeRole).PROJECT_MANAGER}"
+                      th:action="@{/project/task/updatepriority/{taskId}(taskId=${task.taskID})}"
+                      method="post">
+
+                    <select name="taskPriority" onchange="this.form.submit()">
+                        <option value="LOW"       th:selected="${task.taskPriority == 'LOW'}">Lav</option>
+                        <option value="MEDIUM"    th:selected="${task.taskPriority == 'MEDIUM'}">Medium</option>
+                        <option value="HIGH"      th:selected="${task.taskPriority == 'HIGH'}">Høj</option>
+                        <option value="CRITICAL"  th:selected="${task.taskPriority == 'CRITICAL'}">Kritisk</option>
+                    </select>
+                </form>
+
+                <!-- Team Member: kan ikke ændre -->
+                <select th:if="${employeeRole == T(com.example.pkveksamen.model.EmployeeRole).TEAM_MEMBER}" disabled>
+                    <option value="LOW"       th:selected="${task.taskPriority == 'LOW'}">Lav</option>
+                    <option value="MEDIUM"    th:selected="${task.taskPriority == 'MEDIUM'}">Medium</option>
+                    <option value="HIGH"      th:selected="${task.taskPriority == 'HIGH'}">Høj</option>
+                    <option value="CRITICAL"  th:selected="${task.taskPriority == 'CRITICAL'}">Kritisk</option>
+                </select>
+            </td>
+
+            <!-- NOTE -->
+            <td>
+                <a th:if="${employeeRole == T(com.example.pkveksamen.model.EmployeeRole).TEAM_MEMBER}"
                    th:href="@{/project/task/note/{employeeId}/{projectId}/{subProjectId}/{taskId}(
                             employeeId=${currentEmployeeId},
                             projectId=${currentProjectId},
                             subProjectId=${currentSubProjectId},
                             taskId=${task.taskID})}"
-                   class="note-button">
-                    Tilføj note
-                </a>
+                   class="note-button">Tilføj note</a>
             </td>
 
-            <td><span th:text="${task.taskDuration}"></span> dage</td>
+            <td>
+                <span th:text="${task.taskDuration}"></span> dage
+            </td>
+
+            <!-- Handlinger -->
             <td>
                 <div class="action-buttons">
+
                     <!-- Rediger -->
-                    <a th:if="${employeeRole != null
-                                and employeeRole == T(com.example.pkveksamen.model.EmployeeRole).PROJECT_MANAGER}"
-                       th:href="@{/project/task/edit/{employeeId}/{projectId}/{subProjectId}/{taskId}(employeeId=${currentEmployeeId}, projectId=${currentProjectId}, subProjectId=${currentSubProjectId}, taskId=${task.taskID})}"
+                    <a th:if="${employeeRole == T(com.example.pkveksamen.model.EmployeeRole).PROJECT_MANAGER}"
+                       th:href="@{/project/task/edit/{employeeId}/{projectId}/{subProjectId}/{taskId}(
+                                employeeId=${currentEmployeeId},
+                                projectId=${currentProjectId},
+                                subProjectId=${currentSubProjectId},
+                                taskId=${task.taskID})}"
                        class="edit-button">Rediger</a>
 
-
-                    <!-- Slet task - knappen -->
-                    <form th:if="${employeeRole != null
-                                and employeeRole == T(com.example.pkveksamen.model.EmployeeRole).PROJECT_MANAGER}"
+                    <!-- Slet -->
+                    <form th:if="${employeeRole == T(com.example.pkveksamen.model.EmployeeRole).PROJECT_MANAGER}"
                           th:action="@{/task/delete/{employeeId}/{projectId}/{subProjectId}/{taskId}(
-                     employeeId=${currentEmployeeId},
-                     projectId=${currentProjectId},
-                     subProjectId=${currentSubProjectId},
-                     taskId=${task.taskID})}" method="post" style="display:inline">
+                                    employeeId=${currentEmployeeId},
+                                    projectId=${currentProjectId},
+                                    subProjectId=${currentSubProjectId},
+                                    taskId=${task.taskID})}"
+                          method="post" style="display:inline">
                         <button type="submit" class="delete-button"
-                                onclick="return confirm('Er du sikker på, du vil slette denne task?');">
-                            Slet
-                        </button>
+                                onclick="return confirm('Er du sikker på, du vil slette denne task?');">Slet</button>
                     </form>
 
-                    <!-- Se Sub Tasks-knap -->
-                    <a th:href="@{/project/subtask/liste/{projectId}/{subProjectId}/{taskId}/{employeeId}(projectId=${currentProjectId}, subProjectId=${currentSubProjectId}, taskId=${task.taskID}, employeeId=${currentEmployeeId})}"
-                       class="subtask-button">
-                        Se Sub Tasks
-                    </a>
+                    <!-- Se Subtasks -->
+                    <a th:href="@{/project/subtask/liste/{projectId}/{subProjectId}/{taskId}/{employeeId}(
+                                projectId=${currentProjectId},
+                                subProjectId=${currentSubProjectId},
+                                taskId=${task.taskID},
+                                employeeId=${currentEmployeeId})}"
+                       class="subtask-button">Se Sub Tasks</a>
+
                 </div>
             </td>
+
         </tr>
         </tbody>
+
     </table>
+
 </div>
 
 </body>
