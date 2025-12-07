@@ -202,40 +202,49 @@ public class TaskRepository {
         subTask.recalculateDuration();
 
         String sql = "UPDATE sub_task SET " +
+                "sub_task_title = ?, " +
                 "sub_task_description = ?, " +
                 "sub_task_status = ?, " +
                 "sub_task_start_date = ?, " +
                 "sub_task_end_date = ?, " +
-                "sub_task_duration = ? " +
+                "sub_task_duration = ?, " +
+                "sub_task_priority = ?, " +
+                "sub_task_note = ? " +
                 "WHERE sub_task_id = ?";
 
-        jdbcTemplate.update(sql,
+        int rowsAffected = jdbcTemplate.update(sql,
+                subTask.getSubTaskName(),
                 subTask.getSubTaskDescription(),
                 subTask.getSubTaskStatus().name(),
                 subTask.getSubTaskStartDate(),
                 subTask.getSubTaskEndDate(),
                 subTask.getSubTaskDuration(),
+                subTask.getSubTaskPriority().name(),
+                subTask.getSubTaskNote(),
                 subTask.getSubTaskId()
         );
+
+        System.out.println("Rows updated: " + rowsAffected);
     }
 
     public SubTask getSubTaskById(long subTaskId) {
-        String sql = "SELECT sub_task_id, task_id, sub_task_description, sub_task_status, " +
-                "sub_task_start_date, sub_task_end_date, sub_task_duration " +
+        String sql = "SELECT sub_task_id, task_id, sub_task_title, sub_task_description, sub_task_status, " +
+                "sub_task_start_date, sub_task_end_date, sub_task_duration, sub_task_priority, sub_task_note " +
                 "FROM sub_task WHERE sub_task_id = ?";
 
         return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
             SubTask subTask = new SubTask();
 
-            subTask.setSubTaskId(rs.getInt("sub_task_id"));
-            subTask.setSubTaskId(rs.getInt("task_id"));
+            subTask.setSubTaskId(rs.getLong("sub_task_id"));
+            subTask.setSubTaskName(rs.getString("sub_task_title"));
             subTask.setSubTaskDescription(rs.getString("sub_task_description"));
             subTask.setSubTaskStatus(Status.valueOf(rs.getString("sub_task_status")));
             subTask.setSubTaskStartDate(rs.getObject("sub_task_start_date", java.time.LocalDate.class));
             subTask.setSubTaskEndDate(rs.getObject("sub_task_end_date", java.time.LocalDate.class));
             subTask.setSubTaskDuration(rs.getInt("sub_task_duration"));
+            subTask.setSubTaskPriority(Priority.valueOf(rs.getString("sub_task_priority")));
+            subTask.setSubTaskNote(rs.getString("sub_task_note"));
 
-            // hvis du har en metode til at genberegne varighed:
             subTask.recalculateDuration();
 
             return subTask;

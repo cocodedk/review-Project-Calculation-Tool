@@ -189,6 +189,7 @@ public class TaskController {
                                        @PathVariable long subProjectId,
                                        @PathVariable long taskId,
                                        Model model) {
+
         // Ret dette: Hent subtasks for den specifikke task, ikke alle employee's subtasks
         List<SubTask> subTaskList = taskService.showSubTasksByTaskId(taskId);
 
@@ -274,8 +275,9 @@ public class TaskController {
                                 @PathVariable long taskId,
                                 @PathVariable long subTaskId) {
         taskService.deleteSubTask(subTaskId);
-        return "redirect:/project/subtask/liste/" + projectId + "/" + taskId + "/" + subProjectId + "/" + employeeId;
+        return "redirect:/project/subtask/liste/" + projectId + "/" + subProjectId + "/" + taskId + "/" + employeeId;
     }
+
 
     @GetMapping("/project/subtask/edit/{employeeId}/{projectId}/{subProjectId}/{taskId}/{subTaskId}")
     public String showEditSubTaskForm(@PathVariable int employeeId,
@@ -310,6 +312,14 @@ public class TaskController {
                               @PathVariable long taskId,
                               @PathVariable long subTaskId,
                               @ModelAttribute SubTask subTask) {
+
+        if (subTask.getSubTaskStartDate() != null && subTask.getSubTaskEndDate() != null) {
+            long days = ChronoUnit.DAYS.between(subTask.getSubTaskStartDate(), subTask.getSubTaskEndDate());
+            subTask.setSubTaskDuration((int) days + 1);
+        } else {
+            subTask.setSubTaskDuration(0);
+        }
+
 
         subTask.setSubTaskId(subTaskId);
         taskService.editSubTask(subTask);
