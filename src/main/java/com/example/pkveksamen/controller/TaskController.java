@@ -84,8 +84,8 @@ public class TaskController {
                              @ModelAttribute Task task,
                              Model model) {
         // Calculate duration in days
-        if (task.getStartDate() != null && task.getEndDate() != null) {
-            long days = ChronoUnit.DAYS.between(task.getStartDate(), task.getEndDate());
+        if (task.getTaskStartDate() != null && task.getTaskDeadline() != null) {
+            long days = ChronoUnit.DAYS.between(task.getTaskStartDate(), task.getTaskDeadline());
             task.setTaskDuration((int) days + 1);
         } else {
             task.setTaskDuration(0);
@@ -97,8 +97,8 @@ public class TaskController {
                 task.getTaskName(),
                 task.getTaskDescription(),
                 task.getTaskStatus(),
-                task.getStartDate(),
-                task.getEndDate(),
+                task.getTaskStartDate(),
+                task.getTaskDeadline(),
                 task.getTaskDuration(),
                 task.getTaskPriority(),
                 task.getTaskNote()
@@ -231,21 +231,20 @@ public class TaskController {
         }
 
         // Calculate duration in days
-        if (subTask.getSubTaskStartDate() != null && subTask.getSubTaskEndDate() != null) {
-            long days = ChronoUnit.DAYS.between(subTask.getSubTaskStartDate(), subTask.getSubTaskEndDate());
+        if (subTask.getSubTaskStartDate() != null && subTask.getSubTaskDeadline() != null) {
+            long days = ChronoUnit.DAYS.between(subTask.getSubTaskStartDate(), subTask.getSubTaskDeadline());
             subTask.setSubTaskDuration((int) days + 1);
         } else {
             subTask.setSubTaskDuration(0);
         }
 
         taskService.createSubTask(
-                employeeId,
                 taskId,
                 subTask.getSubTaskName(),
                 subTask.getSubTaskDescription(),
                 subTask.getSubTaskStatus().name(),
                 subTask.getSubTaskStartDate(),
-                subTask.getSubTaskEndDate(),
+                subTask.getSubTaskDeadline(),
                 subTask.getSubTaskDuration(),
                 subTask.getSubTaskPriority().name(),
                 subTask.getSubTaskNote()
@@ -313,8 +312,8 @@ public class TaskController {
                               @PathVariable long subTaskId,
                               @ModelAttribute SubTask subTask) {
 
-        if (subTask.getSubTaskStartDate() != null && subTask.getSubTaskEndDate() != null) {
-            long days = ChronoUnit.DAYS.between(subTask.getSubTaskStartDate(), subTask.getSubTaskEndDate());
+        if (subTask.getSubTaskStartDate() != null && subTask.getSubTaskDeadline() != null) {
+            long days = ChronoUnit.DAYS.between(subTask.getSubTaskStartDate(), subTask.getSubTaskDeadline());
             subTask.setSubTaskDuration((int) days + 1);
         } else {
             subTask.setSubTaskDuration(0);

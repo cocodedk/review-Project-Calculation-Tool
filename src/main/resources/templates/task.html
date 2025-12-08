@@ -24,7 +24,7 @@
                         <polyline points="16 17 21 12 16 7"/>
                         <line x1="21" x2="9" y1="12" y2="12"/>
                     </svg>
-                    Log ud
+                    Log out
                 </button>
             </form>
         </div>
@@ -34,7 +34,7 @@
     <div class="control-bar">
         <a th:href="@{/project/subproject/list/{projectId}(projectId=${currentProjectId}, employeeId=${currentEmployeeId})}"
            class="back-button">
-            ← Tilbage til Subprojekter
+            ← Return to subprojects
         </a>
 
         <a th:if="${employeeRole == T(com.example.pkveksamen.model.EmployeeRole).PROJECT_MANAGER}"
@@ -48,7 +48,7 @@
                 <line x1="12" y1="5" x2="12" y2="19"></line>
                 <line x1="5" y1="12" x2="19" y2="12"></line>
             </svg>
-            Opret Ny Task
+            Create new task
         </a>
     </div>
 
@@ -56,15 +56,15 @@
     <table class="task-table">
         <thead>
         <tr>
-            <th>Task Navn</th>
-            <th>Beskrivelse</th>
-            <th>Start Dato</th>
-            <th>Slut Dato</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Start date</th>
+            <th>Deadline</th>
             <th>Status</th>
             <th>Priority</th>
             <th>Note</th>
-            <th>Varighed</th>
-            <th>Handlinger</th>
+            <th>Duration</th>
+            <th>Actions</th>
         </tr>
         </thead>
 
@@ -72,15 +72,15 @@
 
         <!-- Ingen tasks -->
         <tr th:if="${taskList == null or #lists.isEmpty(taskList)}">
-            <td colspan="9">Du har ingen tasks endnu. Klik på "Opret Ny Task" for at starte.</td>
+            <td colspan="9">You have no tasks yet. Click "Create new task" for an overview.</td>
         </tr>
 
         <!-- Iteration -->
         <tr th:each="task : ${taskList}">
             <td th:text="${task.taskName}"></td>
             <td th:text="${task.taskDescription}"></td>
-            <td th:text="${task.startDate}"></td>
-            <td th:text="${task.endDate}"></td>
+            <td th:text="${task.taskStartDate}"></td>
+            <td th:text="${task.taskDeadline}"></td>
 
             <!-- STATUS -->
             <td>
@@ -90,17 +90,17 @@
                       method="post">
 
                     <select name="taskStatus" onchange="this.form.submit()">
-                        <option value="NOT_STARTED"  th:selected="${task.taskStatus == 'NOT_STARTED'}">Ikke startet</option>
-                        <option value="IN_PROGRESS"  th:selected="${task.taskStatus == 'IN_PROGRESS'}">I gang</option>
-                        <option value="COMPLETED"    th:selected="${task.taskStatus == 'COMPLETED'}">Afsluttet</option>
+                        <option value="NOT_STARTED"  th:selected="${task.taskStatus == 'NOT_STARTED'}">Not started</option>
+                        <option value="IN_PROGRESS"  th:selected="${task.taskStatus == 'IN_PROGRESS'}">In progress</option>
+                        <option value="COMPLETED"    th:selected="${task.taskStatus == 'COMPLETED'}">Completed</option>
                     </select>
                 </form>
 
                 <!-- PROJECT MANAGER: kan ikke ændre -->
                 <select th:if="${employeeRole == T(com.example.pkveksamen.model.EmployeeRole).PROJECT_MANAGER}" disabled>
-                    <option value="NOT_STARTED"  th:selected="${task.taskStatus == 'NOT_STARTED'}">Ikke startet</option>
-                    <option value="IN_PROGRESS"  th:selected="${task.taskStatus == 'IN_PROGRESS'}">I gang</option>
-                    <option value="COMPLETED"    th:selected="${task.taskStatus == 'COMPLETED'}">Afsluttet</option>
+                    <option value="NOT_STARTED"  th:selected="${task.taskStatus == 'NOT_STARTED'}">Not started</option>
+                    <option value="IN_PROGRESS"  th:selected="${task.taskStatus == 'IN_PROGRESS'}">In progress</option>
+                    <option value="COMPLETED"    th:selected="${task.taskStatus == 'COMPLETED'}">Completed</option>
                 </select>
             </td>
 
@@ -112,17 +112,17 @@
                       method="post">
 
                     <select name="taskPriority" onchange="this.form.submit()">
-                        <option value="LOW"       th:selected="${task.taskPriority == 'LOW'}">Lav</option>
+                        <option value="LOW"       th:selected="${task.taskPriority == 'LOW'}">Low</option>
                         <option value="MEDIUM"    th:selected="${task.taskPriority == 'MEDIUM'}">Medium</option>
-                        <option value="HIGH"      th:selected="${task.taskPriority == 'HIGH'}">Høj</option>
+                        <option value="HIGH"      th:selected="${task.taskPriority == 'HIGH'}">High</option>
                     </select>
                 </form>
 
                 <!-- Team Member: kan ikke ændre -->
                 <select th:if="${employeeRole == T(com.example.pkveksamen.model.EmployeeRole).TEAM_MEMBER}" disabled>
-                    <option value="LOW"       th:selected="${task.taskPriority == 'LOW'}">Lav</option>
+                    <option value="LOW"       th:selected="${task.taskPriority == 'LOW'}">Low</option>
                     <option value="MEDIUM"    th:selected="${task.taskPriority == 'MEDIUM'}">Medium</option>
-                    <option value="HIGH"      th:selected="${task.taskPriority == 'HIGH'}">Høj</option>
+                    <option value="HIGH"      th:selected="${task.taskPriority == 'HIGH'}">High</option>
                 </select>
             </td>
 
@@ -134,11 +134,11 @@
                             projectId=${currentProjectId},
                             subProjectId=${currentSubProjectId},
                             taskId=${task.taskID})}"
-                   class="note-button">Tilføj note</a>
+                   class="note-button">Add note</a>
             </td>
 
             <td>
-                <span th:text="${task.taskDuration}"></span> dage
+                <span th:text="${task.taskDuration}"></span> days
             </td>
 
             <!-- Handlinger -->
@@ -152,7 +152,7 @@
                                 projectId=${currentProjectId},
                                 subProjectId=${currentSubProjectId},
                                 taskId=${task.taskID})}"
-                       class="edit-button">Rediger</a>
+                       class="edit-button">Edit</a>
 
                     <!-- Slet -->
                     <form th:if="${employeeRole == T(com.example.pkveksamen.model.EmployeeRole).PROJECT_MANAGER}"
@@ -163,7 +163,7 @@
                                     taskId=${task.taskID})}"
                           method="post" style="display:inline">
                         <button type="submit" class="delete-button"
-                                onclick="return confirm('Er du sikker på, du vil slette denne task?');">Slet</button>
+                                onclick="return confirm('Er du sikker på, du vil slette denne task?');">Delete</button>
                     </form>
 
                     <!-- Se Subtasks -->
@@ -172,7 +172,7 @@
                                 subProjectId=${currentSubProjectId},
                                 taskId=${task.taskID},
                                 employeeId=${currentEmployeeId})}"
-                       class="subtask-button">Se Sub Tasks</a>
+                       class="subtask-button">View Sub Tasks</a>
 
                 </div>
             </td>

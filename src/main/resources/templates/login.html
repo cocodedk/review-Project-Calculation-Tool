@@ -9,7 +9,7 @@
 </head>
 <body>
 <div class="container">
-    <h1>THE PLANNER</h1>
+    <h1>PCT</h1>
 
     <div th:if="${error}" class="error-message">
         <p th:text="${error}"></p>
@@ -18,7 +18,7 @@
     <form th:action="@{/validate-login}" method="post">
 
         <div class="form-group">
-            <label for="username">Brugernavn:</label>
+            <label for="username">Username:</label>
             <input type="text"
                    name="username"
                    id="username"
@@ -35,11 +35,11 @@
                    required>
         </div>
 
-        <button type="submit" class="login-button">Log ind</button>
+        <button type="submit" class="login-button">Log in</button>
     </form>
 
     <p>
-        <a th:href="@{/create-employee}" class="create-employee-button">Opret medarbejder</a>
+        <a th:href="@{/create-employee}" class="create-employee-button">Create employee</a>
     </p>
 </div>
 </body>

@@ -2,7 +2,7 @@
 <html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Opret SubTask</title>
+    <title>Create subtask</title>
     <link th:href="@{/createsubtask.css}" rel="stylesheet">
 </head>
 
@@ -12,7 +12,7 @@
 
     <!-- HEADER -->
     <div class="header">
-        <h1>Opret Ny SubTask</h1>
+        <h1>Create new subtask</h1>
 
         <div class="user-info">
             <span th:text="${username} + ' (' + ${employeeRole.displayName} + ')'"></span>
@@ -25,7 +25,7 @@
                         <polyline points="16 17 21 12 16 7"/>
                         <line x1="21" y1="12" x2="9" y2="12"/>
                     </svg>
-                    Log ud
+                    Log out
                 </button>
             </form>
         </div>
@@ -34,7 +34,7 @@
     <!-- Tilbage -->
     <div class="control-bar">
         <a th:href="@{/project/subtask/liste/{projectId}/{subProjectId}/{taskId}/{employeeId}(projectId=${currentProjectId},subProjectId=${currentSubProjectId},taskId=${currentTaskId},employeeId=${currentEmployeeId})}"
-           class="back-button">← Tilbage</a>
+           class="back-button">← Return</a>
     </div>
 
     <!-- FORM -->
@@ -44,44 +44,44 @@
           class="form-card">
 
         <div class="form-row">
-            <label>SubTask Navn</label>
+            <label>Title</label>
             <input type="text" th:field="*{subTaskName}" required>
         </div>
 
         <div class="form-row">
-            <label>Beskrivelse</label>
+            <label>Description</label>
             <textarea th:field="*{subTaskDescription}" rows="4"></textarea>
         </div>
 
         <div class="form-row">
-            <label>Start Dato</label>
+            <label>Start date</label>
             <input type="date" th:field="*{subTaskStartDate}" required>
         </div>
 
         <div class="form-row">
-            <label>Slut Dato</label>
-            <input type="date" th:field="*{subTaskEndDate}" required>
+            <label>Deadline</label>
+            <input type="date" th:field="*{subTaskDeadline}" required>
         </div>
 
         <div class="form-row">
             <label>Status</label>
             <select th:field="*{subTaskStatus}">
-                <option value="NOT_STARTED">Ikke startet</option>
-                <option value="IN_PROGRESS">I gang</option>
-                <option value="COMPLETED">Afsluttet</option>
+                <option value="NOT_STARTED">Not started</option>
+                <option value="IN_PROGRESS">In progress</option>
+                <option value="COMPLETED">Completed</option>
             </select>
         </div>
 
         <div class="form-row">
-            <label>Prioritet</label>
+            <label>Priority</label>
             <select th:field="*{subTaskPriority}">
-                <option value="LOW">Lav</option>
-                <option value="MEDIUM">Mellem</option>
-                <option value="HIGH">Høj</option>
+                <option value="LOW">Low</option>
+                <option value="MEDIUM">Medium</option>
+                <option value="HIGH">High</option>
             </select>
         </div>
 
-        <button type="submit" class="submit-button">Opret SubTask</button>
+        <button type="submit" class="submit-button">Create sub task</button>
 
     </form>
 

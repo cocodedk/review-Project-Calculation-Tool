@@ -12,12 +12,12 @@ public class SubTask {
     private Priority subTaskPriority;
     private String subTaskNote;
     private LocalDate subTaskStartDate;
-    private LocalDate subTaskEndDate;
+    private LocalDate subTaskDeadline;
 
     public SubTask(){}
 
     public SubTask(long subTaskId, String subTaskName, String subTaskDescription, int subTaskDuration, Status subTaskStatus,
-                   Priority subTaskPriority, String subTaskNote, LocalDate subTaskStartDate, LocalDate subTaskEndDate) {
+                   Priority subTaskPriority, String subTaskNote, LocalDate subTaskStartDate, LocalDate subTaskDeadline) {
         this.subTaskId = subTaskId;
         this.subTaskName = subTaskName;
         this.subTaskDescription = subTaskDescription;
@@ -26,12 +26,12 @@ public class SubTask {
         this.subTaskPriority = subTaskPriority;
         this.subTaskNote = subTaskNote;
         this.subTaskStartDate = subTaskStartDate;
-        this.subTaskEndDate = subTaskEndDate;
+        this.subTaskDeadline = subTaskDeadline;
     }
 
     public void recalculateDuration() {
-        if (subTaskStartDate != null && subTaskEndDate != null) {
-            long days = ChronoUnit.DAYS.between(subTaskStartDate, subTaskEndDate);
+        if (subTaskStartDate != null && subTaskDeadline != null) {
+            long days = ChronoUnit.DAYS.between(subTaskStartDate, subTaskDeadline);
 
             // Hvis I vil tælle begge dage med:
             // days = days + 1;
@@ -102,12 +102,12 @@ public class SubTask {
         this.subTaskStartDate = subTaskStartDate;
     }
 
-    public LocalDate getSubTaskEndDate() {
-        return subTaskEndDate;
+    public LocalDate getSubTaskDeadline() {
+        return subTaskDeadline;
     }
 
-    public void setSubTaskEndDate(LocalDate subTaskEndDate) {
-        this.subTaskEndDate = subTaskEndDate;
+    public void setSubTaskDeadline(LocalDate subTaskDeadline) {
+        this.subTaskDeadline = subTaskDeadline;
     }
 
     public String getSubTaskNote() {

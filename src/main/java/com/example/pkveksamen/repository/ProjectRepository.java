@@ -20,21 +20,21 @@ public class ProjectRepository {
     }
 
     public void createProject(String projectTitle, String projectDescription, LocalDate projectStartDate,
-                              LocalDate projectEndDate, String projectCustomer, Integer employeeId) {
+                              LocalDate projectDeadline, String projectCustomer, Integer employeeId) {
         jdbcTemplate.update(
-                "INSERT INTO project (project_title, project_description, project_start_date, project_end_date, project_customer, employee_id) " +
+                "INSERT INTO project (project_title, project_description, project_start_date, project_deadline, project_customer, employee_id) " +
                         "VALUES (?,?,?,?,?,?)",
                 projectTitle,
                 projectDescription,
                 projectStartDate,
-                projectEndDate,
+                projectDeadline,
                 projectCustomer,
                 employeeId
         );
     }
 
     public List<Project> showProjectsByEmployeeId(int employeeId) {
-        String sql = "SELECT project_id, employee_id, project_title, project_description, project_start_date, project_end_date, project_customer " +
+        String sql = "SELECT project_id, employee_id, project_title, project_description, project_start_date, project_deadline, project_customer " +
                 "FROM project " +
                 "WHERE employee_id = ?";
 
@@ -43,8 +43,8 @@ public class ProjectRepository {
             project.setProjectID(rs.getLong("project_id"));
             project.setProjectName(rs.getString("project_title"));
             project.setProjectDescription(rs.getString("project_description"));
-            project.setStartDate(rs.getObject("project_start_date", LocalDate.class));
-            project.setEndDate(rs.getObject("project_end_date", LocalDate.class));
+            project.setProjectStartDate(rs.getObject("project_start_date", LocalDate.class));
+            project.setProjectDeadline(rs.getObject("project_deadline", LocalDate.class));
             project.setProjectCustomer(rs.getString("project_customer"));
             // Beregn varigheden automatisk
             project.recalculateDuration();
@@ -53,7 +53,7 @@ public class ProjectRepository {
     }
 
     public List<SubProject> showSubProjectsByProjectId(long projectID) {
-        String sql = "SELECT sub_project_id, project_id, sub_project_title, sub_project_description, sub_project_start_date, sub_project_end_date, sub_project_duration " +
+        String sql = "SELECT sub_project_id, project_id, sub_project_title, sub_project_description, sub_project_start_date, sub_project_deadline, sub_project_duration " +
                 "FROM sub_project " +
                 "WHERE project_id = ?";
 
@@ -62,8 +62,8 @@ public class ProjectRepository {
             subProject.setSubProjectID(rs.getLong("sub_project_id"));
             subProject.setSubProjectName(rs.getString("sub_project_title"));
             subProject.setSubProjectDescription(rs.getString("sub_project_description"));
-            subProject.setStartDate(rs.getObject("sub_project_start_date", LocalDate.class));
-            subProject.setEndDate(rs.getObject("sub_project_end_date", LocalDate.class));
+            subProject.setSubProjectStartDate(rs.getObject("sub_project_start_date", LocalDate.class));
+            subProject.setSubProjectDeadline(rs.getObject("sub_project_deadline", LocalDate.class));
             subProject.setSubProjectDuration(rs.getInt("sub_project_duration"));
             // Beregn varigheden automatisk
             subProject.recalculateDuration();
@@ -72,16 +72,16 @@ public class ProjectRepository {
     }
 
 
-    public void saveProject(Project projectModel, int employeeId) {
-        String sql = "INSERT INTO project (project_title, project_description, project_start_date, project_end_date, project_customer, employee_id) " +
+    public void saveProject(Project project, int employeeId) {
+        String sql = "INSERT INTO project (project_title, project_description, project_start_date, project_deadline, project_customer, employee_id) " +
                 "VALUES (?, ?, ?, ?, ?, ?)";
 
         jdbcTemplate.update(sql,
-                projectModel.getProjectName(),
-                projectModel.getProjectDescription(),
-                projectModel.getStartDate(),
-                projectModel.getEndDate(),
-                projectModel.getProjectCustomer(),
+                project.getProjectName(),
+                project.getProjectDescription(),
+                project.getProjectStartDate(),
+                project.getProjectDeadline(),
+                project.getProjectCustomer(),
                 employeeId
         );
     }
@@ -91,15 +91,15 @@ public class ProjectRepository {
         subProject.recalculateDuration();
 
         String sql = "INSERT INTO sub_project " +
-                "(project_id, sub_project_title, sub_project_description, sub_project_start_date, sub_project_end_date, sub_project_duration) " +
+                "(project_id, sub_project_title, sub_project_description, sub_project_start_date, sub_project_deadline, sub_project_duration) " +
                 "VALUES (?,?,?,?,?,?)";
 
         jdbcTemplate.update(sql,
                 projectID,                             // project_id
                 subProject.getSubProjectName(),        // sub_project_title
                 subProject.getSubProjectDescription(), // sub_project_description
-                subProject.getStartDate(),             // sub_project_start_date
-                subProject.getEndDate(),               // sub_project_end_date
+                subProject.getSubProjectStartDate(),             // sub_project_start_date
+                subProject.getSubProjectDeadline(),               // sub_project_deadline
                 subProject.getSubProjectDuration()     // sub_project_duration
         );
     }
@@ -114,15 +114,15 @@ public class ProjectRepository {
                 "project_title = ?, " +
                 "project_description = ?, " +
                 "project_start_date = ?, " +
-                "project_end_date = ?, " +
+                "project_deadline = ?, " +
                 "project_customer = ? " +
                 "WHERE project_id = ?";
 
         jdbcTemplate.update(sql,
                 project.getProjectName(),
                 project.getProjectDescription(),
-                project.getStartDate(),
-                project.getEndDate(),
+                project.getProjectStartDate(),
+                project.getProjectDeadline(),
                 project.getProjectCustomer(),
                 project.getProjectID()
         );
@@ -132,22 +132,22 @@ public class ProjectRepository {
                 "sub_project_title = ?, " +
                 "sub_project_description = ?, " +
                 "sub_project_start_date = ?, " +
-                "sub_project_end_date = ?, " +
+                "sub_project_deadline = ?, " +
                 "sub_project_duration = ? " +
                 "WHERE sub_project_id = ?";
 
         jdbcTemplate.update(sql,
                 subProject.getSubProjectName(),
                 subProject.getSubProjectDescription(),
-                subProject.getStartDate(),
-                subProject.getEndDate(),
+                subProject.getSubProjectStartDate(),
+                subProject.getSubProjectDeadline(),
                 subProject.getSubProjectDuration(),
                 subProject.getSubProjectID()
         );
     }
 
     public Project getProjectById(long projectId) {
-        String sql = "SELECT project_id, employee_id, project_title, project_description, project_start_date, project_end_date, project_customer " +
+        String sql = "SELECT project_id, employee_id, project_title, project_description, project_start_date, project_deadline, project_customer " +
                 "FROM project " +
                 "WHERE project_id = ?";
 
@@ -156,8 +156,8 @@ public class ProjectRepository {
             project.setProjectID(rs.getLong("project_id"));
             project.setProjectName(rs.getString("project_title"));
             project.setProjectDescription(rs.getString("project_description"));
-            project.setStartDate(rs.getObject("project_start_date", LocalDate.class));
-            project.setEndDate(rs.getObject("project_end_date", LocalDate.class));
+            project.setProjectStartDate(rs.getObject("project_start_date", LocalDate.class));
+            project.setProjectDeadline(rs.getObject("project_deadline", LocalDate.class));
             project.setProjectCustomer(rs.getString("project_customer"));
             // Beregn varigheden automatisk
             project.recalculateDuration();
@@ -167,7 +167,7 @@ public class ProjectRepository {
 
 
     public SubProject getSubProjectBySubProjectID(long subProjectID) {
-        String sql = "SELECT sub_project_id, project_id, sub_project_title, sub_project_description, sub_project_start_date, sub_project_end_date, sub_project_duration " +
+        String sql = "SELECT sub_project_id, project_id, sub_project_title, sub_project_description, sub_project_start_date, sub_project_deadline, sub_project_duration " +
                 "FROM sub_project " +
                 "WHERE sub_project_id = ?";
 
@@ -177,8 +177,8 @@ public class ProjectRepository {
             subproject.setSubProjectID(rs.getLong("sub_project_id"));
             subproject.setSubProjectName(rs.getString("sub_project_title"));
             subproject.setSubProjectDescription(rs.getString("sub_project_description"));
-            subproject.setStartDate(rs.getObject("sub_project_start_date", LocalDate.class));
-            subproject.setEndDate(rs.getObject("sub_project_end_date", LocalDate.class));
+            subproject.setSubProjectStartDate(rs.getObject("sub_project_start_date", LocalDate.class));
+            subproject.setSubProjectDeadline(rs.getObject("sub_project_deadline", LocalDate.class));
             subproject.setSubProjectDuration(rs.getInt("sub_project_duration"));
             // Beregn varigheden automatisk
             subproject.recalculateDuration();

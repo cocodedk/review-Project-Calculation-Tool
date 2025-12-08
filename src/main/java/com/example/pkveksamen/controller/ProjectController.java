@@ -95,8 +95,8 @@ public class ProjectController {
         projectService.createProject(
                 project.getProjectName(),
                 project.getProjectDescription(),
-                project.getStartDate(),
-                project.getEndDate(),
+                project.getProjectStartDate(),
+                project.getProjectDeadline(),
                 project.getProjectCustomer(),
                 employeeId
         );

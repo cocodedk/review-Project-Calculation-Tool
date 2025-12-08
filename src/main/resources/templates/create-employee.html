@@ -11,14 +11,14 @@
 <h1>Opret medarbejder</h1>
 
 <form th:action="@{/create-employee}" th:object="${employee}" method="post">
-    <label>Brugernavn</label>
-    <input type="text" th:field="*{username}" placeholder="Indtast brugernavn" required>
+    <label>Username</label>
+    <input type="text" th:field="*{username}" placeholder="Enter username" required>
 
     <label>Password</label>
-    <input type="password" th:field="*{password}" placeholder="Indtast password" required>
+    <input type="password" th:field="*{password}" placeholder="Enter password" required>
 
     <label>Email</label>
-    <input type="email" th:field="*{email}" placeholder="Indtast email" required>
+    <input type="email" th:field="*{email}" placeholder="Enter email" required>
 
     <label for="employeeRole">Choose role</label>
     <select id="employeeRole" th:field="*{role}" required>
@@ -28,11 +28,11 @@
         </option>
     </select>
 
-    <button type="submit">Opret medarbejder</button>
+    <button type="submit">Create employee</button>
 </form>
 
 <p th:if="${error}" th:text="${error}" class="error-message"></p>
 
-<a th:href="@{/}">Tilbage til forsiden</a>
+<a th:href="@{/}">Return to homepage</a>
 </body>
 </html>

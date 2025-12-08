@@ -10,18 +10,18 @@ public class SubProject {
     private String subProjectDescription;
     private String subProjectStatus;
     private int subProjectDuration;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private LocalDate subProjectStartDate;
+    private LocalDate subProjectDeadline;
 
 
-    public SubProject(long subProjectID, String subProjectName, String subProjectDescription, String subProjectStatus, int subProjectDuration, LocalDate endDate, LocalDate startDate) {
+    public SubProject(long subProjectID, String subProjectName, String subProjectDescription, String subProjectStatus, int subProjectDuration, LocalDate subProjectDeadline, LocalDate subProjectStartDate) {
         this.subProjectID = subProjectID;
         this.subProjectName = subProjectName;
         this.subProjectDescription = subProjectDescription;
         this.subProjectStatus = subProjectStatus;
         this.subProjectDuration = subProjectDuration;
-        this.endDate = endDate;
-        this.startDate = startDate;
+        this.subProjectDeadline = subProjectDeadline;
+        this.subProjectStartDate = subProjectStartDate;
     }
 
     public SubProject() {
@@ -29,8 +29,8 @@ public class SubProject {
     }
 
     public void recalculateDuration() {
-        if (startDate != null && endDate != null) {
-            long days = ChronoUnit.DAYS.between(startDate, endDate);
+        if (subProjectStartDate != null && subProjectDeadline != null) {
+            long days = ChronoUnit.DAYS.between(subProjectStartDate, subProjectDeadline);
 
             // Hvis I vil tælle begge dage med:
             // days = days + 1;
@@ -85,20 +85,21 @@ public class SubProject {
     public void setSubProjectDuration(int subProjectDuration) {
         this.subProjectDuration = subProjectDuration;
     }
-    public LocalDate getStartDate() {
-        return startDate;
+
+    public LocalDate getSubProjectStartDate() {
+        return subProjectStartDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
+    public void setSubProjectStartDate(LocalDate subProjectStartDate) {
+        this.subProjectStartDate = subProjectStartDate;
     }
 
-    public LocalDate getEndDate() {
-        return endDate;
+    public LocalDate getSubProjectDeadline() {
+        return subProjectDeadline;
     }
 
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
+    public void setSubProjectDeadline(LocalDate subProjectDeadline) {
+        this.subProjectDeadline = subProjectDeadline;
     }
 
 }

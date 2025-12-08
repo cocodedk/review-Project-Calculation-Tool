@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>Rediger Task</title>
+    <title>Edit Task</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link th:href="@{/edit-task.css}" rel="stylesheet">
 </head>
@@ -11,12 +11,12 @@
 
     <!-- Header -->
     <div class="header">
-        <h1>Rediger Task</h1>
+        <h1>Edit Task</h1>
         <div class="user-info">
             <span th:text="${username} + ' (' + ${employeeRole.displayName} + ')'"></span>
             <form th:action="@{/logout}" method="post">
                 <button type="submit" class="logout-button">
-                    Log ud
+                    Log out
                 </button>
             </form>
         </div>
@@ -25,7 +25,7 @@
     <!-- Breadcrumb -->
     <div class="breadcrumb">
         <a th:href="@{/project/task/liste/{projectId}/{subProjectId}/{employeeId}(projectId=${currentProjectId}, subProjectId=${currentSubProjectId}, employeeId=${currentEmployeeId})}">
-            ← Tilbage til Tasks
+            ← Return to tasks
         </a>
     </div>
 
@@ -36,29 +36,29 @@
               method="post">
 
             <div class="form-group">
-                <label for="taskName">Task Navn *</label>
-                <input type="text" id="taskName" th:field="*{taskName}" required placeholder="Indtast task navn">
+                <label for="taskName">Title</label>
+                <input type="text" id="taskName" th:field="*{taskName}" required placeholder="Enter title">
             </div>
 
             <div class="form-group">
-                <label for="taskDescription">Beskrivelse</label>
-                <textarea id="taskDescription" th:field="*{taskDescription}" placeholder="Indtast task beskrivelse"></textarea>
+                <label for="taskDescription">Description</label>
+                <textarea id="taskDescription" th:field="*{taskDescription}" placeholder="Enter description"></textarea>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="startDate">Start Dato *</label>
-                    <input type="date" id="startDate" th:field="*{startDate}" required>
+                    <label for="taskStartDate">Start date</label>
+                    <input type="date" id="taskStartDate" th:field="*{taskStartDate}" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="endDate">Slut Dato *</label>
-                    <input type="date" id="endDate" th:field="*{endDate}" required>
+                    <label for="taskDeadline">Deadline</label>
+                    <input type="date" id="taskDeadline" th:field="*{taskDeadline}" required>
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="taskDuration">Varighed (dage)</label>
+                <label for="taskDuration">Duration (days)</label>
                 <input type="number" id="taskDuration" th:field="*{taskDuration}" readonly>
             </div>
 
@@ -84,10 +84,10 @@
 
             <div class="button-group">
                 <a th:href="@{/project/task/liste/{projectId}/{subProjectId}/{employeeId}(projectId=${currentProjectId}, subProjectId=${currentSubProjectId}, employeeId=${currentEmployeeId})}" class="btn-secondary">
-                    Annuller
+                    Cancel
                 </a>
 
-                <button type="submit" class="create-project-button">Gem Ændringer</button>
+                <button type="submit" class="create-project-button">Save changes</button>
             </div>
 
         </form>

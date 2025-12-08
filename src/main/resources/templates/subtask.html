@@ -24,7 +24,7 @@
                         <polyline points="16 17 21 12 16 7"/>
                         <line x1="21" x2="9" y1="12" y2="12"/>
                     </svg>
-                    Log ud
+                    Log out
                 </button>
             </form>
         </div>
@@ -37,7 +37,7 @@
                 subProjectId=${currentSubProjectId},
                 employeeId=${currentEmployeeId})}"
            class="back-button">
-            ← Tilbage til Tasks
+            ← Return to tasks
         </a>
 
         <a th:if="${employeeRole == T(com.example.pkveksamen.model.EmployeeRole).PROJECT_MANAGER}"
@@ -56,7 +56,7 @@
                 <line x1="5" y1="12" x2="19" y2="12"/>
             </svg>
 
-            Opret Ny SubTask
+            Create new subtask
         </a>
     </div>
 
@@ -64,15 +64,15 @@
     <table class="task-table">
         <thead>
         <tr>
-            <th>SubTask Navn</th>
-            <th>Beskrivelse</th>
-            <th>Start Dato</th>
-            <th>Slut Dato</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Start date</th>
+            <th>Deadline</th>
             <th>Status</th>
             <th>Priority</th>
             <th>Note</th>
-            <th>Varighed</th>
-            <th>Handlinger</th>
+            <th>Duration</th>
+            <th>Actions</th>
         </tr>
         </thead>
 
@@ -80,7 +80,7 @@
 
         <!-- Ingen tasks -->
         <tr th:if="${subTaskList == null or #lists.isEmpty(subTaskList)}">
-            <td colspan="9">Du har ingen subtasks endnu. Klik på "Opret Ny Sub Task" for at starte.</td>
+            <td colspan="9">You have no subtasks yet. Click "Create new subtask" for an overview.</td>
         </tr>
 
         <!-- Iteration -->
@@ -88,7 +88,7 @@
             <td th:text="${subTask.subTaskName}"></td>
             <td th:text="${subTask.subTaskDescription}"></td>
             <td th:text="${subTask.subTaskStartDate}"></td>
-            <td th:text="${subTask.subTaskEndDate}"></td>
+            <td th:text="${subTask.subTaskDeadline}"></td>
 
             <!-- STATUS -->
             <td>
@@ -98,17 +98,17 @@
                       method="post">
 
                     <select name="subTaskStatus" onchange="this.form.submit()">
-                        <option value="NOT_STARTED" th:selected="${subTask.subTaskStatus == 'NOT_STARTED'}">Ikke startet</option>
-                        <option value="IN_PROGRESS" th:selected="${subTask.subTaskStatus == 'IN_PROGRESS'}">I gang</option>
-                        <option value="COMPLETED"   th:selected="${subTask.subTaskStatus == 'COMPLETED'}">Afsluttet</option>
+                        <option value="NOT_STARTED" th:selected="${subTask.subTaskStatus == 'NOT_STARTED'}">Not started</option>
+                        <option value="IN_PROGRESS" th:selected="${subTask.subTaskStatus == 'IN_PROGRESS'}">In progress</option>
+                        <option value="COMPLETED"   th:selected="${subTask.subTaskStatus == 'COMPLETED'}">Completed</option>
                     </select>
                 </form>
 
                 <!-- Project Manager kan IKKE ændre -->
                 <select th:if="${employeeRole == T(com.example.pkveksamen.model.EmployeeRole).PROJECT_MANAGER}" disabled>
-                    <option value="NOT_STARTED" th:selected="${subTask.subTaskStatus == 'NOT_STARTED'}">Ikke startet</option>
-                    <option value="IN_PROGRESS" th:selected="${subTask.subTaskStatus == 'IN_PROGRESS'}">I gang</option>
-                    <option value="COMPLETED"   th:selected="${subTask.subTaskStatus == 'COMPLETED'}">Afsluttet</option>
+                    <option value="NOT_STARTED" th:selected="${subTask.subTaskStatus == 'NOT_STARTED'}">Not started</option>
+                    <option value="IN_PROGRESS" th:selected="${subTask.subTaskStatus == 'IN_PROGRESS'}">In progress</option>
+                    <option value="COMPLETED"   th:selected="${subTask.subTaskStatus == 'COMPLETED'}">Completed</option>
                 </select>
             </td>
 
@@ -120,17 +120,17 @@
                       method="post">
 
                     <select name="subTaskPriority">
-                        <option value="LOW"      th:selected="${subTask.subTaskPriority == 'LOW'}">Lav</option>
+                        <option value="LOW"      th:selected="${subTask.subTaskPriority == 'LOW'}">Low</option>
                         <option value="MEDIUM"   th:selected="${subTask.subTaskPriority == 'MEDIUM'}">Medium</option>
-                        <option value="HIGH"     th:selected="${subTask.subTaskPriority == 'HIGH'}">Høj</option>
+                        <option value="HIGH"     th:selected="${subTask.subTaskPriority == 'HIGH'}">High</option>
                     </select>
                 </form>
 
                 <!-- Team Member kan IKKE ændre -->
                 <select th:if="${employeeRole == T(com.example.pkveksamen.model.EmployeeRole).TEAM_MEMBER}" disabled>
-                    <option value="LOW"      th:selected="${subTask.subTaskPriority == 'LOW'}">Lav</option>
+                    <option value="LOW"      th:selected="${subTask.subTaskPriority == 'LOW'}">Low</option>
                     <option value="MEDIUM"   th:selected="${subTask.subTaskPriority == 'MEDIUM'}">Medium</option>
-                    <option value="HIGH"     th:selected="${subTask.subTaskPriority == 'HIGH'}">Høj</option>
+                    <option value="HIGH"     th:selected="${subTask.subTaskPriority == 'HIGH'}">High</option>
                 </select>
             </td>
             <!-- NOTE -->
@@ -141,11 +141,11 @@
                             projectId=${currentProjectId},
                             subProjectId=${currentSubProjectId},
                             subTaskId=${subTask.subTaskId})}"
-                   class="note-button">Tilføj note</a>
+                   class="note-button">Add note</a>
             </td>
 
             <td>
-                <span th:text="${subTask.subTaskDuration}"></span> dage
+                <span th:text="${subTask.subTaskDuration}"></span> days
             </td>
 
             <!-- Handlinger -->
@@ -159,7 +159,7 @@
                             subProjectId=${currentSubProjectId},
                             taskId=${currentTaskId},
                             subTaskId=${subTask.subTaskId})}"
-                       class="edit-button">Rediger</a>
+                       class="edit-button">Edit</a>
 
                     <form th:if="${employeeRole == T(com.example.pkveksamen.model.EmployeeRole).PROJECT_MANAGER}"
                           th:action="@{/subtask/delete/{employeeId}/{projectId}/{subProjectId}/{taskId}/{subTaskId}(
@@ -170,8 +170,8 @@
                                 subTaskId=${subTask.subTaskId})}"
                           method="post" style="display:inline">
                         <button type="submit" class="delete-button"
-                                onclick="return confirm('Er du sikker på, du vil slette denne subtask?');">
-                            Slet
+                                onclick="return confirm('Are you sure you want to delete this subtask?');">
+                            Delete
                         </button>
                     </form>
 

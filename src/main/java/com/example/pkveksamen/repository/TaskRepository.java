@@ -19,20 +19,20 @@ public class TaskRepository {
     }
 
     public void createTask(Integer employeeId, long subProjectId, String taskName, String taskDescription,
-                           Status status, LocalDate startDate, LocalDate endDate, int taskDuration,
+                           Status status, LocalDate taskStartDate, LocalDate taskDeadline, int taskDuration,
                            Priority priority, String taskNote) {
 
         jdbcTemplate.update(
                 "INSERT INTO task (employee_id, sub_project_id, task_title, task_description, task_status, " +
-                        "task_start_date, task_end_date, task_duration, task_priority, task_note) " +
+                        "task_start_date, task_deadline, task_duration, task_priority, task_note) " +
                         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 employeeId,
                 subProjectId,
                 taskName,
                 taskDescription,
                 status.name(),
-                startDate,
-                endDate,
+                taskStartDate,
+                taskDeadline,
                 taskDuration,
                 priority.name(),
                 taskNote
@@ -41,7 +41,7 @@ public class TaskRepository {
 
     public List<Task> showTaskByEmployeeId(int employeeId) {
         String sql = "SELECT task_id, employee_id, sub_project_id, task_title, task_description, task_status, " +
-                "task_start_date, task_end_date, task_duration, task_priority, task_note " +
+                "task_start_date, task_deadline, task_duration, task_priority, task_note " +
                 "FROM task WHERE employee_id = ?";
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
             Task task = new Task();
@@ -50,8 +50,8 @@ public class TaskRepository {
             task.setTaskDescription(rs.getString("task_description"));
             task.setTaskStatus(Status.fromDisplayName(rs.getString("task_status")));
             task.setTaskNote(rs.getString("task_note"));
-            task.setStartDate(rs.getObject("task_start_date", LocalDate.class));
-            task.setEndDate(rs.getObject("task_end_date", LocalDate.class));
+            task.setTaskStartDate(rs.getObject("task_start_date", LocalDate.class));
+            task.setTaskDeadline(rs.getObject("task_deadline", LocalDate.class));
             task.setTaskDuration(rs.getInt("task_duration"));
             task.recalculateDuration();
             return task;
@@ -59,7 +59,7 @@ public class TaskRepository {
     }
 
     public void saveTask(Task task, int employeeId, long projectId, long subProjectId) {
-        String sql = "INSERT INTO task (employee_id, sub_project_id, task_title, task_description, task_status, task_start_date, task_end_date, task_duration, task_priority, task_note) " +
+        String sql = "INSERT INTO task (employee_id, sub_project_id, task_title, task_description, task_status, task_start_date, task_deadline, task_duration, task_priority, task_note) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         task.recalculateDuration();
         jdbcTemplate.update(sql,
@@ -68,8 +68,8 @@ public class TaskRepository {
                 task.getTaskName(),
                 task.getTaskDescription(),
                 task.getTaskStatus().name(),
-                task.getStartDate(),
-                task.getEndDate(),
+                task.getTaskStartDate(),
+                task.getTaskDeadline(),
                 task.getTaskDuration(),
                 task.getTaskPriority().name(),
                 task.getTaskNote()
@@ -81,13 +81,13 @@ public class TaskRepository {
     }
 
     public void editTask(Task task) {
-        String sql = "UPDATE task SET task_title = ?, task_description = ?, task_status = ?, task_start_date = ?, task_end_date = ?, task_duration = ?, task_priority = ?, task_note = ? WHERE task_id = ?";
+        String sql = "UPDATE task SET task_title = ?, task_description = ?, task_status = ?, task_start_date = ?, task_deadline = ?, task_duration = ?, task_priority = ?, task_note = ? WHERE task_id = ?";
         jdbcTemplate.update(sql,
                 task.getTaskName(),
                 task.getTaskDescription(),
                 task.getTaskStatus().name(),
-                task.getStartDate(),
-                task.getEndDate(),
+                task.getTaskStartDate(),
+                task.getTaskDeadline(),
                 task.getTaskDuration(),
                 task.getTaskPriority().name(),
                 task.getTaskNote(),
@@ -97,7 +97,7 @@ public class TaskRepository {
 
     public Task getTaskById(long taskId) {
         String sql = "SELECT task_id, employee_id, sub_project_id, task_title, task_description, task_status, " +
-                "task_start_date, task_end_date, task_duration, task_priority, task_note " +
+                "task_start_date, task_deadline, task_duration, task_priority, task_note " +
                 "FROM task WHERE task_id = ?";
         return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
             Task task = new Task();
@@ -106,8 +106,8 @@ public class TaskRepository {
             task.setTaskDescription(rs.getString("task_description"));
             task.setTaskStatus(Status.fromDisplayName(rs.getString("task_status")));
             task.setTaskNote(rs.getString("task_note"));
-            task.setStartDate(rs.getObject("task_start_date", LocalDate.class));
-            task.setEndDate(rs.getObject("task_end_date", LocalDate.class));
+            task.setTaskStartDate(rs.getObject("task_start_date", LocalDate.class));
+            task.setTaskDeadline(rs.getObject("task_deadline", LocalDate.class));
             task.setTaskDuration(rs.getInt("task_duration"));
             task.recalculateDuration();
             return task;
@@ -117,7 +117,7 @@ public class TaskRepository {
     public void saveSubTask(SubTask subTask, long subTaskId) {
         subTask.recalculateDuration();
         String sql = "INSERT INTO sub_task (sub_task_id, task_id, sub_task_title, sub_task_description," +
-                " sub_task_status, sub_task_start_date, sub_task_end_date, sub_task_duration, sub_task_priority, sub_task_note) " +
+                " sub_task_status, sub_task_start_date, sub_task_deadline, sub_task_duration, sub_task_priority, sub_task_note) " +
                 "VALUES (?,?,?,?,?,?,?,?,?,?)";
         jdbcTemplate.update(sql,
                 subTaskId,
@@ -125,28 +125,27 @@ public class TaskRepository {
                 subTask.getSubTaskDescription(),
                 subTask.getSubTaskStatus().name(),
                 subTask.getSubTaskStartDate(),
-                subTask.getSubTaskEndDate(),
+                subTask.getSubTaskDeadline(),
                 subTask.getSubTaskDuration(),
                 subTask.getSubTaskPriority().name(),
                 subTask.getSubTaskNote()
         );
     }
 
-    public void createSubTask(int employeeId, long taskId, String subTaskName, String subTaskDescription,
-                              String subTaskStatus, LocalDate subTaskStartDate, LocalDate subTaskEndDate,
+    public void createSubTask(long taskId, String subTaskName, String subTaskDescription,
+                              String subTaskStatus, LocalDate subTaskStartDate, LocalDate subTaskDeadline,
                               int subTaskDuration, String subTaskPriority, String subTaskNote) {
 
-        String sql = "INSERT INTO sub_task (employee_id, task_id, sub_task_title, sub_task_description, " +
-                "sub_task_status, sub_task_start_date, sub_task_end_date, sub_task_duration, sub_task_priority, sub_task_note) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO sub_task (task_id, sub_task_title, sub_task_description, " +
+                "sub_task_status, sub_task_start_date, sub_task_deadline, sub_task_duration, sub_task_priority, sub_task_note) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql,
-                employeeId,
                 taskId,
                 subTaskName,
                 subTaskDescription,
                 subTaskStatus,
                 subTaskStartDate,
-                subTaskEndDate,
+                subTaskDeadline,
                 subTaskDuration,
                 subTaskPriority,
                 subTaskNote
@@ -155,7 +154,7 @@ public class TaskRepository {
 
     public List<SubTask> showSubTasksByTaskId(long taskId) {
         String sql = "SELECT sub_task_id, task_id, sub_task_title, sub_task_description, sub_task_status, " +
-                "sub_task_start_date, sub_task_end_date, sub_task_duration, sub_task_priority, sub_task_note, employee_id " +
+                "sub_task_start_date, sub_task_deadline, sub_task_duration, sub_task_priority, sub_task_note " +
                 "FROM sub_task WHERE task_id = ?";
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
             SubTask subTask = new SubTask();
@@ -165,7 +164,7 @@ public class TaskRepository {
             subTask.setSubTaskStatus(Status.fromDisplayName(rs.getString("sub_task_status")));
             subTask.setSubTaskNote(rs.getString("sub_task_note"));
             subTask.setSubTaskStartDate(rs.getObject("sub_task_start_date", LocalDate.class));
-            subTask.setSubTaskEndDate(rs.getObject("sub_task_end_date", LocalDate.class));
+            subTask.setSubTaskDeadline(rs.getObject("sub_task_deadline", LocalDate.class));
             subTask.setSubTaskDuration(rs.getInt("sub_task_duration"));
             subTask.recalculateDuration();
             return subTask;
@@ -184,14 +183,14 @@ public class TaskRepository {
     public void editSubTask(SubTask subTask) {
         subTask.recalculateDuration();
         String sql = "UPDATE sub_task SET sub_task_title = ?, sub_task_description = ?, sub_task_status = ?, " +
-                "sub_task_start_date = ?, sub_task_end_date = ?, sub_task_duration = ?, sub_task_priority = ?, " +
+                "sub_task_start_date = ?, sub_task_deadline = ?, sub_task_duration = ?, sub_task_priority = ?, " +
                 "sub_task_note = ? WHERE sub_task_id = ?";
         jdbcTemplate.update(sql,
                 subTask.getSubTaskName(),
                 subTask.getSubTaskDescription(),
                 subTask.getSubTaskStatus().name(),
                 subTask.getSubTaskStartDate(),
-                subTask.getSubTaskEndDate(),
+                subTask.getSubTaskDeadline(),
                 subTask.getSubTaskDuration(),
                 subTask.getSubTaskPriority().name(),
                 subTask.getSubTaskNote(),
@@ -201,7 +200,7 @@ public class TaskRepository {
 
     public SubTask getSubTaskById(long subTaskId) {
         String sql = "SELECT sub_task_id, task_id, sub_task_title, sub_task_description, sub_task_status, " +
-                "sub_task_start_date, sub_task_end_date, sub_task_duration, sub_task_priority, sub_task_note " +
+                "sub_task_start_date, sub_task_deadline, sub_task_duration, sub_task_priority, sub_task_note " +
                 "FROM sub_task WHERE sub_task_id = ?";
         return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
             SubTask subTask = new SubTask();
@@ -210,7 +209,7 @@ public class TaskRepository {
             subTask.setSubTaskDescription(rs.getString("sub_task_description"));
             subTask.setSubTaskStatus(Status.fromDisplayName(rs.getString("sub_task_status")));
             subTask.setSubTaskStartDate(rs.getObject("sub_task_start_date", LocalDate.class));
-            subTask.setSubTaskEndDate(rs.getObject("sub_task_end_date", LocalDate.class));
+            subTask.setSubTaskDeadline(rs.getObject("sub_task_deadline", LocalDate.class));
             subTask.setSubTaskDuration(rs.getInt("sub_task_duration"));
             subTask.setSubTaskPriority(Priority.valueOf(rs.getString("sub_task_priority")));
             subTask.setSubTaskNote(rs.getString("sub_task_note"));

@@ -9,8 +9,8 @@ public class Task {
     private String taskDescription;
     private int taskDuration;
     private String taskNote;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private LocalDate taskStartDate;
+    private LocalDate taskDeadline;
     private Priority priority;
     private Status status;
     private EmployeeRole employeeRole;
@@ -18,22 +18,22 @@ public class Task {
     public Task(){}
 
     public Task(int taskID, String taskName, String taskDescription, Status status, int taskDuration,
-                String taskNote, LocalDate startDate, LocalDate endDate, Priority priority, EmployeeRole employeeRole) {
+                String taskNote, LocalDate taskStartDate, LocalDate taskDeadline, Priority priority, EmployeeRole employeeRole) {
         this.taskID = taskID;
         this.taskName = taskName;
         this.taskDescription = taskDescription;
         this.status = status;
         this.taskDuration = taskDuration;
         this.taskNote = taskNote;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.taskStartDate = taskStartDate;
+        this.taskDeadline = taskDeadline;
         this.priority = priority;
         this.employeeRole = employeeRole;
     }
 
     public void recalculateDuration() {
-        if (startDate != null && endDate != null) {
-            long days = ChronoUnit.DAYS.between(startDate, endDate);
+        if (taskStartDate != null && taskDeadline != null) {
+            long days = ChronoUnit.DAYS.between(taskStartDate, taskDeadline);
 
             if (days < 0) {
                 taskDuration = 0;
@@ -92,20 +92,20 @@ public class Task {
         this.taskNote = taskNote;
     }
 
-    public LocalDate getStartDate() {
-        return startDate;
+    public LocalDate getTaskStartDate() {
+        return taskStartDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
+    public void setTaskStartDate(LocalDate taskStartDate) {
+        this.taskStartDate = taskStartDate;
     }
 
-    public LocalDate getEndDate() {
-        return endDate;
+    public LocalDate getTaskDeadline() {
+        return taskDeadline;
     }
 
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
+    public void setTaskDeadline(LocalDate taskDeadline) {
+        this.taskDeadline = taskDeadline;
     }
 
     public Priority getTaskPriority() {

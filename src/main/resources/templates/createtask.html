@@ -2,64 +2,61 @@
 <html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Opret Ny Task</title>
+    <title>Create new task</title>
     <link th:href="@{/createtask.css}" rel="stylesheet">
 </head>
 <body>
 
 <div class="header">
-    <h1>Opret ny Task</h1>
-
-    </form>
-</div>
+    <h1>Create new task</h1>
 </div>
 
 <div class="form-container">
     <form th:action="@{/project/task/createtask/{employeeId}/{projectId}/{subProjectId}(employeeId=${currentEmployeeId}, projectId=${currentProjectId}, subProjectId=${currentSubProjectId})}"
           th:object="${task}" method="post" class="project-form" id="taskForm">
         <div class="form-group">
-            <label for="taskName">Task Navn:</label>
+            <label for="taskName">Title:</label>
             <input type="text" id="taskName" name="taskName" th:field="*{taskName}" required/>
         </div>
 
         <div class="form-group">
-            <label for="taskDescription">Beskrivelse:</label>
+            <label for="taskDescription">Description:</label>
             <textarea id="taskDescription" name="taskDescription" th:field="*{taskDescription}" required></textarea>
         </div>
 
         <div class="form-group">
-            <label for="startDate">Start Dato:</label>
-            <input type="date" id="startDate" name="startDate" th:field="*{startDate}" required/>
+            <label for="taskStartDate">Start date:</label>
+            <input type="date" id="taskStartDate" name="taskStartDate" th:field="*{taskStartDate}" required/>
         </div>
 
         <div class="form-group">
-            <label for="endDate">Slut Dato:</label>
-            <input type="date" id="endDate" name="endDate" th:field="*{endDate}" required/>
+            <label for="taskDeadline">Deadline:</label>
+            <input type="date" id="taskDeadline" name="taskDeadline" th:field="*{taskDeadline}" required/>
         </div>
 
         <div class="form-group">
             <label for="taskStatus">Status:</label>
             <select id="taskStatus" name="taskStatus" th:field="*{taskStatus}" class="form-control" required>
-                <option value="NOT_STARTED">Ikke startet</option>
-                <option value="IN_PROGRESS">I gang</option>
-                <option value="COMPLETED">Afsluttet</option>
+                <option value="NOT_STARTED">Not started</option>
+                <option value="IN_PROGRESS">In progress</option>
+                <option value="COMPLETED">Completed</option>
             </select>
         </div>
 
         <div class="form-group">
-            <label for="taskPriority">Prioritet:</label>
+            <label for="taskPriority">Priority:</label>
             <select id="taskPriority" name="taskPriority" th:field="*{taskPriority}" class="form-control" required>
-                <option value="LOW">Lav</option>
-                <option value="MEDIUM">Mellem</option>
-                <option value="HIGH">Høj</option>
+                <option value="LOW">Low</option>
+                <option value="MEDIUM">Medium</option>
+                <option value="HIGH">High</option>
             </select>
         </div>
 
         <div class="form-actions">
             <a th:href="@{/project/task/liste/{projectId}/{subProjectId}/{employeeId}(projectId=${currentProjectId}, subProjectId=${currentSubProjectId}, employeeId=${currentEmployeeId})}">
-                Annuller
+                Cancel
             </a>
-            <button type="submit" class="submit-button">Opret Task</button>
+            <button type="submit" class="submit-button">Create task</button>
         </div>
     </form>
 </div>

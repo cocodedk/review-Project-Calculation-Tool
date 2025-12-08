@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>Rediger SubTask</title>
+    <title>Edit subtask</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link th:href="@{/edit-subproject.css}" rel="stylesheet">
@@ -13,7 +13,7 @@
 
     <!-- Header -->
     <div class="header">
-        <h1>Rediger SubTask</h1>
+        <h1>Edit subtask</h1>
 
         <div class="user-info">
             <span th:text="${username} + ' (' + ${employeeRole.displayName} + ')'"></span>
@@ -24,7 +24,7 @@
                         <polyline points="16 17 21 12 16 7"/>
                         <line x1="21" x2="9" y1="12" y2="12"/>
                     </svg>
-                    Log ud
+                    Log out
                 </button>
             </form>
         </div>
@@ -37,7 +37,7 @@
                     subProjectId=${currentSubProjectId},
                     taskId=${currentTaskId},
                     employeeId=${currentEmployeeId})}">
-            ← Tilbage til SubTasks
+            ← Return to tasks
         </a>
     </div>
 
@@ -56,7 +56,7 @@
 
             <!-- SUBTASK NAME -->
             <div class="form-group">
-                <label for="subTaskName">Navn *</label>
+                <label for="subTaskName">Title</label>
                 <input type="text"
                        id="subTaskName"
                        th:field="*{subTaskName}"
@@ -66,7 +66,7 @@
 
             <!-- DESCRIPTION -->
             <div class="form-group">
-                <label for="subTaskDescription">Beskrivelse *</label>
+                <label for="subTaskDescription">Description</label>
                 <textarea id="subTaskDescription"
                           th:field="*{subTaskDescription}"
                           placeholder="Indtast beskrivelse"
@@ -75,7 +75,7 @@
 
             <!-- STATUS -->
             <div class="form-group">
-                <label for="subTaskStatus">Status *</label>
+                <label for="subTaskStatus">Status</label>
                 <select id="subTaskStatus" th:field="*{subTaskStatus}" required>
                     <option th:each="status : ${T(com.example.pkveksamen.model.Status).values()}"
                             th:value="${status}"
@@ -87,19 +87,19 @@
             <!-- DATES -->
             <div class="form-row">
                 <div class="form-group">
-                    <label for="subTaskStartDate">Start Dato *</label>
+                    <label for="subTaskStartDate">Start date</label>
                     <input type="date" id="subTaskStartDate" th:field="*{subTaskStartDate}" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="subTaskEndDate">Slut Dato *</label>
-                    <input type="date" id="subTaskEndDate" th:field="*{subTaskEndDate}" required>
+                    <label for="subTaskEndDate">Deadline</label>
+                    <input type="date" id="subTaskEndDate" th:field="*{subTaskDeadline}" required>
                 </div>
             </div>
 
             <!-- DURATION -->
             <div class="form-group">
-                <label for="subTaskDuration">Varighed (dage)</label>
+                <label for="subTaskDuration">Duration (days)</label>
                 <input type="number"
                        id="subTaskDuration"
                        th:field="*{subTaskDuration}"
@@ -109,7 +109,7 @@
 
             <!-- PRIORITY -->
             <div class="form-group">
-                <label for="subTaskPriority">Prioritet *</label>
+                <label for="subTaskPriority">Priority</label>
                 <select id="subTaskPriority" th:field="*{subTaskPriority}" required>
                     <option th:each="priority : ${T(com.example.pkveksamen.model.Priority).values()}"
                             th:value="${priority}"
@@ -120,8 +120,8 @@
 
             <!-- NOTES -->
             <div class="form-group">
-                <label for="subTaskNote">Noter</label>
-                <textarea id="subTaskNote" th:field="*{subTaskNote}" placeholder="Indtast noter"></textarea>
+                <label for="subTaskNote">Note</label>
+                <textarea id="subTaskNote" th:field="*{subTaskNote}"></textarea>
             </div>
 
             <!-- BUTTONS -->
@@ -132,12 +132,12 @@
       taskId=${currentTaskId},
       employeeId=${currentEmployeeId})}"
                    class="btn-secondary">
-                    Annuller
+                    Cancel
                 </a>
 
 
                 <button type="submit" class="create-project-button">
-                    Gem Ændringer
+                    Save changes
                 </button>
             </div>
 

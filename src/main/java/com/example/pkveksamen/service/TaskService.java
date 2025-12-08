@@ -50,10 +50,10 @@ public class TaskService {
 
     }
 
-    public void createSubTask(int employeeId, long taskId, String subTaskName, String subTaskDescription,
+    public void createSubTask(long taskId, String subTaskName, String subTaskDescription,
                               String subTaskStatus, LocalDate subTaskStartDate, LocalDate subTaskEndDate,
                               int subTaskDuration, String subTaskPriority, String subTaskNote) {
-        taskRepository.createSubTask(employeeId, taskId, subTaskName, subTaskDescription, subTaskStatus,
+        taskRepository.createSubTask(taskId, subTaskName, subTaskDescription, subTaskStatus,
                 subTaskStartDate, subTaskEndDate, subTaskDuration, subTaskPriority, subTaskNote);
     }
 

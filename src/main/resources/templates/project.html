@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>Mine Projekter</title>
+    <title>My Projects</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Linker til ekstern CSS-fil med styling -->
     <link th:href="@{/project.css}" rel="stylesheet">
@@ -12,7 +12,7 @@
 <div class="container">
     <!-- Header / top bar -->
     <div class="header">
-        <h1>Mine Projekter</h1>
+        <h1>My Projects</h1>
         <div class="user-info">
 <!--             Viser brugernavn og rolle dynamisk via Thymeleaf-->
             <span th:text="${username} + ' (' + ${employeeRole.displayName} + ')'"></span>
@@ -27,7 +27,7 @@
                         <polyline points="16 17 21 12 16 7"/>
                         <line x1="21" x2="9" y1="12" y2="12"/>
                     </svg>
-                    Log ud
+                    Log out
                 </button>
             </form>
         </div>
@@ -38,7 +38,7 @@
         <a th:if="${employeeRole != null
                                 and employeeRole == T(com.example.pkveksamen.model.EmployeeRole).PROJECT_MANAGER}"
            th:href="@{/project/createproject/{employeeId}(employeeId=${currentEmployeeId})}"
-           class="create-project-button"> Opret Nyt Projekt
+           class="create-project-button"> Create new project
 
             <!-- Plus-ikon -->
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -53,19 +53,19 @@
     <table class="project-table">
         <thead>
         <tr>
-            <th>Projekt Navn</th>
-            <th>Beskrivelse</th>
-            <th>Kunde</th>
-            <th>Start Dato</th>
-            <th>Slut Dato</th>
-            <th>Varighed</th>
-            <th>Handlinger</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Customer</th>
+            <th>Start date</th>
+            <th>Deadline</th>
+            <th>Duration</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
         <!-- Hvis der ingen projekter findes, vis besked -->
         <tr th:if="${projectList == null or #lists.isEmpty(projectList)}">
-            <td colspan="7">Du har ingen projekter endnu. Klik på "Opret Nyt Projekt" for at starte.</td>
+            <td colspan="7">You have no projects yet. Click "Create new project" for an overview.</td>
         </tr>
 
         <!-- Iterer gennem projektlisten og vis hvert projekt -->
@@ -73,28 +73,28 @@
             <td th:text="${project.projectName}"></td>
             <td th:text="${project.projectDescription}"></td>
             <td th:text="${project.projectCustomer}"></td>
-            <td th:text="${project.startDate}"></td>
-            <td th:text="${project.endDate}"></td>
-            <td><span th:text="${project.projectDuration}"></span> dage</td>
+            <td th:text="${project.projectStartDate}"></td>
+            <td th:text="${project.projectDeadline}"></td>
+            <td><span th:text="${project.projectDuration}"></span> Days</td>
             <td>
                 <div class="action-buttons">
                     <!-- Rediger-knap -->
                     <a th:if="${employeeRole != null
                                 and employeeRole == T(com.example.pkveksamen.model.EmployeeRole).PROJECT_MANAGER}"
                        th:href="@{/project/edit/{employeeId}/{projectId}(employeeId=${currentEmployeeId}, projectId=${project.projectID})}"
-                       class="edit-button">Rediger</a>
+                       class="edit-button">Edit</a>
 
                     <!-- Slet-knap med bekræftelse -->
                     <form th:if="${employeeRole != null
                                 and employeeRole == T(com.example.pkveksamen.model.EmployeeRole).PROJECT_MANAGER}"
                           th:action="@{/project/delete/{employeeId}/{id}(employeeId=${currentEmployeeId}, id=${project.projectID})}" method="post" style="display:inline">
-                        <button type="submit" class="delete-button" onclick="return confirm('Er du sikker på, du vil slette dette projekt?');">
-                            Slet
+                        <button type="submit" class="delete-button" onclick="return confirm('Are you sure you want to delete your project?');">
+                            Delete
                         </button>
                     </form>
 
                     <a th:href="@{/project/subproject/list/{projectId}(projectId=${project.projectID}, employeeId=${currentEmployeeId})}"
-                       class="view-subproject-button">Se Subprojekt</a>
+                       class="view-subproject-button">View subproject</a>
 
                 </div>
             </td>

@@ -2,43 +2,43 @@
 <html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Opret Nyt Projekt</title>
+    <title>Create new projekt</title>
     <link th:href="@{/createproject.css}" rel="stylesheet">
 </head>
 <body>
 
-<h1>Opret Nyt Projekt</h1>
+<h1>Create new projekt</h1>
 
     <div class="control-bar">
     <!-- Tilbage til projekter knap -->
     <a th:href="@{/project/list/{employeeId}(employeeId=${currentEmployeeId})}" class="back-button">
-        ← Tilbage til Projekter
+        ← Return to projects
     </a>
     </div>
 
     <form th:action="@{/project/saveproject/{employeeId}(employeeId=${currentEmployeeId})}" th:object="${project}" method="post">
     <div class="form-group">
-        <label for="projectName">Projekt Navn:</label>
+        <label for="projectName">Title:</label>
         <input type="text" id="projectName" name="projectName" th:field="*{projectName}" required/>
     </div>
 
     <div class="form-group">
-        <label for="projectDescription">Beskrivelse:</label>
+        <label for="projectDescription">Description:</label>
         <input type="text" id="projectDescription" name="projectDescription" th:field="*{projectDescription}" required/>
     </div>
 
     <div class="form-group">
-        <label for="startDate">Start Dato:</label>
-        <input type="date" id="startDate" name="startDate" th:field="*{startDate}" required/>
+        <label for="projectStartDato">Start date:</label>
+        <input type="date" id="projectStartDato" name="projectStartDato" th:field="*{projectStartDate}" required/>
     </div>
 
     <div class="form-group">
-        <label for="endDate">Slut Dato:</label>
-        <input type="date" id="endDate" name="endDate" th:field="*{endDate}" required/>
+        <label for="projectDeadline">Deadline:</label>
+        <input type="date" id="projectDeadline" name="projectDeadline" th:field="*{projectDeadline}" required/>
     </div>
 
     <div class="form-group">
-        <label for="projectCustomer">Kunde:</label>
+        <label for="projectCustomer">Customer:</label>
         <input type="text" id="projectCustomer" name="projectCustomer" th:field="*{projectCustomer}" required/>
     </div>
 
@@ -52,17 +52,17 @@
 
         <div class="form-group">
             <h3>Assign to</h3>
-            <label for="selectedEmployeeId">Vælg Team Medlem:</label>
+            <label for="selectedEmployeeId">Choose team member:</label>
             <select id="selectedEmployeeId" name="selectedEmployeeId">
                 <option th:each="member : ${teamMembers}"
                         th:value="${member.employeeId}"
                         th:text="${member.username}">
-                    Medlem
+                    Member
                 </option>
             </select>
         </div>
 
-    <button type="submit">Opret Projekt</button>
+    <button type="submit">Create project</button>
 
 </form>
 

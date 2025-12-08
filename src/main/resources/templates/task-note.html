@@ -2,17 +2,17 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>Rediger Note</title>
+    <title>Edit Note</title>
     <link th:href="@{/task.css}" rel="stylesheet">
 </head>
 <body>
 <div class="container">
     <div class="header">
-        <h1>Note til Task</h1>
+        <h1>Note for task</h1>
         <div class="user-info">
             <span th:text="${username} + ' (' + ${employeeRole.displayName} + ')'"></span>
             <form th:action="@{/logout}" method="post">
-                <button type="submit" class="logout-button">Log ud</button>
+                <button type="submit" class="logout-button">Log out</button>
             </form>
         </div>
     </div>
@@ -23,7 +23,7 @@
               subProjectId=${currentSubProjectId},
               employeeId=${currentEmployeeId})}"
            class="back-button">
-            ← Tilbage til Tasks
+            ← Return to tasks
         </a>
     </div>
 
@@ -41,7 +41,7 @@
         <textarea id="taskNote" name="taskNote" rows="6"
                   th:text="${task.taskNote}"></textarea>
 
-        <button type="submit" class="save-button">Gem note</button>
+        <button type="submit" class="save-button">Save note</button>
     </form>
 </div>
 </body>

@@ -2,54 +2,51 @@
 <html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Opret Nyt subproject</title>
+    <title>Create new subproject</title>
     <link th:href="@{/createsubproject.css}" rel="stylesheet">
 </head>
 <body>
 
 <div class="header">
-    <h1>Opret Nyt Subprojekt</h1>
-    
-        </form>
-    </div>
+    <h1>Create new subproject</h1>
 </div>
 
 <div class="form-container">
     <form th:action="@{/project/savesubproject/{employeeId}/{projectId}(employeeId=${currentEmployeeId}, projectId=${currentProjectId})}"
           th:object="${subProject}" method="post" class="project-form" id="subprojectForm">
         <div class="form-group">
-            <label for="subProjectName">Subprojekt Navn:</label>
+            <label for="subProjectName">Title:</label>
             <input type="text" id="subProjectName" name="subProjectName" th:field="*{subProjectName}" required/>
         </div>
 
         <div class="form-group">
-            <label for="subProjectDescription">Beskrivelse:</label>
+            <label for="subProjectDescription">Description:</label>
             <textarea id="subProjectDescription" name="subProjectDescription" th:field="*{subProjectDescription}" required></textarea>
         </div>
 
         <div class="form-group">
-            <label for="startDate">Start Dato:</label>
-            <input type="date" id="startDate" name="startDate" th:field="*{startDate}" required 
+            <label for="subProjectStartDate">Start date:</label>
+            <input type="date" id="subProjectStartDate" name="subProjectStartDate" th:field="*{subProjectStartDate}" required
                    onchange="calculateDuration()"/>
         </div>
 
         <div class="form-group">
-            <label for="endDate">Slut Dato:</label>
-            <input type="date" id="endDate" name="endDate" th:field="*{endDate}" required 
+            <label for="subProjectDeadline">Deadline:</label>
+            <input type="date" id="subProjectDeadline" name="subProjectDeadline" th:field="*{subProjectDeadline}" required
                    onchange="calculateDuration()"/>
         </div>
 
         <div class="form-group">
-            <label for="subProjectDuration">Varighed (dage):</label>
+            <label for="subProjectDuration">Duration (days):</label>
             <input type="number" id="subProjectDuration" name="subProjectDuration" 
                    th:field="*{subProjectDuration}" readonly/>
         </div>
 
         <div class="form-actions">
             <a th:href="@{/project/subproject/list/{projectId}(projectId=${currentProjectId}, employeeId=${currentEmployeeId})}">
-                Annuller
+                Cancel
             </a>
-            <button type="submit" class="submit-button">Opret Subprojekt</button>
+            <button type="submit" class="submit-button">Create subproject</button>
         </div>
     </form>
 </div>
