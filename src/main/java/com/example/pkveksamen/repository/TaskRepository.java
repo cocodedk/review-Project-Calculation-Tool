@@ -116,7 +116,8 @@ public class TaskRepository {
 
     public void saveSubTask(SubTask subTask, long subTaskId) {
         subTask.recalculateDuration();
-        String sql = "INSERT INTO sub_task (sub_task_id, task_id, sub_task_title, sub_task_description, sub_task_status, sub_task_start_date, sub_task_end_date, sub_task_duration, sub_task_priority, sub_task_note) " +
+        String sql = "INSERT INTO sub_task (sub_task_id, task_id, sub_task_title, sub_task_description," +
+                " sub_task_status, sub_task_start_date, sub_task_end_date, sub_task_duration, sub_task_priority, sub_task_note) " +
                 "VALUES (?,?,?,?,?,?,?,?,?,?)";
         jdbcTemplate.update(sql,
                 subTaskId,
