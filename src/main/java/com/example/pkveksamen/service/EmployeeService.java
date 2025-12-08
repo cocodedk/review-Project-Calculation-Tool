@@ -5,6 +5,8 @@ import com.example.pkveksamen.repository.EmployeeRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class EmployeeService {
 
@@ -36,5 +38,10 @@ public class EmployeeService {
 
     public Employee getEmployeeById(int employeeId) {
         return employeeRepository.findEmployeeById(employeeId);
+    }
+
+    // Tilføj til EmployeeService.java
+    public List<Employee> getAllTeamMembers() {
+        return employeeRepository.getAllTeamMembers();
     }
 }

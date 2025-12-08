@@ -34,7 +34,25 @@
             <input type="date" id="taskDeadline" name="taskDeadline" th:field="*{taskDeadline}" required/>
         </div>
 
-        <div class="form-group">
+        <!-- NY SEKTION: Tildel til teammedlem -->
+        <div class="form-group"
+             th:if="${employeeRole != null
+                and employeeRole == T(com.example.pkveksamen.model.EmployeeRole).PROJECT_MANAGER}">
+
+            <label for="assignedToEmployeeId">Assign to team member:</label>
+            <select id="assignedToEmployeeId" name="assignedToEmployeeId" class="form-control" required>
+                <option value="">-- Choose team member --</option>
+                <option th:each="member : ${teamMembers}"
+                        th:value="${member.employeeId}"
+                        th:text="${member.username}">
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group"
+             th:if="${employeeRole != null
+            and employeeRole == T(com.example.pkveksamen.model.EmployeeRole).TEAM_MEMBER}">
+
             <label for="taskStatus">Status:</label>
             <select id="taskStatus" name="taskStatus" th:field="*{taskStatus}" class="form-control" required>
                 <option value="NOT_STARTED">Not started</option>

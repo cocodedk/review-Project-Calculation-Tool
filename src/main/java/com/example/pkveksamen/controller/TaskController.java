@@ -62,17 +62,24 @@ public class TaskController {
                                      @PathVariable long projectId,
                                      @PathVariable long subProjectId,
                                      Model model) {
+        // Tjek om brugeren er projektleder
+        Employee currentEmployee = employeeService.getEmployeeById(employeeId);
+
+        if (!isManager(currentEmployee)) {
+            // Hvis ikke projektleder, send tilbage
+            return "redirect:/project/task/liste/" + projectId + "/" + subProjectId + "/" + employeeId;
+        }
+
+        // Hent alle teammedlemmer til dropdown
+        List<Employee> teamMembers = employeeService.getAllTeamMembers();
+
         model.addAttribute("task", new Task());
+        model.addAttribute("teamMembers", teamMembers);
         model.addAttribute("currentEmployeeId", employeeId);
         model.addAttribute("currentProjectId", projectId);
         model.addAttribute("currentSubProjectId", subProjectId);
-
-        // Tilføj employee info til header
-        Employee employee = employeeService.getEmployeeById(employeeId);
-        if (employee != null) {
-            model.addAttribute("username", employee.getUsername());
-            model.addAttribute("employeeRole", employee.getRole());
-        }
+        model.addAttribute("username", currentEmployee.getUsername());
+        model.addAttribute("employeeRole", currentEmployee.getRole());
 
         return "createtask";
     }
