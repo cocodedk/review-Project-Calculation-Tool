@@ -78,6 +78,7 @@ Tak til alle som har bidraget til projektet:
 
 <a href="https://github.com/KimL92/Project-Calculation-Tool/graphs/contributors"> 
 <img src="https://contrib.rocks/image?repo=KimL92/Project-Calculation-Tool" /> </a>
+
 Individuelle GitHub-profiler:
 
 @aden0020
