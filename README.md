@@ -67,23 +67,19 @@ Når teammedlem ændrer en task-status, bliver ændringen gemt i databasen og ka
 
 ### 1. Klon projektet
 ``bash
-git clone [ https://github.com/KimL92/Project-Calculation-Tool.git ]
+git clone https://github.com/KimL92/Project-Calculation-Tool.git
 cd projektmappen
 
 ---
 
-## 👥 Contributors
+👥 Contributors
 
 Tak til alle som har bidraget til projektet:
 
-<a href="https://github.com/KimL92/Project-Calculation-Tool/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=KimL92/Project-Calculation-Tool" />
-</a>
-
-
-### Individuelle GitHub-profiler
-- [@aden0020](https://github.com/Aden0020)
-- [@aljamour](https://github.com/aljamour)
-- [@Junes2003](https://github.com/Junes2003)
-- [@moha4733](https://github.com/moha4733)
+<a href="https://github.com/KimL92/Project-Calculation-Tool/graphs/contributors"> <img src="https://contrib.rocks/image?repo=KimL92/Project-Calculation-Tool" /> </a>
+Individuelle GitHub-profiler:
+@aden0020
+@aljamour
+@Junes2003
+@moha4733
 
