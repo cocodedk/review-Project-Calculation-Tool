@@ -29,12 +29,24 @@
 
     <div class="form-group">
         <label for="projectStartDato">Start date:</label>
-        <input type="date" id="projectStartDato" name="projectStartDato" th:field="*{projectStartDate}" required/>
+        <input type="date"
+               id="projectStartDato"
+               name="projectStartDato"
+               th:field="*{projectStartDate}"
+               min="2000-01-01"
+               max="2100-12-31"
+               required/>
     </div>
 
     <div class="form-group">
         <label for="projectDeadline">Deadline:</label>
-        <input type="date" id="projectDeadline" name="projectDeadline" th:field="*{projectDeadline}" required/>
+        <input type="date"
+               id="projectDeadline"
+               name="projectDeadline"
+               th:field="*{projectDeadline}"
+               min="2000-01-01"
+               max="2100-12-31"
+               required/>
     </div>
 
     <div class="form-group">

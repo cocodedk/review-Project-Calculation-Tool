@@ -1,9 +1,6 @@
 package com.example.pkveksamen.controller;
 
-import com.example.pkveksamen.model.EmployeeRole;
-import com.example.pkveksamen.model.Project;
-import com.example.pkveksamen.model.Employee;
-import com.example.pkveksamen.model.SubProject;
+import com.example.pkveksamen.model.*;
 import com.example.pkveksamen.service.ProjectService;
 import com.example.pkveksamen.service.EmployeeService;
 import org.springframework.stereotype.Controller;
@@ -78,7 +75,28 @@ public class ProjectController {
     @GetMapping("/createsubproject/{employeeId}/{projectId}")
     public String showCreateSubProjectForm(@PathVariable int employeeId,
                                            @PathVariable long projectId,
+                                           @ModelAttribute SubProject subProject,
                                            Model model) {
+
+        // Simpel range-check
+        if (subProject.getSubProjectStartDate() != null) {
+            int year = subProject.getSubProjectStartDate().getYear();
+            if (year < 2000 || year > 2100) {
+                // her kunne du fx sætte en fejlbesked i model og vise formen igen
+                model.addAttribute("error", "Start date year must be between 2000 and 2100");
+                // husk at lægge de samme model-attributter på som i GET-metoden
+                return "createsubproject";
+            }
+        }
+
+        if (subProject.getSubProjectDeadline() != null) {
+            int year = subProject.getSubProjectDeadline().getYear();
+            if (year < 2000 || year > 2100) {
+                model.addAttribute("error", "Deadline year must be between 2000 and 2100");
+                return "createsubproject";
+            }
+        }
+
         model.addAttribute("subProject", new SubProject());
         model.addAttribute("currentEmployeeId", employeeId);
         model.addAttribute("currentProjectId", projectId);
@@ -91,6 +109,25 @@ public class ProjectController {
                                 @ModelAttribute Project project,
                                 Model model) {
         project.recalculateDuration();
+
+        // Simpel range-check
+        if (project.getProjectStartDate() != null) {
+            int year = project.getProjectStartDate().getYear();
+            if (year < 2000 || year > 2100) {
+                // her kunne du fx sætte en fejlbesked i model og vise formen igen
+                model.addAttribute("error", "Start date year must be between 2000 and 2100");
+                // husk at lægge de samme model-attributter på som i GET-metoden
+                return "createproject";
+            }
+        }
+
+        if (project.getProjectDeadline() != null) {
+            int year = project.getProjectDeadline().getYear();
+            if (year < 2000 || year > 2100) {
+                model.addAttribute("error", "Deadline year must be between 2000 and 2100");
+                return "createproject";
+            }
+        }
 
         projectService.createProject(
                 project.getProjectName(),

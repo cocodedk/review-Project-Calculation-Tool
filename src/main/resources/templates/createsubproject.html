@@ -26,13 +26,25 @@
 
         <div class="form-group">
             <label for="subProjectStartDate">Start date:</label>
-            <input type="date" id="subProjectStartDate" name="subProjectStartDate" th:field="*{subProjectStartDate}" required
+            <input type="date"
+                   id="subProjectStartDate"
+                   name="subProjectStartDate"
+                   th:field="*{subProjectStartDate}"
+                   min="2000-01-01"
+                   max="2100-12-31"
+                   required
                    onchange="calculateDuration()"/>
         </div>
 
         <div class="form-group">
             <label for="subProjectDeadline">Deadline:</label>
-            <input type="date" id="subProjectDeadline" name="subProjectDeadline" th:field="*{subProjectDeadline}" required
+            <input type="date"
+                   id="subProjectDeadline"
+                   name="subProjectDeadline"
+                   th:field="*{subProjectDeadline}"
+                   min="2000-01-01"
+                   max="2100-12-31"
+                   required
                    onchange="calculateDuration()"/>
         </div>
 

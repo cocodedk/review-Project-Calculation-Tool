@@ -55,12 +55,20 @@
 
         <div class="form-row">
             <label>Start date</label>
-            <input type="date" th:field="*{subTaskStartDate}" required>
+            <input type="date"
+                   th:field="*{subTaskStartDate}"
+                   min="2000-01-01"
+                   max="2100-12-31"
+                   required>
         </div>
 
         <div class="form-row">
             <label>Deadline</label>
-            <input type="date" th:field="*{subTaskDeadline}" required>
+            <input type="date"
+                   th:field="*{subTaskDeadline}"
+                   min="2000-01-01"
+                   max="2100-12-31"
+                   required>
         </div>
 
         <div class="form-row">

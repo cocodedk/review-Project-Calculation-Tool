@@ -3,7 +3,6 @@ package com.example.pkveksamen.repository;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.example.pkveksamen.model.Employee;
 import com.example.pkveksamen.model.SubProject;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -104,8 +103,27 @@ public class ProjectRepository {
         );
     }
 
-    //!
+    /*
     public void deleteProject(long projectID) {
+        jdbcTemplate.update("DELETE FROM project WHERE project_id = ?", projectID);
+    }
+    */
+
+    public void deleteProject(long projectID) {
+        // First delete all subtasks related to tasks in subprojects of this project
+        String deleteSubtasksSql = "DELETE FROM sub_task WHERE task_id IN " +
+                "(SELECT t.task_id FROM task t " +
+                "JOIN sub_project sp ON t.sub_project_id = sp.sub_project_id " +
+                "WHERE sp.project_id = ?)";
+        jdbcTemplate.update(deleteSubtasksSql, projectID);
+        // Then delete all tasks in subprojects of this project
+        String deleteTasksSql = "DELETE FROM task WHERE sub_project_id IN " +
+                "(SELECT sub_project_id FROM sub_project WHERE project_id = ?)";
+        jdbcTemplate.update(deleteTasksSql, projectID);
+        // Then delete all subprojects of this project
+        String deleteSubProjectsSql = "DELETE FROM sub_project WHERE project_id = ?";
+        jdbcTemplate.update(deleteSubProjectsSql, projectID);
+        // Finally, delete the project itself
         jdbcTemplate.update("DELETE FROM project WHERE project_id = ?", projectID);
     }
 
@@ -185,9 +203,6 @@ public class ProjectRepository {
             return subproject;
         }, subProjectID);
     }
-
-
-
 
     public void deleteSubProject(long subProjectId) {
         jdbcTemplate.update("DELETE FROM sub_project WHERE sub_project_id = ?", subProjectId);

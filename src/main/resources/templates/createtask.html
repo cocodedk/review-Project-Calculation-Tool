@@ -26,12 +26,24 @@
 
         <div class="form-group">
             <label for="taskStartDate">Start date:</label>
-            <input type="date" id="taskStartDate" name="taskStartDate" th:field="*{taskStartDate}" required/>
+            <input type="date"
+                   id="taskStartDate"
+                   name="taskStartDate"
+                   th:field="*{taskStartDate}"
+                   min="2000-01-01"
+                   max="2100-12-31"
+                   required/>
         </div>
 
         <div class="form-group">
             <label for="taskDeadline">Deadline:</label>
-            <input type="date" id="taskDeadline" name="taskDeadline" th:field="*{taskDeadline}" required/>
+            <input type="date"
+                   id="taskDeadline"
+                   name="taskDeadline"
+                   th:field="*{taskDeadline}"
+                   min="2000-01-01"
+                   max="2100-12-31"
+                   required/>
         </div>
 
         <!-- NY SEKTION: Tildel til teammedlem -->

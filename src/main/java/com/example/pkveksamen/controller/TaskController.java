@@ -98,6 +98,33 @@ public class TaskController {
             task.setTaskDuration(0);
         }
 
+        // Simpel range-check
+        if (task.getTaskStartDate() != null) {
+            int year = task.getTaskStartDate().getYear();
+            if (year < 2000 || year > 2100) {
+                // her kunne du fx sætte en fejlbesked i model og vise formen igen
+                model.addAttribute("error", "Start date year must be between 2000 and 2100");
+                // husk at lægge de samme model-attributter på som i GET-metoden
+                return "createtask";
+            }
+        }
+
+        if (task.getTaskDeadline() != null) {
+            int year = task.getTaskDeadline().getYear();
+            if (year < 2000 || year > 2100) {
+                model.addAttribute("error", "Deadline year must be between 2000 and 2100");
+                return "createtask";
+            }
+        }
+
+        // default status & priority hvis de er null
+        if (task.getTaskStatus() == null) {
+            task.setTaskStatus(Status.NOT_STARTED);
+        }
+        if (task.getTaskPriority() == null) {
+            task.setTaskPriority(Priority.MEDIUM);
+        }
+
         taskService.createTask(
                 employeeId,
                 subProjectId,
@@ -243,6 +270,33 @@ public class TaskController {
             subTask.setSubTaskDuration((int) days + 1);
         } else {
             subTask.setSubTaskDuration(0);
+        }
+
+        // Simpel range-check
+        if (subTask.getSubTaskStartDate() != null) {
+            int year = subTask.getSubTaskStartDate().getYear();
+            if (year < 2000 || year > 2100) {
+                // her kunne du fx sætte en fejlbesked i model og vise formen igen
+                model.addAttribute("error", "Start date year must be between 2000 and 2100");
+                // husk at lægge de samme model-attributter på som i GET-metoden
+                return "createsubtask";
+            }
+        }
+
+        if (subTask.getSubTaskDeadline() != null) {
+            int year = subTask.getSubTaskDeadline().getYear();
+            if (year < 2000 || year > 2100) {
+                model.addAttribute("error", "Deadline year must be between 2000 and 2100");
+                return "createsubtask";
+            }
+        }
+
+        // default status & priority hvis de er null
+        if (subTask.getSubTaskStatus() == null) {
+            subTask.setSubTaskStatus(Status.NOT_STARTED);
+        }
+        if (subTask.getSubTaskPriority() == null) {
+            subTask.setSubTaskPriority(Priority.MEDIUM);
         }
 
         taskService.createSubTask(

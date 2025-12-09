@@ -30,11 +30,11 @@ public class TaskRepository {
                 subProjectId,
                 taskName,
                 taskDescription,
-                status.name(),
+                status.getDisplayName(),
                 taskStartDate,
                 taskDeadline,
                 taskDuration,
-                priority.name(),
+                priority.getDisplayName(),
                 taskNote
         );
     }
