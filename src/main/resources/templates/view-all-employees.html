@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" th:href="@{/view-all-employees.css}">
 </head>
 <body>
 <h1 class="title">All Employees</h1>
@@ -37,6 +38,9 @@
     </tr>
 
     </tbody>
+    <div>
+        <a th:href="@{/project/list/{employeeId}(employeeId=${currentEmployeeId})}" class="back-button">← Back to Projects</a>
+    </div>
 </table>
 </body>
 </html>
