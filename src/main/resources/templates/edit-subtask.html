@@ -16,7 +16,7 @@
         <h1>Edit subtask</h1>
 
         <div class="user-info">
-            <span th:text="${username} + ' (' + ${employeeRole.displayName} + ')'"></span>
+            <span th:text="${username != null ? username : 'User'} + ' (' + (employeeRole != null ? employeeRole.displayName : '') + ')'"></span>
             <form th:action="@{/logout}" method="post">
                 <button type="submit" class="logout-button">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -44,6 +44,7 @@
 
     <!-- Form -->
     <div class="form-card">
+        <div th:if="${error}" class="error-banner" th:text="${error}"></div>
 
         <form th:action="@{/project/subtask/edit/{employeeId}/{projectId}/{subProjectId}/{taskId}/{subTaskId}(
                         employeeId=${currentEmployeeId},

@@ -11,6 +11,8 @@
     <h1>Create new subproject</h1>
 </div>
 
+<div th:if="${error}" class="error-banner" th:text="${error}"></div>
+
 <div class="form-container">
     <form th:action="@{/project/savesubproject/{employeeId}/{projectId}(employeeId=${currentEmployeeId}, projectId=${currentProjectId})}"
           th:object="${subProject}" method="post" class="project-form" id="subprojectForm">

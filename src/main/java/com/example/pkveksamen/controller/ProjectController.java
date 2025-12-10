@@ -205,8 +205,38 @@ public class ProjectController {
     @PostMapping("/savesubproject/{employeeId}/{projectId}")
     public String saveSubProject(@PathVariable int employeeId,
                                  @PathVariable long projectId,
-                                 @ModelAttribute SubProject subProject) {
+                                 @ModelAttribute SubProject subProject,
+                                 Model model) {
         subProject.recalculateDuration();
+
+        Project project = projectService.getProjectById(projectId);
+        if (project.getProjectStartDate() != null && subProject.getSubProjectStartDate() != null &&
+                subProject.getSubProjectStartDate().isBefore(project.getProjectStartDate())) {
+            subProject.recalculateDuration();
+            model.addAttribute("error", "Subproject start date must be within project period");
+            model.addAttribute("subProject", subProject);
+            model.addAttribute("currentEmployeeId", employeeId);
+            model.addAttribute("currentProjectId", projectId);
+            return "createsubproject";
+        }
+        if (project.getProjectDeadline() != null && subProject.getSubProjectDeadline() != null &&
+                subProject.getSubProjectDeadline().isAfter(project.getProjectDeadline())) {
+            subProject.recalculateDuration();
+            model.addAttribute("error", "Subproject deadline must be within project period");
+            model.addAttribute("subProject", subProject);
+            model.addAttribute("currentEmployeeId", employeeId);
+            model.addAttribute("currentProjectId", projectId);
+            return "createsubproject";
+        }
+        if (subProject.getSubProjectStartDate() != null && subProject.getSubProjectDeadline() != null &&
+                subProject.getSubProjectDeadline().isBefore(subProject.getSubProjectStartDate())) {
+            model.addAttribute("error", "Subproject deadline cannot be before start date");
+            model.addAttribute("subProject", subProject);
+            model.addAttribute("currentEmployeeId", employeeId);
+            model.addAttribute("currentProjectId", projectId);
+            return "createsubproject";
+        }
+
         projectService.saveSubProject(subProject, projectId);
         return "redirect:/project/subproject/list/" + projectId + "?employeeId=" + employeeId;
     }
@@ -277,9 +307,52 @@ public class ProjectController {
     public String editSubProject(@PathVariable int employeeId,
                                  @PathVariable long projectId,
                                  @PathVariable long subProjectId, // lowercase i URL
-                                 @ModelAttribute SubProject subProject) {
+                                 @ModelAttribute SubProject subProject,
+                                 Model model) {
         subProject.setSubProjectID(subProjectId); // Bruger setter-metoden fra model klassen
         subProject.recalculateDuration();
+
+        Project project = projectService.getProjectById(projectId);
+        if (project.getProjectStartDate() != null && subProject.getSubProjectStartDate() != null &&
+                subProject.getSubProjectStartDate().isBefore(project.getProjectStartDate())) {
+            model.addAttribute("error", "Subproject start date must be within project period");
+            model.addAttribute("subProject", subProject);
+            model.addAttribute("currentEmployeeId", employeeId);
+            model.addAttribute("currentProjectId", projectId);
+            Employee employee = employeeService.getEmployeeById(employeeId);
+            if (employee != null) {
+                model.addAttribute("username", employee.getUsername());
+                model.addAttribute("employeeRole", employee.getRole());
+            }
+            return "edit-subproject";
+        }
+        if (project.getProjectDeadline() != null && subProject.getSubProjectDeadline() != null &&
+                subProject.getSubProjectDeadline().isAfter(project.getProjectDeadline())) {
+            model.addAttribute("error", "Subproject deadline must be within project period");
+            model.addAttribute("subProject", subProject);
+            model.addAttribute("currentEmployeeId", employeeId);
+            model.addAttribute("currentProjectId", projectId);
+            Employee employee = employeeService.getEmployeeById(employeeId);
+            if (employee != null) {
+                model.addAttribute("username", employee.getUsername());
+                model.addAttribute("employeeRole", employee.getRole());
+            }
+            return "edit-subproject";
+        }
+        if (subProject.getSubProjectStartDate() != null && subProject.getSubProjectDeadline() != null &&
+                subProject.getSubProjectDeadline().isBefore(subProject.getSubProjectStartDate())) {
+            model.addAttribute("error", "Subproject deadline cannot be before start date");
+            model.addAttribute("subProject", subProject);
+            model.addAttribute("currentEmployeeId", employeeId);
+            model.addAttribute("currentProjectId", projectId);
+            Employee employee = employeeService.getEmployeeById(employeeId);
+            if (employee != null) {
+                model.addAttribute("username", employee.getUsername());
+                model.addAttribute("employeeRole", employee.getRole());
+            }
+            return "edit-subproject";
+        }
+
         projectService.editSubProject(subProject);
         return "redirect:/project/subproject/list/" + projectId + "?employeeId=" + employeeId;
     }

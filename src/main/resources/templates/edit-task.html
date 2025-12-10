@@ -13,7 +13,7 @@
     <div class="header">
         <h1>Edit Task</h1>
         <div class="user-info">
-            <span th:text="${username} + ' (' + ${employeeRole.displayName} + ')'"></span>
+            <span th:text="${username != null ? username : 'User'} + ' (' + (employeeRole != null ? employeeRole.displayName : '') + ')'"></span>
             <form th:action="@{/logout}" method="post">
                 <button type="submit" class="logout-button">
                     Log out
@@ -31,6 +31,8 @@
 
     <!-- Form -->
     <div class="form-card">
+        <div th:if="${error}" class="error-banner" th:text="${error}"></div>
+
         <form th:action="@{/project/task/edit/{employeeId}/{projectId}/{subProjectId}/{taskId}(employeeId=${currentEmployeeId}, projectId=${currentProjectId}, subProjectId=${currentSubProjectId}, taskId=${task.taskID})}"
               th:object="${task}"
               method="post">

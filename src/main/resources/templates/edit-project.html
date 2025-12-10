@@ -30,6 +30,8 @@
     </div>
 
     <div class="form-card">
+        <div th:if="${error}" class="error-banner" th:text="${error}"></div>
+
         <form th:action="@{/project/edit/{employeeId}/{projectId}(employeeId=${currentEmployeeId}, projectId=${project.projectID})}"
               th:object="${project}"
               method="post">

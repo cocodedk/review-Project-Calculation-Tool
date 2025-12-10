@@ -11,6 +11,8 @@
     <h1>Create new task</h1>
 </div>
 
+<div th:if="${error}" class="error-banner" th:text="${error}"></div>
+
 <div class="form-container">
     <form th:action="@{/project/task/createtask/{employeeId}/{projectId}/{subProjectId}(employeeId=${currentEmployeeId}, projectId=${currentProjectId}, subProjectId=${currentSubProjectId})}"
           th:object="${task}" method="post" class="project-form" id="taskForm">

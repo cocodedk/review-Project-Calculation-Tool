@@ -104,6 +104,10 @@ public class TaskService {
         taskRepository.updateSubTaskStatus(subTaskId, status.getDisplayName());
     }
 
+    public void updateSubTaskNote(long subTaskId, String subTaskNote) {
+        taskRepository.updateSubTaskNote(subTaskId, subTaskNote);
+    }
+
     public void updateSubTaskPriority(long subTaskId, Priority priority) {
         taskRepository.updateSubTaskPriority(subTaskId, priority.getDisplayName());
     }

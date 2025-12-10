@@ -27,6 +27,14 @@ public class TaskController {
         this.taskRepository = taskRepository;
     }
 
+    private void addEmployeeHeader(Model model, int employeeId) {
+        Employee employee = employeeService.getEmployeeById(employeeId);
+        if (employee != null) {
+            model.addAttribute("username", employee.getUsername());
+            model.addAttribute("employeeRole", employee.getRole());
+        }
+    }
+
     // her laver vi metoderene på hvad de forskellig bruger skal kunne.
     public boolean isManager(Employee employee) {
         return employee != null && employee.getRole() == EmployeeRole.PROJECT_MANAGER;
@@ -43,22 +51,19 @@ public class TaskController {
                                        Model model) {
         Employee currentEmployee = employeeService.getEmployeeById(employeeId);
         List<Task> taskList;
-        
+
         if (isManager(currentEmployee)) {
             taskList = taskService.showTasksBySubProjectId(subProjectId);
         } else {
             taskList = taskService.showTaskByEmployeeId(employeeId);
         }
-        
+
         model.addAttribute("taskList", taskList);
         model.addAttribute("currentProjectId", projectId);
         model.addAttribute("currentSubProjectId", subProjectId);
         model.addAttribute("currentEmployeeId", employeeId);
 
-        if (currentEmployee != null) {
-            model.addAttribute("username", currentEmployee.getUsername());
-            model.addAttribute("employeeRole", currentEmployee.getRole());
-        }
+        addEmployeeHeader(model, employeeId);
 
         return "task";
     }
@@ -84,8 +89,7 @@ public class TaskController {
         model.addAttribute("currentEmployeeId", employeeId);
         model.addAttribute("currentProjectId", projectId);
         model.addAttribute("currentSubProjectId", subProjectId);
-        model.addAttribute("username", currentEmployee.getUsername());
-        model.addAttribute("employeeRole", currentEmployee.getRole());
+        addEmployeeHeader(model, employeeId);
 
         return "createtask";
     }
@@ -125,6 +129,79 @@ public class TaskController {
         }
         if (task.getTaskPriority() == null) {
             task.setTaskPriority(Priority.MEDIUM);
+        }
+
+        Project project = projectService.getProjectById(projectId);
+        SubProject subProject = projectService.getSubProjectBySubProjectID(subProjectId);
+        if (project != null && task.getTaskStartDate() != null && project.getProjectStartDate() != null &&
+                task.getTaskStartDate().isBefore(project.getProjectStartDate())) {
+            model.addAttribute("error", "Task start date must be within project period");
+            model.addAttribute("task", task);
+            List<Employee> projectMembers = projectService.getProjectMembers(projectId);
+            for (Employee member : projectMembers) {
+                member.setAlphaRoles(employeeService.getEmployeeById(member.getEmployeeId()).getAlphaRoles());
+            }
+            model.addAttribute("teamMembers", projectMembers);
+            model.addAttribute("currentEmployeeId", employeeId);
+            model.addAttribute("currentProjectId", projectId);
+            model.addAttribute("currentSubProjectId", subProjectId);
+            return "createtask";
+        }
+        if (project != null && task.getTaskDeadline() != null && project.getProjectDeadline() != null &&
+                task.getTaskDeadline().isAfter(project.getProjectDeadline())) {
+            model.addAttribute("error", "Task deadline must be within project period");
+            model.addAttribute("task", task);
+            List<Employee> projectMembers = projectService.getProjectMembers(projectId);
+            for (Employee member : projectMembers) {
+                member.setAlphaRoles(employeeService.getEmployeeById(member.getEmployeeId()).getAlphaRoles());
+            }
+            model.addAttribute("teamMembers", projectMembers);
+            model.addAttribute("currentEmployeeId", employeeId);
+            model.addAttribute("currentProjectId", projectId);
+            model.addAttribute("currentSubProjectId", subProjectId);
+            return "createtask";
+        }
+        if (subProject != null && task.getTaskStartDate() != null && subProject.getSubProjectStartDate() != null &&
+                task.getTaskStartDate().isBefore(subProject.getSubProjectStartDate())) {
+            model.addAttribute("error", "Task start date must be within subproject period (set in the subproject)");
+            model.addAttribute("task", task);
+            List<Employee> projectMembers = projectService.getProjectMembers(projectId);
+            for (Employee member : projectMembers) {
+                member.setAlphaRoles(employeeService.getEmployeeById(member.getEmployeeId()).getAlphaRoles());
+            }
+            model.addAttribute("teamMembers", projectMembers);
+            model.addAttribute("currentEmployeeId", employeeId);
+            model.addAttribute("currentProjectId", projectId);
+            model.addAttribute("currentSubProjectId", subProjectId);
+            return "createtask";
+        }
+        if (subProject != null && task.getTaskDeadline() != null && subProject.getSubProjectDeadline() != null &&
+                task.getTaskDeadline().isAfter(subProject.getSubProjectDeadline())) {
+            model.addAttribute("error", "Task deadline must be within subproject period (set in the subproject)");
+            model.addAttribute("task", task);
+            List<Employee> projectMembers = projectService.getProjectMembers(projectId);
+            for (Employee member : projectMembers) {
+                member.setAlphaRoles(employeeService.getEmployeeById(member.getEmployeeId()).getAlphaRoles());
+            }
+            model.addAttribute("teamMembers", projectMembers);
+            model.addAttribute("currentEmployeeId", employeeId);
+            model.addAttribute("currentProjectId", projectId);
+            model.addAttribute("currentSubProjectId", subProjectId);
+            return "createtask";
+        }
+        if (task.getTaskStartDate() != null && task.getTaskDeadline() != null &&
+                task.getTaskDeadline().isBefore(task.getTaskStartDate())) {
+            model.addAttribute("error", "Task deadline cannot be before start date");
+            model.addAttribute("task", task);
+            List<Employee> projectMembers = projectService.getProjectMembers(projectId);
+            for (Employee member : projectMembers) {
+                member.setAlphaRoles(employeeService.getEmployeeById(member.getEmployeeId()).getAlphaRoles());
+            }
+            model.addAttribute("teamMembers", projectMembers);
+            model.addAttribute("currentEmployeeId", employeeId);
+            model.addAttribute("currentProjectId", projectId);
+            model.addAttribute("currentSubProjectId", subProjectId);
+            return "createtask";
         }
 
         Integer employeeIdToAssign = assignedToEmployeeId != null ? assignedToEmployeeId : employeeId;
@@ -204,13 +281,99 @@ public class TaskController {
                            @PathVariable long subProjectId,
                            @PathVariable int taskId,
                            @ModelAttribute Task task,
-                           @RequestParam(value = "assignedToEmployeeId", required = false) Integer assignedToEmployeeId) {
+                           @RequestParam(value = "assignedToEmployeeId", required = false) Integer assignedToEmployeeId,
+                           Model model) {
         task.setTaskID(taskId);
         if (assignedToEmployeeId != null) {
             Employee assignedEmployee = new Employee();
             assignedEmployee.setEmployeeId(assignedToEmployeeId);
             task.setAssignedEmployee(assignedEmployee);
         }
+        if (task.getTaskStartDate() != null && task.getTaskDeadline() != null) {
+            long days = ChronoUnit.DAYS.between(task.getTaskStartDate(), task.getTaskDeadline());
+            task.setTaskDuration((int) days + 1);
+        } else {
+            task.setTaskDuration(0);
+        }
+
+        Project project = projectService.getProjectById(projectId);
+        SubProject subProject = projectService.getSubProjectBySubProjectID(subProjectId);
+        if (project != null && task.getTaskStartDate() != null && project.getProjectStartDate() != null &&
+                task.getTaskStartDate().isBefore(project.getProjectStartDate())) {
+            model.addAttribute("error", "Task start date must be within project period");
+            model.addAttribute("task", task);
+            List<Employee> projectMembers = projectService.getProjectMembers(projectId);
+            for (Employee member : projectMembers) {
+                member.setAlphaRoles(employeeService.getEmployeeById(member.getEmployeeId()).getAlphaRoles());
+            }
+            model.addAttribute("teamMembers", projectMembers);
+            model.addAttribute("currentEmployeeId", employeeId);
+            model.addAttribute("currentProjectId", projectId);
+            model.addAttribute("currentSubProjectId", subProjectId);
+            addEmployeeHeader(model, employeeId);
+            return "edit-task";
+        }
+        if (project != null && task.getTaskDeadline() != null && project.getProjectDeadline() != null &&
+                task.getTaskDeadline().isAfter(project.getProjectDeadline())) {
+            model.addAttribute("error", "Task deadline must be within project period");
+            model.addAttribute("task", task);
+            List<Employee> projectMembers = projectService.getProjectMembers(projectId);
+            for (Employee member : projectMembers) {
+                member.setAlphaRoles(employeeService.getEmployeeById(member.getEmployeeId()).getAlphaRoles());
+            }
+            model.addAttribute("teamMembers", projectMembers);
+            model.addAttribute("currentEmployeeId", employeeId);
+            model.addAttribute("currentProjectId", projectId);
+            model.addAttribute("currentSubProjectId", subProjectId);
+            addEmployeeHeader(model, employeeId);
+            return "edit-task";
+        }
+        if (subProject != null && task.getTaskStartDate() != null && subProject.getSubProjectStartDate() != null &&
+                task.getTaskStartDate().isBefore(subProject.getSubProjectStartDate())) {
+            model.addAttribute("error", "Task start date must be within subproject period (set in the subproject)");
+            model.addAttribute("task", task);
+            List<Employee> projectMembers = projectService.getProjectMembers(projectId);
+            for (Employee member : projectMembers) {
+                member.setAlphaRoles(employeeService.getEmployeeById(member.getEmployeeId()).getAlphaRoles());
+            }
+            model.addAttribute("teamMembers", projectMembers);
+            model.addAttribute("currentEmployeeId", employeeId);
+            model.addAttribute("currentProjectId", projectId);
+            model.addAttribute("currentSubProjectId", subProjectId);
+            addEmployeeHeader(model, employeeId);
+            return "edit-task";
+        }
+        if (subProject != null && task.getTaskDeadline() != null && subProject.getSubProjectDeadline() != null &&
+                task.getTaskDeadline().isAfter(subProject.getSubProjectDeadline())) {
+            model.addAttribute("error", "Task deadline must be within subproject period (set in the subproject)");
+            model.addAttribute("task", task);
+            List<Employee> projectMembers = projectService.getProjectMembers(projectId);
+            for (Employee member : projectMembers) {
+                member.setAlphaRoles(employeeService.getEmployeeById(member.getEmployeeId()).getAlphaRoles());
+            }
+            model.addAttribute("teamMembers", projectMembers);
+            model.addAttribute("currentEmployeeId", employeeId);
+            model.addAttribute("currentProjectId", projectId);
+            model.addAttribute("currentSubProjectId", subProjectId);
+            addEmployeeHeader(model, employeeId);
+            return "edit-task";
+        }
+        if (task.getTaskStartDate() != null && task.getTaskDeadline() != null &&
+                task.getTaskDeadline().isBefore(task.getTaskStartDate())) {
+            model.addAttribute("error", "Task deadline cannot be before start date");
+            model.addAttribute("task", task);
+            List<Employee> projectMembers = projectService.getProjectMembers(projectId);
+            for (Employee member : projectMembers) {
+                member.setAlphaRoles(employeeService.getEmployeeById(member.getEmployeeId()).getAlphaRoles());
+            }
+            model.addAttribute("teamMembers", projectMembers);
+            model.addAttribute("currentEmployeeId", employeeId);
+            model.addAttribute("currentProjectId", projectId);
+            model.addAttribute("currentSubProjectId", subProjectId);
+            addEmployeeHeader(model, employeeId);
+            return "edit-task";
+        }
+
         taskService.editTask(task);
         return "redirect:/project/task/liste/" + projectId + "/" + subProjectId + "/" + employeeId;
     }
@@ -318,6 +481,53 @@ public class TaskController {
             subTask.setSubTaskPriority(Priority.MEDIUM);
         }
 
+        Task parentTask = taskService.getTaskById(taskId);
+        if (parentTask != null && parentTask.getTaskStartDate() != null && subTask.getSubTaskStartDate() != null &&
+                subTask.getSubTaskStartDate().isBefore(parentTask.getTaskStartDate())) {
+            model.addAttribute("error", "Subtask start date must be within task period");
+            model.addAttribute("subTask", subTask);
+            model.addAttribute("currentEmployeeId", employeeId);
+            model.addAttribute("currentProjectId", projectId);
+            model.addAttribute("currentSubProjectId", subProjectId);
+            model.addAttribute("currentTaskId", taskId);
+            Employee employee = employeeService.getEmployeeById(employeeId);
+            if (employee != null) {
+                model.addAttribute("username", employee.getUsername());
+                model.addAttribute("employeeRole", employee.getRole());
+            }
+            return "createsubtask";
+        }
+        if (parentTask != null && parentTask.getTaskDeadline() != null && subTask.getSubTaskDeadline() != null &&
+                subTask.getSubTaskDeadline().isAfter(parentTask.getTaskDeadline())) {
+            model.addAttribute("error", "Subtask deadline must be within task period");
+            model.addAttribute("subTask", subTask);
+            model.addAttribute("currentEmployeeId", employeeId);
+            model.addAttribute("currentProjectId", projectId);
+            model.addAttribute("currentSubProjectId", subProjectId);
+            model.addAttribute("currentTaskId", taskId);
+            Employee employee = employeeService.getEmployeeById(employeeId);
+            if (employee != null) {
+                model.addAttribute("username", employee.getUsername());
+                model.addAttribute("employeeRole", employee.getRole());
+            }
+            return "createsubtask";
+        }
+        if (subTask.getSubTaskStartDate() != null && subTask.getSubTaskDeadline() != null &&
+                subTask.getSubTaskDeadline().isBefore(subTask.getSubTaskStartDate())) {
+            model.addAttribute("error", "Subtask deadline cannot be before start date");
+            model.addAttribute("subTask", subTask);
+            model.addAttribute("currentEmployeeId", employeeId);
+            model.addAttribute("currentProjectId", projectId);
+            model.addAttribute("currentSubProjectId", subProjectId);
+            model.addAttribute("currentTaskId", taskId);
+            Employee employee = employeeService.getEmployeeById(employeeId);
+            if (employee != null) {
+                model.addAttribute("username", employee.getUsername());
+                model.addAttribute("employeeRole", employee.getRole());
+            }
+            return "createsubtask";
+        }
+
         taskService.createSubTask(
                 taskId,
                 subTask.getSubTaskName(),
@@ -390,7 +600,8 @@ public class TaskController {
                               @PathVariable long subProjectId,
                               @PathVariable long taskId,
                               @PathVariable long subTaskId,
-                              @ModelAttribute SubTask subTask) {
+                              @ModelAttribute SubTask subTask,
+                              Model model) {
 
         if (subTask.getSubTaskStartDate() != null && subTask.getSubTaskDeadline() != null) {
             long days = ChronoUnit.DAYS.between(subTask.getSubTaskStartDate(), subTask.getSubTaskDeadline());
@@ -401,10 +612,91 @@ public class TaskController {
 
 
         subTask.setSubTaskId(subTaskId);
+        Task parentTask = taskService.getTaskById(taskId);
+        if (parentTask != null && parentTask.getTaskStartDate() != null && subTask.getSubTaskStartDate() != null &&
+                subTask.getSubTaskStartDate().isBefore(parentTask.getTaskStartDate())) {
+            model.addAttribute("error", "Subtask start date must be within task period");
+            model.addAttribute("subTask", subTask);
+            model.addAttribute("currentEmployeeId", employeeId);
+            model.addAttribute("currentProjectId", projectId);
+            model.addAttribute("currentSubProjectId", subProjectId);
+            model.addAttribute("currentTaskId", taskId);
+            Employee employee = employeeService.getEmployeeById(employeeId);
+            if (employee != null) {
+                model.addAttribute("username", employee.getUsername());
+                model.addAttribute("employeeRole", employee.getRole());
+            }
+            return "edit-subtask";
+        }
+        if (parentTask != null && parentTask.getTaskDeadline() != null && subTask.getSubTaskDeadline() != null &&
+                subTask.getSubTaskDeadline().isAfter(parentTask.getTaskDeadline())) {
+            model.addAttribute("error", "Subtask deadline must be within task period");
+            model.addAttribute("subTask", subTask);
+            model.addAttribute("currentEmployeeId", employeeId);
+            model.addAttribute("currentProjectId", projectId);
+            model.addAttribute("currentSubProjectId", subProjectId);
+            model.addAttribute("currentTaskId", taskId);
+            Employee employee = employeeService.getEmployeeById(employeeId);
+            if (employee != null) {
+                model.addAttribute("username", employee.getUsername());
+                model.addAttribute("employeeRole", employee.getRole());
+            }
+            return "edit-subtask";
+        }
+        if (subTask.getSubTaskStartDate() != null && subTask.getSubTaskDeadline() != null &&
+                subTask.getSubTaskDeadline().isBefore(subTask.getSubTaskStartDate())) {
+            model.addAttribute("error", "Subtask deadline cannot be before start date");
+            model.addAttribute("subTask", subTask);
+            model.addAttribute("currentEmployeeId", employeeId);
+            model.addAttribute("currentProjectId", projectId);
+            model.addAttribute("currentSubProjectId", subProjectId);
+            model.addAttribute("currentTaskId", taskId);
+            Employee employee = employeeService.getEmployeeById(employeeId);
+            if (employee != null) {
+                model.addAttribute("username", employee.getUsername());
+                model.addAttribute("employeeRole", employee.getRole());
+            }
+            return "edit-subtask";
+        }
+
         taskService.editSubTask(subTask);
 
         return "redirect:/project/subtask/liste/"
                 + projectId + "/" + subProjectId + "/" + taskId + "/" + employeeId;
+    }
+
+    @GetMapping("/project/subtask/note/{employeeId}/{projectId}/{subProjectId}/{subTaskId}")
+    public String showSubTaskNoteForm(@PathVariable int employeeId,
+                                      @PathVariable long projectId,
+                                      @PathVariable long subProjectId,
+                                      @PathVariable long subTaskId,
+                                      @RequestParam("taskId") long taskId,
+                                      Model model) {
+
+        SubTask subTask = taskService.getSubTaskById(subTaskId);
+
+        model.addAttribute("subTask", subTask);
+        model.addAttribute("currentEmployeeId", employeeId);
+        model.addAttribute("currentProjectId", projectId);
+        model.addAttribute("currentSubProjectId", subProjectId);
+        model.addAttribute("currentTaskId", taskId);
+
+        addEmployeeHeader(model, employeeId);
+
+        return "subtask-note";
+    }
+
+    @PostMapping("/project/subtask/note/{employeeId}/{projectId}/{subProjectId}/{subTaskId}")
+    public String saveSubTaskNote(@PathVariable int employeeId,
+                                  @PathVariable long projectId,
+                                  @PathVariable long subProjectId,
+                                  @PathVariable long subTaskId,
+                                  @RequestParam("taskId") long taskId,
+                                  @RequestParam("subTaskNote") String subTaskNote) {
+
+        taskService.updateSubTaskNote(subTaskId, subTaskNote);
+
+        return "redirect:/project/subtask/liste/" + projectId + "/" + subProjectId + "/" + taskId + "/" + employeeId;
     }
 
     @GetMapping("/project/task/note/{employeeId}/{projectId}/{subProjectId}/{taskId}")
