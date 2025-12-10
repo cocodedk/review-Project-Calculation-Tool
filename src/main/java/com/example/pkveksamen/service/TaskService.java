@@ -55,7 +55,6 @@ public class TaskService {
         taskRepository.saveTask(task, employeeId, projectId, subProjectId);
     }
 
-
     public void deleteTask(long taskId) {
         taskRepository.deleteTask(taskId);
     }

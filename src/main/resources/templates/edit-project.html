@@ -65,6 +65,8 @@
                     <input type="date"
                            id="projectStartDate"
                            th:field="*{projectStartDate}"
+                           min="2000-01-01"
+                           max="2100-12-31"
                            required>
                 </div>
 
@@ -73,6 +75,8 @@
                     <input type="date"
                            id="projectDeadline"
                            th:field="*{projectDeadline}"
+                           min="2000-01-01"
+                           max="2100-12-31"
                            required>
                 </div>
             </div>

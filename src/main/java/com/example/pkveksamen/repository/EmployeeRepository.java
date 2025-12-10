@@ -123,22 +123,6 @@ public class EmployeeRepository {
         }, EmployeeRole.TEAM_MEMBER.getDisplayName());
     }
 
-    /*
-    public List<Employee> getAllEmployees() {
-        String sql = "SELECT employee_id, username, email, role " +
-                "FROM employee";
-
-        return jdbcTemplate.query(sql, (rs, rowNum) -> {
-            Employee employee = new Employee();
-            employee.setEmployeeId(rs.getInt("employee_id"));
-            employee.setUsername(rs.getString("username"));
-            employee.setEmail(rs.getString("email"));
-            employee.setRole(EmployeeRole.fromDisplayName(rs.getString("role")));
-            return employee;
-        });
-    }
-    */
-
     public List<Employee> getAllEmployees() {
         String sql = "SELECT employee_id, username, email, role FROM employee";
 
