@@ -53,7 +53,7 @@
     <div class="all-members-control-bar">
         <a th:if="${employeeRole != null
                                 and employeeRole == T(com.example.pkveksamen.model.EmployeeRole).PROJECT_MANAGER}"
-           th:href="@{/project/all-employees}"
+           th:href="@{/project/all-employees(employeeId=${currentEmployeeId})}"
            class="all-employees-button"> View all employees
 
             <!-- avatar-ikon -->

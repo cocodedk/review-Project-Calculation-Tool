@@ -26,6 +26,10 @@
            class="back-button">
             ← Return to subtasks
         </a>
+        <a th:href="@{/project/list/{employeeId}(employeeId=${currentEmployeeId})}"
+           class="back-button">
+            ← Back to projects
+        </a>
     </div>
 
     <form th:action="@{/project/subtask/note/{employeeId}/{projectId}/{subProjectId}/{subTaskId}(

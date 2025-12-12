@@ -73,11 +73,16 @@ public class ProjectController {
 
 
     @GetMapping("/all-employees")
-    public String showAllEmployees(Model model) {
+    public String showAllEmployees(@RequestParam("employeeId") int employeeId, Model model) {
         List<Employee> employeeList = employeeService.getAllEmployees();
         model.addAttribute("employees", employeeList);
-        // TODO: vi skal lave en tilbage knap i html
-        // model.addAttribute("currentEmployeeId", employeeId);
+        model.addAttribute("currentEmployeeId", employeeId);
+
+        Employee employee = employeeService.getEmployeeById(employeeId);
+        if (employee != null) {
+            model.addAttribute("username", employee.getUsername());
+            model.addAttribute("employeeRole", employee.getRole());
+        }
 
         return "view-all-employees";
     }
