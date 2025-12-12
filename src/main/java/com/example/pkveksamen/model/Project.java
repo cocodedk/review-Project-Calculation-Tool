@@ -22,7 +22,7 @@ public class Project {
             // days = days + 1;
 
             if (days < 0) {
-                projectDuration = 0; // eller kast exception, hvis det er “ulovligt”
+                projectDuration = 0;
             } else {
                 projectDuration = (int) days;
             }

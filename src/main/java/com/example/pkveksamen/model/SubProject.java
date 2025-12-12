@@ -8,17 +8,15 @@ public class SubProject {
     private long subProjectID;
     private String subProjectName;
     private String subProjectDescription;
-    private String subProjectStatus;
     private int subProjectDuration;
     private LocalDate subProjectStartDate;
     private LocalDate subProjectDeadline;
 
 
-    public SubProject(long subProjectID, String subProjectName, String subProjectDescription, String subProjectStatus, int subProjectDuration, LocalDate subProjectDeadline, LocalDate subProjectStartDate) {
+    public SubProject(long subProjectID, String subProjectName, String subProjectDescription, int subProjectDuration, LocalDate subProjectDeadline, LocalDate subProjectStartDate) {
         this.subProjectID = subProjectID;
         this.subProjectName = subProjectName;
         this.subProjectDescription = subProjectDescription;
-        this.subProjectStatus = subProjectStatus;
         this.subProjectDuration = subProjectDuration;
         this.subProjectDeadline = subProjectDeadline;
         this.subProjectStartDate = subProjectStartDate;
@@ -36,7 +34,7 @@ public class SubProject {
             // days = days + 1;
 
             if (days < 0) {
-                subProjectDuration = 0; // eller kast exception, hvis det er “ulovligt”
+                subProjectDuration = 0;
             } else {
                 subProjectDuration = (int) days;
             }
@@ -70,13 +68,6 @@ public class SubProject {
         this.subProjectDescription = subProjectDescription;
     }
 
-    public String getSubProjectStatus() {
-        return subProjectStatus;
-    }
-
-    public void setSubProjectStatus(String subProjectStatus) {
-        this.subProjectStatus = subProjectStatus;
-    }
 
     public int getSubProjectDuration() {
         return subProjectDuration;
