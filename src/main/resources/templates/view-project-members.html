@@ -120,6 +120,28 @@
     <a th:href="@{/project/list/{employeeId}(employeeId=${currentEmployeeId})}" class="back-button">← Back to Projects</a>
 
     <div class="section">
+        <h2>Add Members to Project</h2>
+        <div th:if="${availableEmployees == null or #lists.isEmpty(availableEmployees)}" class="empty-message">
+            All employees are already assigned to this project.
+        </div>
+    </div>
+    <div th:if="${availableEmployees != null and !#lists.isEmpty(availableEmployees)}" class="add-member-form">
+        <form th:action="@{/project/employees/{employeeId}/{projectId}/add(employeeId=${currentEmployeeId}, projectId=${currentProjectId})}" method="post">
+            <div class="form-group">
+                <label for="selectedEmployeeId">Select Employee:</label>
+                <select id="selectedEmployeeId" name="selectedEmployeeId" required>
+                    <option value="">-- Select an employee --</option>
+                    <option th:each="employee : ${availableEmployees}"
+                            th:value="${employee.employeeId}"
+                            th:text="${employee.username} + ' (' + ${employee.email} + ')'">
+                    </option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Add to Project</button>
+        </form>
+    </div>
+
+    <div class="section">
         <h2>Current Project Members</h2>
         <table>
             <thead>
@@ -152,28 +174,6 @@
             </tr>
             </tbody>
         </table>
-    </div>
-
-    <div class="section">
-        <h2>Add Members to Project</h2>
-        <div th:if="${availableEmployees == null or #lists.isEmpty(availableEmployees)}" class="empty-message">
-            All employees are already assigned to this project.
-        </div>
-        <div th:if="${availableEmployees != null and !#lists.isEmpty(availableEmployees)}" class="add-member-form">
-            <form th:action="@{/project/employees/{employeeId}/{projectId}/add(employeeId=${currentEmployeeId}, projectId=${currentProjectId})}" method="post">
-                <div class="form-group">
-                    <label for="selectedEmployeeId">Select Employee:</label>
-                    <select id="selectedEmployeeId" name="selectedEmployeeId" required>
-                        <option value="">-- Select an employee --</option>
-                        <option th:each="employee : ${availableEmployees}"
-                                th:value="${employee.employeeId}"
-                                th:text="${employee.username} + ' (' + ${employee.email} + ')'">
-                        </option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary">Add to Project</button>
-            </form>
-        </div>
     </div>
 </div>
 </body>

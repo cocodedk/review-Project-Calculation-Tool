@@ -76,6 +76,8 @@ public class ProjectController {
     public String showAllEmployees(Model model) {
         List<Employee> employeeList = employeeService.getAllEmployees();
         model.addAttribute("employees", employeeList);
+        // TODO: vi skal lave en tilbage knap i html
+        // model.addAttribute("currentEmployeeId", employeeId);
 
         return "view-all-employees";
     }
