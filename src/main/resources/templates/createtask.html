@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang="da" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create new task</title>
+    <link th:href="@{/common.css}" rel="stylesheet">
     <link th:href="@{/createtask.css}" rel="stylesheet">
 </head>
 <body>
@@ -16,6 +18,7 @@
 <div class="form-container">
     <form th:action="@{/project/task/createtask/{employeeId}/{projectId}/{subProjectId}(employeeId=${currentEmployeeId}, projectId=${currentProjectId}, subProjectId=${currentSubProjectId})}"
           th:object="${task}" method="post" class="project-form" id="taskForm">
+        <th:block th:replace="~{fragments/csrf :: csrf}"></th:block>
         <div class="form-group">
             <label for="taskName">Title:</label>
             <input type="text" id="taskName" name="taskName" th:field="*{taskName}" required/>

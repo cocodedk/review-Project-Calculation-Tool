@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang="da" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create new subproject</title>
+    <link th:href="@{/common.css}" rel="stylesheet">
     <link th:href="@{/createsubproject.css}" rel="stylesheet">
 </head>
 <body>
@@ -16,6 +18,7 @@
 <div class="form-container">
     <form th:action="@{/project/savesubproject/{employeeId}/{projectId}(employeeId=${currentEmployeeId}, projectId=${currentProjectId})}"
           th:object="${subProject}" method="post" class="project-form" id="subprojectForm">
+        <th:block th:replace="~{fragments/csrf :: csrf}"></th:block>
         <div class="form-group">
             <label for="subProjectName">Title:</label>
             <input type="text" id="subProjectName" name="subProjectName" th:field="*{subProjectName}" required/>

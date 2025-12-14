@@ -5,6 +5,8 @@ import com.example.pkveksamen.repository.TaskRepository;
 import com.example.pkveksamen.service.EmployeeService;
 import com.example.pkveksamen.service.ProjectService;
 import com.example.pkveksamen.service.TaskService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,8 @@ import java.time.temporal.ChronoUnit;
 
 @Controller
 public class TaskController {
+
+    private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
 
     private final TaskService taskService;
     private final EmployeeService employeeService;
@@ -133,9 +137,7 @@ public class TaskController {
 
         Project project = projectService.getProjectById(projectId);
         SubProject subProject = projectService.getSubProjectBySubProjectID(subProjectId);
-
-// Debug - fjern denne linje efter test
-        System.out.println("DEBUG - SubProjectId: " + subProjectId + ", SubProject: " + subProject);
+        logger.debug("Create task: projectId={} subProjectId={} resolvedSubProject={}", projectId, subProjectId, subProject != null);
 
         String error = null;
 
@@ -149,20 +151,32 @@ public class TaskController {
             // Valider kun mod subproject
             if (task.getTaskStartDate() != null && subProject.getSubProjectStartDate() != null &&
                     task.getTaskStartDate().isBefore(subProject.getSubProjectStartDate())) {
-                error = "Task start date must be within subproject period (set in the subproject)";
+                String dateRange = subProject.getSubProjectStartDate().toString();
+                if (subProject.getSubProjectDeadline() != null) {
+                    dateRange += " to " + subProject.getSubProjectDeadline().toString();
+                }
+                error = "Task start date must be within subproject period (" + dateRange + ")";
             } else if (task.getTaskDeadline() != null && subProject.getSubProjectDeadline() != null &&
                     task.getTaskDeadline().isAfter(subProject.getSubProjectDeadline())) {
-                error = "Task deadline must be within subproject period (set in the subproject)";
+                String dateRange = subProject.getSubProjectStartDate() != null ? subProject.getSubProjectStartDate().toString() : "start";
+                dateRange += " to " + subProject.getSubProjectDeadline().toString();
+                error = "Task deadline must be within subproject period (" + dateRange + ")";
             }
         }
 // Ellers valider mod project (kun hvis IKKE i subproject)
         else if (subProjectId <= 0 || subProject == null) {
             if (project != null && task.getTaskStartDate() != null && project.getProjectStartDate() != null &&
                     task.getTaskStartDate().isBefore(project.getProjectStartDate())) {
-                error = "Task start date must be within project period";
+                String dateRange = project.getProjectStartDate().toString();
+                if (project.getProjectDeadline() != null) {
+                    dateRange += " to " + project.getProjectDeadline().toString();
+                }
+                error = "Task start date must be within project period (" + dateRange + ")";
             } else if (project != null && task.getTaskDeadline() != null && project.getProjectDeadline() != null &&
                     task.getTaskDeadline().isAfter(project.getProjectDeadline())) {
-                error = "Task deadline must be within project period";
+                String dateRange = project.getProjectStartDate() != null ? project.getProjectStartDate().toString() : "start";
+                dateRange += " to " + project.getProjectDeadline().toString();
+                error = "Task deadline must be within project period (" + dateRange + ")";
             }
         }
 
@@ -231,23 +245,19 @@ public class TaskController {
         if (task.getAssignedEmployee() != null) {
             task.getAssignedEmployee().setAlphaRoles(employeeService.getEmployeeById(task.getAssignedEmployee().getEmployeeId()).getAlphaRoles());
         }
-        
+
         List<Employee> projectMembers = projectService.getProjectMembers(projectId);
         for (Employee member : projectMembers) {
             member.setAlphaRoles(employeeService.getEmployeeById(member.getEmployeeId()).getAlphaRoles());
         }
-        
+
         model.addAttribute("task", task);
         model.addAttribute("teamMembers", projectMembers);
         model.addAttribute("currentEmployeeId", employeeId);
         model.addAttribute("currentProjectId", projectId);
         model.addAttribute("currentSubProjectId", subProjectId);
 
-        Employee employee = employeeService.getEmployeeById(employeeId);
-        if (employee != null) {
-            model.addAttribute("username", employee.getUsername());
-            model.addAttribute("employeeRole", employee.getRole());
-        }
+        addEmployeeHeader(model, employeeId);
 
         return "edit-task";
     }
@@ -277,7 +287,11 @@ public class TaskController {
         SubProject subProject = projectService.getSubProjectBySubProjectID(subProjectId);
         if (project != null && task.getTaskStartDate() != null && project.getProjectStartDate() != null &&
                 task.getTaskStartDate().isBefore(project.getProjectStartDate())) {
-            model.addAttribute("error", "Task start date must be within project period");
+            String dateRange = project.getProjectStartDate().toString();
+            if (project.getProjectDeadline() != null) {
+                dateRange += " to " + project.getProjectDeadline().toString();
+            }
+            model.addAttribute("error", "Task start date must be within project period (" + dateRange + ")");
             model.addAttribute("task", task);
             List<Employee> projectMembers = projectService.getProjectMembers(projectId);
             for (Employee member : projectMembers) {
@@ -292,7 +306,9 @@ public class TaskController {
         }
         if (project != null && task.getTaskDeadline() != null && project.getProjectDeadline() != null &&
                 task.getTaskDeadline().isAfter(project.getProjectDeadline())) {
-            model.addAttribute("error", "Task deadline must be within project period");
+            String dateRange = project.getProjectStartDate() != null ? project.getProjectStartDate().toString() : "start";
+            dateRange += " to " + project.getProjectDeadline().toString();
+            model.addAttribute("error", "Task deadline must be within project period (" + dateRange + ")");
             model.addAttribute("task", task);
             List<Employee> projectMembers = projectService.getProjectMembers(projectId);
             for (Employee member : projectMembers) {
@@ -307,7 +323,11 @@ public class TaskController {
         }
         if (subProject != null && task.getTaskStartDate() != null && subProject.getSubProjectStartDate() != null &&
                 task.getTaskStartDate().isBefore(subProject.getSubProjectStartDate())) {
-            model.addAttribute("error", "Task start date must be within subproject period (set in the subproject)");
+            String dateRange = subProject.getSubProjectStartDate().toString();
+            if (subProject.getSubProjectDeadline() != null) {
+                dateRange += " to " + subProject.getSubProjectDeadline().toString();
+            }
+            model.addAttribute("error", "Task start date must be within subproject period (" + dateRange + ")");
             model.addAttribute("task", task);
             List<Employee> projectMembers = projectService.getProjectMembers(projectId);
             for (Employee member : projectMembers) {
@@ -322,7 +342,9 @@ public class TaskController {
         }
         if (subProject != null && task.getTaskDeadline() != null && subProject.getSubProjectDeadline() != null &&
                 task.getTaskDeadline().isAfter(subProject.getSubProjectDeadline())) {
-            model.addAttribute("error", "Task deadline must be within subproject period (set in the subproject)");
+            String dateRange = subProject.getSubProjectStartDate() != null ? subProject.getSubProjectStartDate().toString() : "start";
+            dateRange += " to " + subProject.getSubProjectDeadline().toString();
+            model.addAttribute("error", "Task deadline must be within subproject period (" + dateRange + ")");
             model.addAttribute("task", task);
             List<Employee> projectMembers = projectService.getProjectMembers(projectId);
             for (Employee member : projectMembers) {
@@ -392,12 +414,7 @@ public class TaskController {
         model.addAttribute("currentEmployeeId", employeeId);
         model.addAttribute("currentTaskId", taskId);
 
-        // Add employee details for the header
-        Employee employee = employeeService.getEmployeeById(employeeId);
-        if (employee != null) {
-            model.addAttribute("username", employee.getUsername());
-            model.addAttribute("employeeRole", employee.getRole());
-        }
+        addEmployeeHeader(model, employeeId);
 
         return "subtask";
     }
@@ -410,16 +427,14 @@ public class TaskController {
                                 @ModelAttribute SubTask subTask,
                                 Model model) {
 
-        // TILFØJ DENNE TRY-CATCH
         try {
             Task parentTask = taskService.getTaskById(taskId);
             if (parentTask == null) {
-                System.out.println("ERROR - Task findes ikke: taskId=" + taskId);
+                logger.warn("Create subtask: parent task not found (taskId={})", taskId);
                 return "redirect:/project/task/liste/" + projectId + "/" + subProjectId + "/" + employeeId;
             }
         } catch (Exception e) {
-            System.out.println("ERROR - Task findes ikke i databasen: taskId=" + taskId);
-            System.out.println("Tjek din task.html - linket sender forkert taskId!");
+            logger.warn("Create subtask: error loading parent task (taskId={})", taskId, e);
             return "redirect:/project/task/liste/" + projectId + "/" + subProjectId + "/" + employeeId;
         }
 
@@ -461,7 +476,11 @@ public class TaskController {
         Task parentTask = taskService.getTaskById(taskId);
         if (parentTask != null && parentTask.getTaskStartDate() != null && subTask.getSubTaskStartDate() != null &&
                 subTask.getSubTaskStartDate().isBefore(parentTask.getTaskStartDate())) {
-            model.addAttribute("error", "Subtask start date must be within task period");
+            String dateRange = parentTask.getTaskStartDate().toString();
+            if (parentTask.getTaskDeadline() != null) {
+                dateRange += " to " + parentTask.getTaskDeadline().toString();
+            }
+            model.addAttribute("error", "Subtask start date must be within task period (" + dateRange + ")");
             model.addAttribute("subTask", subTask);
             model.addAttribute("currentEmployeeId", employeeId);
             model.addAttribute("currentProjectId", projectId);
@@ -476,7 +495,9 @@ public class TaskController {
         }
         if (parentTask != null && parentTask.getTaskDeadline() != null && subTask.getSubTaskDeadline() != null &&
                 subTask.getSubTaskDeadline().isAfter(parentTask.getTaskDeadline())) {
-            model.addAttribute("error", "Subtask deadline must be within task period");
+            String dateRange = parentTask.getTaskStartDate() != null ? parentTask.getTaskStartDate().toString() : "start";
+            dateRange += " to " + parentTask.getTaskDeadline().toString();
+            model.addAttribute("error", "Subtask deadline must be within task period (" + dateRange + ")");
             model.addAttribute("subTask", subTask);
             model.addAttribute("currentEmployeeId", employeeId);
             model.addAttribute("currentProjectId", projectId);
@@ -519,20 +540,6 @@ public class TaskController {
 
         return "redirect:/project/subtask/liste/" + projectId + "/" + subProjectId + "/" + taskId + "/" + employeeId;
     }
-
-//    @PostMapping("/subtask/save/{employeeId}/{projectId}/{subProjectId}/{taskId}/{subTaskId}")
-//    public String saveSubTask(@PathVariable int employeeId,
-//                              @PathVariable long projectId,
-//                              @PathVariable long subProjectId,
-//                              @PathVariable long taskId,
-//                              @PathVariable long subTaskId,
-//                              @ModelAttribute SubTask subTask) {
-//        taskService.saveSubTask(subTask, subTaskId);
-//        subTask.recalculateDuration();
-//
-//
-//        return "redirect:/project/task/subtask/liste/" + projectId + "/" + subProjectId + "/" + taskId + "/" + employeeId;
-//    }
 
     @PostMapping("/subtask/delete/{employeeId}/{projectId}/{subProjectId}/{taskId}/{subTaskId}")
     public String deleteSubTask(@PathVariable int employeeId,
@@ -592,7 +599,11 @@ public class TaskController {
         Task parentTask = taskService.getTaskById(taskId);
         if (parentTask != null && parentTask.getTaskStartDate() != null && subTask.getSubTaskStartDate() != null &&
                 subTask.getSubTaskStartDate().isBefore(parentTask.getTaskStartDate())) {
-            model.addAttribute("error", "Subtask start date must be within task period");
+            String dateRange = parentTask.getTaskStartDate().toString();
+            if (parentTask.getTaskDeadline() != null) {
+                dateRange += " to " + parentTask.getTaskDeadline().toString();
+            }
+            model.addAttribute("error", "Subtask start date must be within task period (" + dateRange + ")");
             model.addAttribute("subTask", subTask);
             model.addAttribute("currentEmployeeId", employeeId);
             model.addAttribute("currentProjectId", projectId);
@@ -607,7 +618,9 @@ public class TaskController {
         }
         if (parentTask != null && parentTask.getTaskDeadline() != null && subTask.getSubTaskDeadline() != null &&
                 subTask.getSubTaskDeadline().isAfter(parentTask.getTaskDeadline())) {
-            model.addAttribute("error", "Subtask deadline must be within task period");
+            String dateRange = parentTask.getTaskStartDate() != null ? parentTask.getTaskStartDate().toString() : "start";
+            dateRange += " to " + parentTask.getTaskDeadline().toString();
+            model.addAttribute("error", "Subtask deadline must be within task period (" + dateRange + ")");
             model.addAttribute("subTask", subTask);
             model.addAttribute("currentEmployeeId", employeeId);
             model.addAttribute("currentProjectId", projectId);
@@ -771,5 +784,3 @@ public class TaskController {
         return "redirect:/project/subtask/liste/" + projectId + "/" + subProjectId + "/" + taskId + "/" + employeeId;
     }
 }
-
-

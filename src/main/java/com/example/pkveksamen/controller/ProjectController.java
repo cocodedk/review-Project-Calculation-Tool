@@ -21,17 +21,6 @@ public class ProjectController {
         this.employeeService = employeeService;
     }
 
-    /* VI BRUGER DEN IKKE
-    // her laver vi metoderene på hvad de forskellig bruger skal kunne.
-    public boolean isManager(Employee employee){
-        return employee != null && employee.getRole() == EmployeeRole.PROJECT_MANAGER;
-    }
-
-    public boolean isTeamMember(Employee employee){
-        return employee != null && employee.getRole() == EmployeeRole.TEAM_MEMBER;
-    }
-    */
-
     @GetMapping("/employees/{employeeId}/{projectId}")
     public String showProjectMembers(@PathVariable int employeeId,
                                      @PathVariable long projectId,
@@ -45,12 +34,6 @@ public class ProjectController {
         model.addAttribute("availableEmployees", availableEmployees);
         model.addAttribute("currentEmployeeId", employeeId);
         model.addAttribute("currentProjectId", projectId);
-
-        Employee employee = employeeService.getEmployeeById(employeeId);
-        if (employee != null) {
-            model.addAttribute("username", employee.getUsername());
-            model.addAttribute("employeeRole", employee.getRole());
-        }
 
         return "view-project-members";
     }
@@ -78,12 +61,6 @@ public class ProjectController {
         model.addAttribute("employees", employeeList);
         model.addAttribute("currentEmployeeId", employeeId);
 
-        Employee employee = employeeService.getEmployeeById(employeeId);
-        if (employee != null) {
-            model.addAttribute("username", employee.getUsername());
-            model.addAttribute("employeeRole", employee.getRole());
-        }
-
         return "view-all-employees";
     }
 
@@ -92,12 +69,6 @@ public class ProjectController {
         List<Project> projectList = projectService.showProjectsByEmployeeId(employeeId);
         model.addAttribute("projectList", projectList);
         model.addAttribute("currentEmployeeId", employeeId);
-
-        Employee employee = employeeService.getEmployeeById(employeeId);
-        if (employee != null) {
-            model.addAttribute("username", employee.getUsername());
-            model.addAttribute("employeeRole", employee.getRole());
-        }
         return "project";
     }
 
@@ -204,7 +175,6 @@ public class ProjectController {
                               @ModelAttribute Project project) {
         project.recalculateDuration();
         projectService.saveProject(project, employeeId);
-//        projectService.assignEmployeeToProject(selectedEmployeeId, project.getProjectID());
         return "redirect:/project/list/" + employeeId;
     }
 
@@ -220,7 +190,11 @@ public class ProjectController {
         if (project.getProjectStartDate() != null && subProject.getSubProjectStartDate() != null &&
                 subProject.getSubProjectStartDate().isBefore(project.getProjectStartDate())) {
             subProject.recalculateDuration();
-            model.addAttribute("error", "Subproject start date must be within project period");
+            String dateRange = project.getProjectStartDate().toString();
+            if (project.getProjectDeadline() != null) {
+                dateRange += " to " + project.getProjectDeadline().toString();
+            }
+            model.addAttribute("error", "Subproject start date must be within project period (" + dateRange + ")");
             model.addAttribute("subProject", subProject);
             model.addAttribute("currentEmployeeId", employeeId);
             model.addAttribute("currentProjectId", projectId);
@@ -229,7 +203,9 @@ public class ProjectController {
         if (project.getProjectDeadline() != null && subProject.getSubProjectDeadline() != null &&
                 subProject.getSubProjectDeadline().isAfter(project.getProjectDeadline())) {
             subProject.recalculateDuration();
-            model.addAttribute("error", "Subproject deadline must be within project period");
+            String dateRange = project.getProjectStartDate() != null ? project.getProjectStartDate().toString() : "start";
+            dateRange += " to " + project.getProjectDeadline().toString();
+            model.addAttribute("error", "Subproject deadline must be within project period (" + dateRange + ")");
             model.addAttribute("subProject", subProject);
             model.addAttribute("currentEmployeeId", employeeId);
             model.addAttribute("currentProjectId", projectId);
@@ -322,7 +298,11 @@ public class ProjectController {
         Project project = projectService.getProjectById(projectId);
         if (project.getProjectStartDate() != null && subProject.getSubProjectStartDate() != null &&
                 subProject.getSubProjectStartDate().isBefore(project.getProjectStartDate())) {
-            model.addAttribute("error", "Subproject start date must be within project period");
+            String dateRange = project.getProjectStartDate().toString();
+            if (project.getProjectDeadline() != null) {
+                dateRange += " to " + project.getProjectDeadline().toString();
+            }
+            model.addAttribute("error", "Subproject start date must be within project period (" + dateRange + ")");
             model.addAttribute("subProject", subProject);
             model.addAttribute("currentEmployeeId", employeeId);
             model.addAttribute("currentProjectId", projectId);
@@ -335,7 +315,9 @@ public class ProjectController {
         }
         if (project.getProjectDeadline() != null && subProject.getSubProjectDeadline() != null &&
                 subProject.getSubProjectDeadline().isAfter(project.getProjectDeadline())) {
-            model.addAttribute("error", "Subproject deadline must be within project period");
+            String dateRange = project.getProjectStartDate() != null ? project.getProjectStartDate().toString() : "start";
+            dateRange += " to " + project.getProjectDeadline().toString();
+            model.addAttribute("error", "Subproject deadline must be within project period (" + dateRange + ")");
             model.addAttribute("subProject", subProject);
             model.addAttribute("currentEmployeeId", employeeId);
             model.addAttribute("currentProjectId", projectId);

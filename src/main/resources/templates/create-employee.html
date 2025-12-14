@@ -1,16 +1,19 @@
 
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="da">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Opret medarbejder</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create employee</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link th:href="@{/common.css}" rel="stylesheet">
     <link th:href="@{/create-employee.css}" rel="stylesheet">
 </head>
 <body>
-<h1>Opret medarbejder</h1>
+<h1>Create employee</h1>
 
 <form th:action="@{/create-employee}" th:object="${employee}" method="post">
+    <th:block th:replace="~{fragments/csrf :: csrf}"></th:block>
     <label>Username</label>
     <input type="text" th:field="*{username}" placeholder="Enter username" required>
 
@@ -19,15 +22,6 @@
 
     <label>Email</label>
     <input type="email" th:field="*{email}" placeholder="Enter email" required>
-
-    <!-- rolle vises -->
-    <label for="employeeRole">Choose role</label>
-    <select id="employeeRole" th:field="*{role}" required>
-        <option th:each="r : ${roles}"
-                th:value="${r}"
-                th:text="${#strings.capitalize(#strings.replace(r.name().toLowerCase(), '_', ' '))}">
-        </option>
-    </select>
 
     <!-- skill/alpha role vises -->
     <label for="skill">Choose skill (Alpha Role)</label>

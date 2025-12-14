@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang="da" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create subtask</title>
+    <link th:href="@{/common.css}" rel="stylesheet">
     <link th:href="@{/createsubtask.css}" rel="stylesheet">
 </head>
 
@@ -18,6 +20,7 @@
             <span th:text="${username != null ? username : 'User'} + ' (' + (employeeRole != null ? employeeRole.displayName : '') + ')'"></span>
 
             <form th:action="@{/logout}" method="post">
+                <th:block th:replace="~{fragments/csrf :: csrf}"></th:block>
                 <button type="submit" class="logout-button">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none"
                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -34,7 +37,7 @@
     <!-- Tilbage -->
     <div class="control-bar">
         <a th:href="@{/project/subtask/liste/{projectId}/{subProjectId}/{taskId}/{employeeId}(projectId=${currentProjectId},subProjectId=${currentSubProjectId},taskId=${currentTaskId},employeeId=${currentEmployeeId})}"
-           class="back-button">← Return</a>
+           class="back-button">← Back</a>
     </div>
 
     <!-- FORM -->
@@ -44,6 +47,7 @@
           th:object="${subTask}"
           method="post"
           class="form-card">
+        <th:block th:replace="~{fragments/csrf :: csrf}"></th:block>
 
         <div class="form-row">
             <label>Title</label>

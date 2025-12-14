@@ -4,39 +4,45 @@ import com.example.pkveksamen.model.AlphaRole;
 import com.example.pkveksamen.model.Employee;
 import com.example.pkveksamen.model.EmployeeRole;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class EmployeeRepository {
 
     private final JdbcTemplate jdbcTemplate;
+    private final PasswordEncoder passwordEncoder;
 
-    public EmployeeRepository(JdbcTemplate jdbcTemplate) {
+    public EmployeeRepository(JdbcTemplate jdbcTemplate, PasswordEncoder passwordEncoder) {
         this.jdbcTemplate = jdbcTemplate;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public void createEmployee(String username, String password, String email, String role, String alphaRoleDisplayName) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         String insertEmployeeSql = "INSERT INTO employee(username, password, email, role) VALUES (?, ?, ?, ?)";
-        
+        String passwordHash = passwordEncoder.encode(password);
+
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(insertEmployeeSql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, username);
-            ps.setString(2, password);
+            ps.setString(2, passwordHash);
             ps.setString(3, email);
             ps.setString(4, role);
             return ps;
         }, keyHolder);
-        
+
         Integer employeeId = keyHolder.getKey().intValue();
-        
+
         String getRoleIdSql = "SELECT role_id FROM role WHERE role_name = ?";
         Integer roleId;
         try {
@@ -52,9 +58,27 @@ public class EmployeeRepository {
             }, roleKeyHolder);
             roleId = roleKeyHolder.getKey().intValue();
         }
-        
+
         String insertEmployeeRoleSql = "INSERT INTO employee_role(employee_id, role_id) VALUES (?, ?)";
         jdbcTemplate.update(insertEmployeeRoleSql, employeeId, roleId);
+    }
+
+    public boolean existsByUsername(String username) {
+        Integer count = jdbcTemplate.queryForObject(
+                "SELECT COUNT(*) FROM employee WHERE LOWER(username) = LOWER(?)",
+                Integer.class,
+                username
+        );
+        return count != null && count > 0;
+    }
+
+    public boolean existsByEmail(String email) {
+        Integer count = jdbcTemplate.queryForObject(
+                "SELECT COUNT(*) FROM employee WHERE LOWER(email) = LOWER(?)",
+                Integer.class,
+                email
+        );
+        return count != null && count > 0;
     }
 
     public Employee findEmployeeById(int employeeId) {
@@ -77,20 +101,30 @@ public class EmployeeRepository {
         }
     }
 
-    public Integer validateLogin(String username, String password) {
+    public Integer validateLogin(String usernameOrEmail, String password) {
+        // Try to find by username first, then by email
+        String sql = "SELECT employee_id, password FROM employee WHERE username = ? OR email = ?";
         try {
-            String sql = "SELECT employee_id FROM employee WHERE username = ? AND password = ?";
+            Map<String, Object> row = jdbcTemplate.queryForMap(sql, usernameOrEmail, usernameOrEmail);
+            int employeeId = ((Number) row.get("employee_id")).intValue();
+            String stored = String.valueOf(row.get("password"));
 
-            List<Integer> result = jdbcTemplate.query(sql, (rs, rowNum) ->
-                    rs.getInt("employee_id"),
-                    username,
-                    password);
-            if (!result.isEmpty())
-                return result.get(0);
-            else
-                return 0;
+            if (passwordEncoder.matches(password, stored)) {
+                return employeeId;
+            }
+
+            // Legacy plaintext support: if a user matches, upgrade to BCrypt.
+            if (stored != null && stored.equals(password)) {
+                String upgraded = passwordEncoder.encode(password);
+                jdbcTemplate.update("UPDATE employee SET password = ? WHERE employee_id = ?", upgraded, employeeId);
+                return employeeId;
+            }
+
+            return 0;
         } catch (EmptyResultDataAccessException e) {
-            return null;
+            return 0;
+        } catch (IncorrectResultSizeDataAccessException e) {
+            return 0;
         }
     }
 

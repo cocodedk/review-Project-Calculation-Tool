@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="da">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit subtask</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link th:href="@{/common.css}" rel="stylesheet">
     <link th:href="@{/edit-subproject.css}" rel="stylesheet">
 </head>
 
@@ -18,6 +20,7 @@
         <div class="user-info">
             <span th:text="${username != null ? username : 'User'} + ' (' + (employeeRole != null ? employeeRole.displayName : '') + ')'"></span>
             <form th:action="@{/logout}" method="post">
+                <th:block th:replace="~{fragments/csrf :: csrf}"></th:block>
                 <button type="submit" class="logout-button">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
@@ -54,6 +57,7 @@
                         subTaskId=${subTask.subTaskId})}"
               th:object="${subTask}"
               method="post">
+            <th:block th:replace="~{fragments/csrf :: csrf}"></th:block>
 
             <!-- SUBTASK NAME -->
             <div class="form-group">
@@ -91,7 +95,8 @@
                     <label for="subTaskStartDate">Start date</label>
                     <input type="date"
                            id="subTaskStartDate"
-                           th:field="*{subTaskStartDate}"
+                           name="subTaskStartDate"
+                           th:value="${subTask?.subTaskStartDate != null ? #temporals.format(subTask.subTaskStartDate, 'yyyy-MM-dd') : ''}"
                            min="2000-01-01"
                            max="2100-12-31"
                            required>
@@ -101,7 +106,8 @@
                     <label for="subTaskEndDate">Deadline</label>
                     <input type="date"
                            id="subTaskEndDate"
-                           th:field="*{subTaskDeadline}"
+                           name="subTaskDeadline"
+                           th:value="${subTask?.subTaskDeadline != null ? #temporals.format(subTask.subTaskDeadline, 'yyyy-MM-dd') : ''}"
                            min="2000-01-01"
                            max="2100-12-31"
                            required>

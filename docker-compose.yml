@@ -13,7 +13,7 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
       - ./src/main/resources/schema-mysql.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
-      - ./src/main/resources/data.sql:/docker-entrypoint-initdb.d/02-data.sql:ro
+      - ./src/main/resources/data-mysql.sql:/docker-entrypoint-initdb.d/02-data.sql:ro
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
       interval: 10s
@@ -40,8 +40,15 @@ services:
 
       # JVM Options
       JAVA_OPTS: ${JAVA_OPTS:--Xmx512m -Xms256m}
+
+      # Enable template hot reload (for development)
+      SPRING_THYMELEAF_CACHE: "false"
     ports:
       - "${APP_PORT:-8080}:8080"
+    volumes:
+      # Mount templates for hot reload (faster development)
+      - ./src/main/resources/templates:/app/templates:ro
+      - ./src/main/resources/static:/app/static:ro
     depends_on:
       mysql:
         condition: service_healthy

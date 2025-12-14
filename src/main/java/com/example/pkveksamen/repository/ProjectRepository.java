@@ -109,12 +109,6 @@ public class ProjectRepository {
         );
     }
 
-    /*
-    public void deleteProject(long projectID) {
-        jdbcTemplate.update("DELETE FROM project WHERE project_id = ?", projectID);
-    }
-    */
-
     public void deleteProject(long projectID) {
         // First delete all subtasks related to tasks in subprojects of this project
         String deleteSubtasksSql = "DELETE FROM sub_task WHERE task_id IN " +
@@ -271,4 +265,3 @@ public class ProjectRepository {
         jdbcTemplate.update(sql, projectId, employeeId);
     }
 }
-

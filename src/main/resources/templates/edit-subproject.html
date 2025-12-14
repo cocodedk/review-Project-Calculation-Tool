@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="da">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Edit subproject</title>
   <!-- package til at bruge en lækker og æstetisk skrifttype-->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link th:href="@{/common.css}" rel="stylesheet">
   <link th:href="@{/edit-subproject.css}" rel="stylesheet">
 </head>
 <body>
@@ -14,6 +16,7 @@
     <div class="user-info">
       <span th:text="${username != null ? username : 'User'} + ' (' + (employeeRole != null ? employeeRole.displayName : '') + ')'"></span>
       <form th:action="@{/logout}" method="post">
+        <th:block th:replace="~{fragments/csrf :: csrf}"></th:block>
         <button type="submit" class="logout-button">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
@@ -27,7 +30,7 @@
   </div>
 
   <div class="breadcrumb">
-    <a th:href="@{/project/subproject/list/{projectId}(projectId=${currentProjectId}, employeeId=${currentEmployeeId})}">← Tilbage til Mine Subprojekter</a>
+    <a th:href="@{/project/subproject/list/{projectId}(projectId=${currentProjectId}, employeeId=${currentEmployeeId})}">← Back to my subprojects</a>
   </div>
 
   <div class="form-card">
@@ -36,6 +39,7 @@
     <form th:action="@{/project/subproject/edit/{employeeId}/{projectId}/{subProjectId}(employeeId=${currentEmployeeId}, projectId=${currentProjectId}, subProjectId=${subProject.subProjectID})}"
           th:object="${subProject}"
           method="post">
+      <th:block th:replace="~{fragments/csrf :: csrf}"></th:block>
 
       <div class="form-group">
         <label for="subProjectName">Title</label>
@@ -58,7 +62,8 @@
           <label for="subProjectStartDate">Start date:</label>
           <input type="date"
                  id="subProjectStartDate"
-                 th:field="*{subProjectStartDate}"
+                 name="subProjectStartDate"
+                 th:value="${subProject?.subProjectStartDate != null ? #temporals.format(subProject.subProjectStartDate, 'yyyy-MM-dd') : ''}"
                  min="2000-01-01"
                  max="2100-12-31"
                  required>
@@ -68,7 +73,8 @@
           <label for="subProjectDeadline">Deadline:</label>
           <input type="date"
                  id="subProjectDeadline"
-                 th:field="*{subProjectDeadline}"
+                 name="subProjectDeadline"
+                 th:value="${subProject?.subProjectDeadline != null ? #temporals.format(subProject.subProjectDeadline, 'yyyy-MM-dd') : ''}"
                  min="2000-01-01"
                  max="2100-12-31"
                  required>

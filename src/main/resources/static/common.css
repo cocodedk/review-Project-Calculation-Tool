@@ -1,0 +1,9 @@
+.inline-form {
+    display: inline;
+}
+
+.inline-form-spaced {
+    display: inline;
+    margin-left: 10px;
+}
+

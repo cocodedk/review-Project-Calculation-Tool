@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="da">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit project</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link th:href="@{/common.css}" rel="stylesheet">
     <link th:href="@{/edit-project.css}" rel="stylesheet">
 </head>
 <body>
@@ -13,6 +15,7 @@
         <div class="user-info">
             <span th:text="${username} + ' (' + ${employeeRole.displayName} + ')'"></span>
             <form th:action="@{/logout}" method="post">
+                <th:block th:replace="~{fragments/csrf :: csrf}"></th:block>
                 <button type="submit" class="logout-button">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
@@ -35,6 +38,7 @@
         <form th:action="@{/project/edit/{employeeId}/{projectId}(employeeId=${currentEmployeeId}, projectId=${project.projectID})}"
               th:object="${project}"
               method="post">
+            <th:block th:replace="~{fragments/csrf :: csrf}"></th:block>
 
             <div class="form-group">
                 <label for="projectName">Title</label>
@@ -66,7 +70,8 @@
                     <label for="projectStartDate">Start date</label>
                     <input type="date"
                            id="projectStartDate"
-                           th:field="*{projectStartDate}"
+                           name="projectStartDate"
+                           th:value="${project?.projectStartDate != null ? #temporals.format(project.projectStartDate, 'yyyy-MM-dd') : ''}"
                            min="2000-01-01"
                            max="2100-12-31"
                            required>
@@ -76,7 +81,8 @@
                     <label for="projectDeadline">Deadline</label>
                     <input type="date"
                            id="projectDeadline"
-                           th:field="*{projectDeadline}"
+                           name="projectDeadline"
+                           th:value="${project?.projectDeadline != null ? #temporals.format(project.projectDeadline, 'yyyy-MM-dd') : ''}"
                            min="2000-01-01"
                            max="2100-12-31"
                            required>

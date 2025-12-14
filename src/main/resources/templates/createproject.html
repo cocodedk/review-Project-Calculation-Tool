@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<html lang="da" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Create new projekt</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create new project</title>
+    <link th:href="@{/common.css}" rel="stylesheet">
     <link th:href="@{/createproject.css}" rel="stylesheet">
 </head>
 <body>
 
-<h1>Create new projekt</h1>
+<h1>Create new project</h1>
 
     <div class="control-bar">
     <!-- Tilbage til projekter knap -->
@@ -17,6 +19,7 @@
     </div>
 
     <form th:action="@{/project/saveproject/{employeeId}(employeeId=${currentEmployeeId})}" th:object="${project}" method="post">
+        <th:block th:replace="~{fragments/csrf :: csrf}"></th:block>
     <div class="form-group">
         <label for="projectName">Title:</label>
         <input type="text" id="projectName" name="projectName" th:field="*{projectName}" required/>

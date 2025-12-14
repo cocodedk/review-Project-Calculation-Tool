@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="da">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Projects</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Linker til ekstern CSS-fil med styling -->
+    <link th:href="@{/common.css}" rel="stylesheet">
     <link th:href="@{/project.css}" rel="stylesheet">
 </head>
 <body>
@@ -19,6 +21,7 @@
 
 <!--             Logout form-->
             <form th:action="@{/logout}" method="post">
+                <th:block th:replace="~{fragments/csrf :: csrf}"></th:block>
                 <button type="submit" class="logout-button">
                     <!-- Logout ikon -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
@@ -109,7 +112,8 @@
                     <!-- Slet-knap med bekræftelse -->
                     <form th:if="${employeeRole != null
                                 and employeeRole == T(com.example.pkveksamen.model.EmployeeRole).PROJECT_MANAGER}"
-                          th:action="@{/project/delete/{employeeId}/{id}(employeeId=${currentEmployeeId}, id=${project.projectID})}" method="post" style="display:inline">
+                          th:action="@{/project/delete/{employeeId}/{id}(employeeId=${currentEmployeeId}, id=${project.projectID})}" method="post" class="inline-form">
+                        <th:block th:replace="~{fragments/csrf :: csrf}"></th:block>
                         <button type="submit" class="delete-button" onclick="return confirm('Are you sure you want to delete your project?');">
                             Delete
                         </button>

@@ -2,9 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log ind</title>
     <!-- Google Font link (indlæser fonten fra Google) -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link th:href="@{/common.css}" rel="stylesheet">
     <link th:href="@{/login.css}" rel="stylesheet">
 </head>
 <body>
@@ -16,13 +18,14 @@
     </div>
 
     <form th:action="@{/validate-login}" method="post">
+        <th:block th:replace="~{fragments/csrf :: csrf}"></th:block>
 
         <div class="form-group">
-            <label for="username">Username:</label>
+            <label for="username">Username or Email:</label>
             <input type="text"
                    name="username"
                    id="username"
-                   placeholder="Username"
+                   placeholder="Username or Email"
                    required>
         </div>
 

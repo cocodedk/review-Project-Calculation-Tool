@@ -2,33 +2,49 @@ package com.example.pkveksamen.service;
 
 import com.example.pkveksamen.model.Employee;
 import com.example.pkveksamen.repository.EmployeeRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 public class EmployeeService {
 
+    private static final Logger logger = LoggerFactory.getLogger(EmployeeService.class);
     private EmployeeRepository employeeRepository;
 
     public EmployeeService(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
     }
 
-    public boolean createEmployee(String username, String password, String email, String role, String alphaRoleDisplayName) {
+    @Transactional
+    public CreateEmployeeResult createEmployee(String username, String password, String email, String role, String alphaRoleDisplayName) {
+        if (employeeRepository.existsByUsername(username)) {
+            return CreateEmployeeResult.USERNAME_ALREADY_IN_USE;
+        }
+        if (employeeRepository.existsByEmail(email)) {
+            return CreateEmployeeResult.EMAIL_ALREADY_IN_USE;
+        }
+
         try {
             employeeRepository.createEmployee(username, password, email, role, alphaRoleDisplayName);
-            System.out.println("Bruger oprettet: " + username + " " + email + " med alphaRole: " + alphaRoleDisplayName);
-            return true;
+            logger.info("Employee created: username={} email={} alphaRole={}", username, email, alphaRoleDisplayName);
+            return CreateEmployeeResult.SUCCESS;
         } catch (DataIntegrityViolationException e) {
-            System.out.println("Email allerede i brug: " + email);
-            e.printStackTrace();
-            return false;
+            logger.warn("Employee create failed (data integrity violation): username={} email={}", username, email, e);
+            if (employeeRepository.existsByUsername(username)) {
+                return CreateEmployeeResult.USERNAME_ALREADY_IN_USE;
+            }
+            if (employeeRepository.existsByEmail(email)) {
+                return CreateEmployeeResult.EMAIL_ALREADY_IN_USE;
+            }
+            return CreateEmployeeResult.UNKNOWN_ERROR;
         } catch (Exception e) {
-            System.out.println("Uventet fejl ved oprettelse af bruger: " + e.getMessage());
-            e.printStackTrace();
-            return false;
+            logger.error("Unexpected error creating employee: username={} email={}", username, email, e);
+            return CreateEmployeeResult.UNKNOWN_ERROR;
         }
     }
 

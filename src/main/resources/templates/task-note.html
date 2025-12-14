@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="da">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Note</title>
+    <link th:href="@{/common.css}" rel="stylesheet">
     <link th:href="@{/task.css}" rel="stylesheet">
 </head>
 <body>
@@ -12,6 +14,7 @@
         <div class="user-info">
             <span th:text="${username} + ' (' + ${employeeRole.displayName} + ')'"></span>
             <form th:action="@{/logout}" method="post">
+                <th:block th:replace="~{fragments/csrf :: csrf}"></th:block>
                 <button type="submit" class="logout-button">Log out</button>
             </form>
         </div>
@@ -34,6 +37,7 @@
               taskId=${task.taskID})}"
           method="post"
           class="note-form">
+        <th:block th:replace="~{fragments/csrf :: csrf}"></th:block>
 
         <h2 th:text="${task.taskName}"></h2>
 

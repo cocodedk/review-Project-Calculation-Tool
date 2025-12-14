@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="da">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project Members</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link th:href="@{/common.css}" rel="stylesheet">
     <link th:href="@{/project.css}" rel="stylesheet">
     <style>
         .members-container {
@@ -111,7 +113,8 @@
         </div>
         <div class="user-info">
             <span th:text="${username} + ' (' + ${employeeRole.displayName} + ')'"></span>
-            <form th:action="@{/logout}" method="post" style="display:inline; margin-left: 10px;">
+            <form th:action="@{/logout}" method="post" class="inline-form-spaced">
+                <th:block th:replace="~{fragments/csrf :: csrf}"></th:block>
                 <button type="submit" class="btn btn-danger">Log out</button>
             </form>
         </div>
@@ -127,6 +130,7 @@
     </div>
     <div th:if="${availableEmployees != null and !#lists.isEmpty(availableEmployees)}" class="add-member-form">
         <form th:action="@{/project/employees/{employeeId}/{projectId}/add(employeeId=${currentEmployeeId}, projectId=${currentProjectId})}" method="post">
+            <th:block th:replace="~{fragments/csrf :: csrf}"></th:block>
             <div class="form-group">
                 <label for="selectedEmployeeId">Select Employee:</label>
                 <select id="selectedEmployeeId" name="selectedEmployeeId" required>
@@ -163,8 +167,9 @@
                 <td>
                     <form th:action="@{/project/employees/{employeeId}/{projectId}/remove(employeeId=${currentEmployeeId}, projectId=${currentProjectId})}" 
                           method="post" 
-                          style="display:inline;"
+                          class="inline-form"
                           th:if="${member.employeeId != currentEmployeeId}">
+                        <th:block th:replace="~{fragments/csrf :: csrf}"></th:block>
                         <input type="hidden" name="employeeIdToRemove" th:value="${member.employeeId}">
                         <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to remove this member from the project?');">
                             Remove
@@ -178,4 +183,3 @@
 </div>
 </body>
 </html>
-

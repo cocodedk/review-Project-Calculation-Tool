@@ -6,6 +6,7 @@ import com.example.pkveksamen.model.SubProject;
 import com.example.pkveksamen.model.Task;
 import com.example.pkveksamen.repository.ProjectRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -40,6 +41,7 @@ public class ProjectService {
         projectRepository.saveSubProject(subProject, projectID);
     }
 
+    @Transactional
     public void deleteProject(long projectID) {
         projectRepository.deleteProject(projectID);
     }
