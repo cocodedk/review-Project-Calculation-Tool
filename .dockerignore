@@ -1,0 +1,42 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# IDE
+.idea
+.vscode
+*.iml
+*.ipr
+*.iws
+.settings
+.classpath
+.project
+
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# Documentation
+*.md
+!README.md
+code-review/
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Test files
+src/test/
+
+# Environment files (should use env vars instead)
+.env
+.env.local
