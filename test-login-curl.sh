@@ -1,6 +1,12 @@
 #!/bin/sh
 # Login test script using curl (better cookie/session support)
 # This script properly handles CSRF tokens and sessions
+#
+# Credentials are loaded from environment variables (TEST_DEFAULT_USERNAME, TEST_DEFAULT_PASSWORD, TEST_DEFAULT_HOST)
+# or from a .env.test file in the project root (for development only).
+#
+# WARNING: Test credentials are for development/testing purposes only and should NEVER be used in production.
+# If these credentials were ever exposed in version control, they should be rotated immediately.
 
 # Colors for output
 RED='\033[0;31m'
@@ -8,23 +14,39 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-# Default values
+# Load .env.test if it exists (simple key=value format)
+if [ -f .env.test ]; then
+  export $(grep -v '^#' .env.test | xargs)
+fi
+
+# Default values from environment variables or command line arguments
 if [ -z "$1" ]; then
-  USERNAME_OR_EMAIL="your.email+fakedata11617@gmail.com"
+  USERNAME_OR_EMAIL="${TEST_DEFAULT_USERNAME}"
 else
   USERNAME_OR_EMAIL="$1"
 fi
 
 if [ -z "$2" ]; then
-  PASSWORD="jUfmv580rz6sOU"
+  PASSWORD="${TEST_DEFAULT_PASSWORD}"
 else
   PASSWORD="$2"
 fi
 
 if [ -z "$3" ]; then
-  HOST="localhost:8080"
+  HOST="${TEST_DEFAULT_HOST:-localhost:8080}"
 else
   HOST="$3"
+fi
+
+# Validate required credentials
+if [ -z "$USERNAME_OR_EMAIL" ]; then
+  echo "${RED}ERROR: TEST_DEFAULT_USERNAME not set. Please set environment variable TEST_DEFAULT_USERNAME or create a .env.test file.${NC}"
+  exit 1
+fi
+
+if [ -z "$PASSWORD" ]; then
+  echo "${RED}ERROR: TEST_DEFAULT_PASSWORD not set. Please set environment variable TEST_DEFAULT_PASSWORD or create a .env.test file.${NC}"
+  exit 1
 fi
 
 COOKIE_JAR="/tmp/login_cookies.txt"

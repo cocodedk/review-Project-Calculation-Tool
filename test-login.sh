@@ -1,10 +1,32 @@
 #!/bin/sh
 # Login test script for the application
 # Works with BusyBox wget
+#
+# Credentials are loaded from environment variables (TEST_DEFAULT_USERNAME, TEST_DEFAULT_PASSWORD, TEST_DEFAULT_HOST)
+# or from a .env.test file in the project root (for development only).
+#
+# WARNING: Test credentials are for development/testing purposes only and should NEVER be used in production.
+# If these credentials were ever exposed in version control, they should be rotated immediately.
 
-USERNAME_OR_EMAIL="${1:-your.email+fakedata11617@gmail.com}"
-PASSWORD="${2:-jUfmv580rz6sOU}"
-HOST="${3:-localhost:8080}"
+# Load .env.test if it exists (simple key=value format)
+if [ -f .env.test ]; then
+  export $(grep -v '^#' .env.test | xargs)
+fi
+
+USERNAME_OR_EMAIL="${1:-${TEST_DEFAULT_USERNAME}}"
+PASSWORD="${2:-${TEST_DEFAULT_PASSWORD}}"
+HOST="${3:-${TEST_DEFAULT_HOST:-localhost:8080}}"
+
+# Validate required credentials
+if [ -z "$USERNAME_OR_EMAIL" ]; then
+  echo "ERROR: TEST_DEFAULT_USERNAME not set. Please set environment variable TEST_DEFAULT_USERNAME or create a .env.test file."
+  exit 1
+fi
+
+if [ -z "$PASSWORD" ]; then
+  echo "ERROR: TEST_DEFAULT_PASSWORD not set. Please set environment variable TEST_DEFAULT_PASSWORD or create a .env.test file."
+  exit 1
+fi
 
 echo "=== Login Test Script ==="
 echo "Username/Email: $USERNAME_OR_EMAIL"

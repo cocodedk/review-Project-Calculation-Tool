@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.7</version>
+        <version>3.5.8</version>
         <relativePath/>
     </parent>
 
@@ -24,6 +24,8 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!-- Explicitly set Spring Framework to 6.2.15 to ensure CVE-2025-41254 mitigation -->
+        <spring-framework.version>6.2.15</spring-framework.version>
     </properties>
 
     <dependencies>

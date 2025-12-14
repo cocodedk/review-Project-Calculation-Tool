@@ -2,6 +2,7 @@ package com.example.pkveksamen.service;
 
 import com.example.pkveksamen.model.Employee;
 import com.example.pkveksamen.repository.EmployeeRepository;
+import com.example.pkveksamen.util.EmailLoggingUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -31,10 +32,12 @@ public class EmployeeService {
 
         try {
             employeeRepository.createEmployee(username, password, email, role, alphaRoleDisplayName);
-            logger.info("Employee created: username={} email={} alphaRole={}", username, email, alphaRoleDisplayName);
+            String logSafeEmailId = EmailLoggingUtil.createLogSafeEmailIdentifier(username, email);
+            logger.info("Employee created: username={} emailId={} alphaRole={}", username, logSafeEmailId, alphaRoleDisplayName);
             return CreateEmployeeResult.SUCCESS;
         } catch (DataIntegrityViolationException e) {
-            logger.warn("Employee create failed (data integrity violation): username={} email={}", username, email, e);
+            String logSafeEmailId = EmailLoggingUtil.createLogSafeEmailIdentifier(username, email);
+            logger.warn("Employee create failed (data integrity violation): username={} emailId={}", username, logSafeEmailId, e);
             if (employeeRepository.existsByUsername(username)) {
                 return CreateEmployeeResult.USERNAME_ALREADY_IN_USE;
             }
@@ -43,7 +46,8 @@ public class EmployeeService {
             }
             return CreateEmployeeResult.UNKNOWN_ERROR;
         } catch (Exception e) {
-            logger.error("Unexpected error creating employee: username={} email={}", username, email, e);
+            String logSafeEmailId = EmailLoggingUtil.createLogSafeEmailIdentifier(username, email);
+            logger.error("Unexpected error creating employee: username={} emailId={}", username, logSafeEmailId, e);
             return CreateEmployeeResult.UNKNOWN_ERROR;
         }
     }

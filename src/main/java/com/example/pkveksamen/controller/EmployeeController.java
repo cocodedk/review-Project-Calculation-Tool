@@ -47,6 +47,10 @@ public class EmployeeController {
         String email = employee.getEmail() == null ? null : employee.getEmail().trim().toLowerCase();
         String password = employee.getPassword();
 
+        // Update employee object with sanitized values so they're shown if validation fails
+        employee.setUsername(username);
+        employee.setEmail(email);
+
         if (employee.getSkill() == null) {
             model.addAttribute("error", "Please select an Alpha Role");
             model.addAttribute("employee", employee);
@@ -60,7 +64,7 @@ public class EmployeeController {
             model.addAttribute("skills", AlphaRole.values());
             return "create-employee";
         }
-        
+
         CreateEmployeeResult result = employeeService.createEmployee(
                 username,
                 password,

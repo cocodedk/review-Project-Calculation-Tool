@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Test Configuration Files ###
+# Test credentials file (contains sensitive test account information)
+.env.test

@@ -1,3 +1,5 @@
+package com.example.pkveksamen.util;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class HashPassword {

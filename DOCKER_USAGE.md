@@ -82,6 +82,41 @@ docker-compose exec app mvn test
 docker-compose run --rm app mvn test
 ```
 
+### Running Test Scripts in Container
+
+The container includes test login scripts (`test-login.sh`). To use them, you need to provide test credentials via environment variables:
+
+**Option 1: Set in docker-compose.yml or .env file**
+```bash
+# Add to your .env file (not committed to git)
+TEST_DEFAULT_USERNAME=test@example.com
+TEST_DEFAULT_PASSWORD=testpassword
+TEST_DEFAULT_HOST=localhost:8080
+```
+
+Then run the test script:
+```bash
+docker-compose exec app /app/test-login.sh
+```
+
+**Option 2: Pass environment variables directly**
+```bash
+docker-compose exec -e TEST_DEFAULT_USERNAME=test@example.com -e TEST_DEFAULT_PASSWORD=testpass app /app/test-login.sh
+```
+
+**Option 3: Pass credentials as arguments**
+```bash
+docker-compose exec app /app/test-login.sh test@example.com testpass localhost:8080
+```
+
+**For Java LoginTestScript:**
+```bash
+# Set environment variables in container
+docker-compose exec -e TEST_DEFAULT_USERNAME=test@example.com -e TEST_DEFAULT_PASSWORD=testpass app sh -c "java -cp app.jar com.example.pkveksamen.LoginTestScript"
+```
+
+⚠️ **Note**: Test credentials are for development/testing only. See `TEST_CREDENTIALS.md` for more details.
+
 ## Production Deployment
 
 ### Build Image

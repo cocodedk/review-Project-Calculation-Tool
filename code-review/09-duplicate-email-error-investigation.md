@@ -196,3 +196,4 @@ The duplicate email detection **works correctly** from a functional perspective:
 4. Minor race condition risk (mitigated by database constraint)
 
 The system is **functionally correct** but could benefit from UX improvements.
+
